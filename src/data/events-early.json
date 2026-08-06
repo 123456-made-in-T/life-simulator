@@ -12,7 +12,7 @@
   { "id": "e011", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "maxAttrs": { "linggen": 4 }, "minAttrs": { "jiashi": 7 } }, "text": "灵根平平的你靠家中重礼打点，勉强进了一家小宗门做外门杂役。", "effects": { "cultivation": 10 } },
   { "id": "e012", "realmMax": 0, "ageMin": 12, "ageMax": 20, "once": true, "cond": { "flag": "qiyun" }, "text": "你在后山迷路，误入一处废弃洞府，得到半卷无名功法！", "effects": { "cultivation": 30, "linggen": 1 }, "achievement": "洞府奇遇" },
   { "id": "e013", "realmMax": 0, "ageMin": 14, "ageMax": 25, "once": true, "cond": { "flag": "meimao" }, "text": "镇上首富看中你的容貌，想招你入赘。你婉言谢绝，一心向道。", "effects": { "daoxin": 1 } },
-  { "id": "e014", "realmMax": 0, "ageMin": 6, "ageMax": 60, "weight": 3, "text": "平平淡淡又一年，你日出而作，日落而息。" },
+  { "id": "e014", "realmMax": 0, "ageMin": 6, "weight": 3, "text": "平平淡淡又一年，你日出而作，日落而息。" },
   { "id": "e015", "realmMax": 0, "ageMin": 16, "ageMax": 60, "cond": { "maxAttrs": { "linggen": 2 } }, "weight": 2, "text": "你渐渐认了命：仙缘渺茫，不如把眼前的日子过好。", "effects": { "daoxin": 1 } },
   { "id": "e016", "realmMax": 0, "ageMin": 18, "ageMax": 50, "once": true, "cond": { "maxAttrs": { "linggen": 3 } }, "text": "你成了亲，伴侣温柔体贴，日子清贫却安稳。", "effects": { "daoxin": 2, "tipo": 1 } },
   { "id": "e017", "realmMax": 0, "ageMin": 6, "ageMax": 30, "once": true, "text": "瘟疫过境，村里病倒了一大片。", "effects": { "tipo": -1 }, "deathChance": 0.04, "deathText": "你没能熬过这场瘟疫。" },
@@ -30,5 +30,8 @@
   { "id": "e029", "realmMin": 1, "realmMax": 6, "weight": 3, "text": "闭关苦修，寒来暑往，修为稳步精进。", "effects": { "cultivation": 10 } },
   { "id": "e030", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "qiyun" }, "text": "雷雨夜，一道紫雷劈中你门前古树，树心中竟藏着一枚雷灵果！", "effects": { "linggen": 1, "cultivation": 20 }, "achievement": "雷灵造化" },
   { "id": "e031", "realmMin": 1, "realmMax": 2, "cond": { "maxAttrs": { "jiashi": 2 } }, "text": "囊中羞涩，你连最便宜的聚气丹都买不起，只能靠打坐硬熬。", "effects": { "daoxin": -1, "cultivation": 3 } },
-  { "id": "e032", "realmMin": 1, "realmMax": 2, "once": true, "text": "一场大战波及山门，你随众撤离，亲眼见识了金丹修士移山填海的恐怖伟力。", "effects": { "daoxin": 1 } }
+  { "id": "e032", "realmMin": 1, "realmMax": 2, "once": true, "text": "一场大战波及山门，你随众撤离，亲眼见识了金丹修士移山填海的恐怖伟力。", "effects": { "daoxin": 1 } },
+  { "id": "e033", "realmMax": 0, "ageMin": 55, "weight": 2, "text": "你坐在村口晒太阳，给孙辈讲年轻时差点遇仙的故事，孩子们听得眼睛发亮。", "effects": { "daoxin": 1 } },
+  { "id": "e034", "realmMax": 0, "ageMin": 50, "weight": 2, "text": "岁月催人老，你的背驼了，眼也花了，好在儿孙孝顺，粗茶淡饭也有滋味。", "effects": { "tipo": -1, "daoxin": 1 } },
+  { "id": "e035", "realmMax": 0, "ageMin": 60, "once": true, "text": "花甲寿宴，全村人都来道贺。你举杯环顾，恍惚觉得这辈子虽无仙缘，也算圆满。", "effects": { "daoxin": 1 } }
 ]

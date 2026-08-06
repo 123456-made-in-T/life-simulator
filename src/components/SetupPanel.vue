@@ -14,7 +14,7 @@ const emit = defineEmits(['confirm']);
 const ATTR_HINTS = {
   linggen: '修炼速度与突破之资',
   wuxing: '悟道参法之能',
-  tipo: '生死关头的本钱',
+  tipo: '生死关头的本钱，0 点恐早夭',
   jiashi: '出身背景与财力',
 };
 

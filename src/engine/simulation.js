@@ -22,13 +22,14 @@ export function advanceTick(state, pool, rng) {
   const tickYears = REALMS[state.realmIndex].tickYears;
   let next = { ...state, age: state.age + tickYears };
 
-  // 寿元耗尽
+  // 寿元耗尽（回合跨度大时年龄可能越过寿元，按寿元数收口）
   if (next.age >= next.lifespan) {
+    next = { ...next, age: next.lifespan };
     return endLife(next, logs, ageDeathText(next));
   }
 
   // 修为增长（开蒙之后）
-  if (next.age >= ENLIGHTEN_AGE && next.realmIndex < MAX_REALM_INDEX + 1) {
+  if (next.age >= ENLIGHTEN_AGE) {
     next = { ...next, cultivation: next.cultivation + cultivationGain(next, tickYears) };
   }
 
@@ -54,7 +55,11 @@ export function advanceTick(state, pool, rng) {
 
   // 体魄耗尽
   if (next.attrs.tipo <= 0) {
-    return endLife(next, logs, '沉疴缠身，药石无医，溘然长逝。');
+    const text =
+      next.age <= 3
+        ? '先天孱弱，你没能熬过襁褓岁月，一生早早画上了句点。'
+        : '沉疴缠身，药石无医，溘然长逝。';
+    return endLife(next, logs, text);
   }
 
   // 道心崩溃：心魔入体

@@ -131,6 +131,15 @@ describe('events', () => {
   test('pickEvent 空事件池返回 null', () => {
     expect(pickEvent([], freshState(), createRng(1))).toBeNull();
   });
+
+  test('事件增加的寿元同步计入 lifespanBonus（突破后不丢失）', () => {
+    const state = freshState();
+
+    const { state: next } = applyEvent(state, { id: 'x', effects: { lifespan: 50 } }, createRng(1));
+
+    expect(next.lifespan).toBe(state.lifespan + 50);
+    expect(next.lifespanBonus).toBe(state.lifespanBonus + 50);
+  });
 });
 
 describe('advanceTick 与完整人生', () => {

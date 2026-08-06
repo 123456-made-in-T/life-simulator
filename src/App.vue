@@ -26,6 +26,7 @@ const summary = ref(null);
 let rng = null;
 let allocation = null;
 let timer = null;
+let summaryTimer = null;
 let tickCount = 0;
 
 function handleAllocation(alloc) {
@@ -68,11 +69,23 @@ function step() {
 }
 
 function finishLife() {
+  // 幂等保护：死亡后 skip 按钮仍可点，避免重复结算和游走的定时器
+  if (summaryTimer || phase.value === 'summary') {
+    return;
+  }
   stopTimer();
   summary.value = summarize(state.value);
-  setTimeout(() => {
+  summaryTimer = setTimeout(() => {
+    summaryTimer = null;
     phase.value = 'summary';
   }, SUMMARY_DELAY_MS);
+}
+
+function clearSummaryTimer() {
+  if (summaryTimer) {
+    clearTimeout(summaryTimer);
+    summaryTimer = null;
+  }
 }
 
 function toggleSpeed() {
@@ -83,6 +96,12 @@ function toggleSpeed() {
 }
 
 function skipToEnd() {
+  // 已在结算等待中：直接跳到结算页
+  if (summaryTimer) {
+    clearSummaryTimer();
+    phase.value = 'summary';
+    return;
+  }
   stopTimer();
   while (state.value.alive && !state.value.ascended && tickCount < MAX_TICKS) {
     step();
@@ -92,6 +111,7 @@ function skipToEnd() {
 
 function restart() {
   stopTimer();
+  clearSummaryTimer();
   phase.value = 'setup';
   state.value = null;
   logs.value = [];
@@ -100,7 +120,10 @@ function restart() {
   allocation = null;
 }
 
-onBeforeUnmount(stopTimer);
+onBeforeUnmount(() => {
+  stopTimer();
+  clearSummaryTimer();
+});
 </script>
 
 <template>

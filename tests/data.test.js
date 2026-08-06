@@ -2,6 +2,7 @@
 
 import { describe, test, expect } from 'vitest';
 import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
+import { isEligible } from '../src/engine/events.js';
 
 const VALID_EFFECT_KEYS = new Set([
   'linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin', 'cultivation', 'lifespan', 'flag',
@@ -47,6 +48,9 @@ describe('事件数据', () => {
       if (event.realmMin != null && event.realmMax != null) {
         expect(event.realmMin, event.id).toBeLessThanOrEqual(event.realmMax);
       }
+      if (event.weight != null) {
+        expect(event.weight, `${event.id} weight 必须为正数`).toBeGreaterThan(0);
+      }
       if (event.deathChance != null) {
         expect(event.deathChance, event.id).toBeGreaterThan(0);
         expect(event.deathChance, event.id).toBeLessThanOrEqual(1);
@@ -66,6 +70,20 @@ describe('事件数据', () => {
         (e) => (e.realmMin ?? 0) <= realm && realm <= (e.realmMax ?? 6),
       );
       expect(available.length, `境界 ${realm} 没有任何事件`).toBeGreaterThan(0);
+    }
+  });
+
+  test('凡人从幼年到寿终每个年龄都有事件可触发（不出现空窗）', () => {
+    const base = {
+      realmIndex: 0,
+      usedEventIds: [],
+      talents: [],
+      flags: {},
+      attrs: { linggen: 5, wuxing: 5, tipo: 5, jiashi: 5, daoxin: 5 },
+    };
+    for (let age = 0; age < 80; age += 1) {
+      const eligible = EVENT_POOL.filter((e) => isEligible(e, { ...base, age }));
+      expect(eligible.length, `凡人 ${age} 岁没有任何事件`).toBeGreaterThan(0);
     }
   });
 });

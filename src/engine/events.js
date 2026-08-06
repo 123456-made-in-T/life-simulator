@@ -59,11 +59,14 @@ export function applyEvent(state, event, rng) {
     }
   }
 
+  // 寿元同时计入 lifespanBonus：突破换算新境界寿元时才不会丢掉事件加成
+  const lifespanDelta = effects.lifespan ?? 0;
   const next = {
     ...state,
     attrs,
     cultivation: Math.max(0, state.cultivation + (effects.cultivation ?? 0)),
-    lifespan: state.lifespan + (effects.lifespan ?? 0),
+    lifespan: state.lifespan + lifespanDelta,
+    lifespanBonus: state.lifespanBonus + lifespanDelta,
     flags: effects.flag ? { ...state.flags, [effects.flag]: true } : state.flags,
     usedEventIds: event.once ? [...state.usedEventIds, event.id] : state.usedEventIds,
     achievements: event.achievement
