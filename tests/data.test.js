@@ -8,9 +8,12 @@ const VALID_EFFECT_KEYS = new Set([
   'linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin', 'cultivation', 'lifespan', 'flag',
 ]);
 const VALID_EVENT_KEYS = new Set([
-  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'cond',
-  'text', 'effects', 'deathChance', 'deathText', 'achievement', 'tone',
+  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'cond', 'text', 'options',
 ]);
+const VALID_OPTION_KEYS = new Set([
+  'text', 'resultText', 'effects', 'deathChance', 'deathText', 'achievement', 'tone',
+]);
+const MIN_OPTIONS = 2;
 
 describe('命格数据', () => {
   test('id 唯一', () => {
@@ -30,20 +33,17 @@ describe('命格数据', () => {
   });
 });
 
-describe('事件数据', () => {
+describe('事件数据（抉择制）', () => {
   test('id 唯一', () => {
     const ids = EVENT_POOL.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  test('每个事件字段合法', () => {
+  test('每个事件至少有两个选项，且字段全部合法', () => {
     for (const event of EVENT_POOL) {
       expect(event.text, event.id).toBeTruthy();
       for (const key of Object.keys(event)) {
         expect(VALID_EVENT_KEYS.has(key), `${event.id} 含非法字段 ${key}`).toBe(true);
-      }
-      for (const key of Object.keys(event.effects || {})) {
-        expect(VALID_EFFECT_KEYS.has(key), `${event.id} 含非法效果键 ${key}`).toBe(true);
       }
       if (event.realmMin != null && event.realmMax != null) {
         expect(event.realmMin, event.id).toBeLessThanOrEqual(event.realmMax);
@@ -51,14 +51,28 @@ describe('事件数据', () => {
       if (event.weight != null) {
         expect(event.weight, `${event.id} weight 必须为正数`).toBeGreaterThan(0);
       }
-      if (event.deathChance != null) {
-        expect(event.deathChance, event.id).toBeGreaterThan(0);
-        expect(event.deathChance, event.id).toBeLessThanOrEqual(1);
-        expect(event.deathText, `${event.id} 有死亡概率但缺少 deathText`).toBeTruthy();
-      }
       if (event.cond) {
         for (const key of Object.keys(event.cond)) {
           expect(['minAttrs', 'maxAttrs', 'talent', 'flag'], `${event.id} cond 含非法键 ${key}`).toContain(key);
+        }
+      }
+
+      expect(Array.isArray(event.options), `${event.id} 缺少 options`).toBe(true);
+      expect(event.options.length, `${event.id} 选项少于 ${MIN_OPTIONS} 个`).toBeGreaterThanOrEqual(MIN_OPTIONS);
+
+      for (const option of event.options) {
+        expect(option.text, `${event.id} 有选项缺少 text`).toBeTruthy();
+        expect(option.resultText, `${event.id}「${option.text}」缺少 resultText`).toBeTruthy();
+        for (const key of Object.keys(option)) {
+          expect(VALID_OPTION_KEYS.has(key), `${event.id}「${option.text}」含非法字段 ${key}`).toBe(true);
+        }
+        for (const key of Object.keys(option.effects || {})) {
+          expect(VALID_EFFECT_KEYS.has(key), `${event.id}「${option.text}」含非法效果键 ${key}`).toBe(true);
+        }
+        if (option.deathChance != null) {
+          expect(option.deathChance, `${event.id}「${option.text}」deathChance 越界`).toBeGreaterThan(0);
+          expect(option.deathChance, `${event.id}「${option.text}」deathChance 越界`).toBeLessThanOrEqual(1);
+          expect(option.deathText, `${event.id}「${option.text}」有死亡概率但缺少 deathText`).toBeTruthy();
         }
       }
     }

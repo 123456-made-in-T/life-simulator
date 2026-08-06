@@ -11,7 +11,7 @@ import {
   createCharacter,
   drawTalents,
 } from '../../engine/character.js';
-import { advanceTick } from '../../engine/simulation.js';
+import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
 import { TALENT_POOL, EVENT_POOL } from '../../data/index.js';
@@ -21,7 +21,6 @@ const PICK_COUNT = 3;
 const TICK_INTERVAL_MS = { slow: 700, fast: 220 };
 const MAX_TICKS = 500;
 const SUMMARY_DELAY_MS = 1600;
-const SKIP_LOG_LIMIT = 2000;
 
 const ATTR_HINTS = {
   linggen: '修炼速度与突破之资',
@@ -51,6 +50,7 @@ Page({
     speed: 'slow',
     summary: null,
     seed: 0,
+    pendingOptions: [],
   },
 
   onLoad() {
@@ -140,14 +140,6 @@ Page({
     return !this.state.alive || this.state.ascended || this.tickCount >= MAX_TICKS;
   },
 
-  /** 纯推进一回合，返回新增日志（不触发渲染） */
-  advanceOnce() {
-    this.tickCount += 1;
-    const result = advanceTick(this.state, EVENT_POOL, this.rng);
-    this.state = result.state;
-    return result.logs;
-  },
-
   renderLogs(newLogs) {
     const logs = this.data.logs.concat(newLogs);
     this.setData({
@@ -162,7 +154,44 @@ Page({
       this.finishLife();
       return;
     }
-    this.renderLogs(this.advanceOnce());
+    this.tickCount += 1;
+    const result = advanceTick(this.state, EVENT_POOL, this.rng);
+    this.state = result.state;
+    this.renderLogs(result.logs);
+    if (result.pending) {
+      // 遇到抉择点：停下光阴，等玩家做决定
+      this.stopTimer();
+      this.pending = result.pending;
+      this.setData({ pendingOptions: this.buildPendingOptions(result.pending) });
+    } else if (!result.state.alive) {
+      this.finishLife();
+    }
+  },
+
+  buildPendingOptions(pending) {
+    if (pending.kind === 'breakthrough') {
+      const pct = Math.round(pending.chance * 100);
+      return [
+        pending.isFinal ? `问鼎天劫（成功率约 ${pct}%，败则身死道消）` : `逆天冲关（成功率约 ${pct}%）`,
+        '稳固道基，来日再战',
+      ];
+    }
+    return pending.event.options.map((option) => option.text);
+  },
+
+  onChoose(e) {
+    if (!this.pending) return;
+    const index = Number(e.currentTarget.dataset.index);
+    const result = resolveChoice(this.state, this.pending, index, this.rng);
+    this.pending = null;
+    this.state = result.state;
+    this.setData({ pendingOptions: [] });
+    this.renderLogs(result.logs);
+    if (!result.state.alive || result.state.ascended) {
+      this.finishLife();
+      return;
+    }
+    this.startTimer();
   },
 
   startTimer() {
@@ -203,22 +232,6 @@ Page({
     }
   },
 
-  onSkip() {
-    // 结算等待期内再点：直接进结算页
-    if (this.summaryTimer) {
-      this.clearSummaryTimer();
-      this.setData({ phase: 'summary', summary: this.pendingSummary });
-      return;
-    }
-    this.stopTimer();
-    const collected = [];
-    while (!this.isFinished() && collected.length < SKIP_LOG_LIMIT) {
-      collected.push(...this.advanceOnce());
-    }
-    this.renderLogs(collected);
-    this.finishLife();
-  },
-
   onRestart() {
     this.stopTimer();
     this.clearSummaryTimer();
@@ -227,7 +240,15 @@ Page({
     this.allocation = null;
     this.tickCount = 0;
     this.pendingSummary = null;
-    this.setData({ phase: 'setup', logs: [], lastLogId: '', summary: null, view: null });
+    this.pending = null;
+    this.setData({
+      phase: 'setup',
+      logs: [],
+      lastLogId: '',
+      summary: null,
+      view: null,
+      pendingOptions: [],
+    });
     this.updateRemaining();
   },
 });

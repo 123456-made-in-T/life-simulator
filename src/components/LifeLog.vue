@@ -7,8 +7,9 @@ const props = defineProps({
   state: { type: Object, required: true },
   logs: { type: Array, required: true },
   speed: { type: String, required: true },
+  pendingOptions: { type: Array, required: true },
 });
-defineEmits(['toggle-speed', 'skip']);
+defineEmits(['toggle-speed', 'choose']);
 
 const scroller = ref(null);
 
@@ -50,9 +51,18 @@ const cultivationPercent = computed(() =>
       </p>
     </div>
 
-    <div class="controls">
+    <div v-if="pendingOptions.length > 0" class="choices">
+      <button
+        v-for="(option, i) in pendingOptions"
+        :key="i"
+        class="choice-btn"
+        @click="$emit('choose', i)"
+      >
+        {{ option }}
+      </button>
+    </div>
+    <div v-else class="controls">
       <button @click="$emit('toggle-speed')">{{ speed === 'slow' ? '光阴加速 »' : '细品岁月 «' }}</button>
-      <button @click="$emit('skip')">一键闭关至终局</button>
     </div>
   </section>
 </template>
@@ -148,6 +158,10 @@ const cultivationPercent = computed(() =>
   color: #7a4a1e;
 }
 
+.tone-choice .log-text {
+  color: var(--indigo);
+}
+
 .tone-breakthrough .log-text {
   color: var(--indigo);
   font-weight: 600;
@@ -165,12 +179,33 @@ const cultivationPercent = computed(() =>
 
 .controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-top: var(--space-1);
   border-top: 1px solid var(--line);
 }
 
 .controls button {
   font-size: 0.85rem;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-1);
+  border-top: 2px solid var(--cinnabar);
+  animation: fade-up var(--duration) var(--ease);
+}
+
+.choice-btn {
+  text-align: left;
+  padding: 0.6em 1em;
+  border-color: var(--cinnabar);
+  color: var(--cinnabar);
+}
+
+.choice-btn:hover {
+  background: var(--cinnabar);
+  color: var(--paper);
 }
 </style>

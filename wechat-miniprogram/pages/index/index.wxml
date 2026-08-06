@@ -68,9 +68,18 @@
     <view id="log-bottom"></view>
   </scroll-view>
 
-  <view class="controls">
+  <view class="choices" wx:if="{{pendingOptions.length > 0}}">
+    <view
+      class="btn choice-btn"
+      hover-class="btn-hover"
+      wx:for="{{pendingOptions}}"
+      wx:key="*this"
+      data-index="{{index}}"
+      bindtap="onChoose"
+    >{{item}}</view>
+  </view>
+  <view class="controls" wx:else>
     <view class="btn small" hover-class="btn-hover" bindtap="onToggleSpeed">{{speed === 'slow' ? '光阴加速 »' : '细品岁月 «'}}</view>
-    <view class="btn small" hover-class="btn-hover" bindtap="onSkip">一键闭关至终局</view>
   </view>
 </view>
 

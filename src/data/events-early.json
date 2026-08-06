@@ -1,37 +1,187 @@
 [
-  { "id": "e001", "realmMax": 0, "ageMax": 3, "once": true, "weight": 2, "text": "你呱呱坠地。产婆说你哭声洪亮，是个有福气的。" },
-  { "id": "e002", "realmMax": 0, "ageMin": 1, "ageMax": 5, "once": true, "text": "你在河边玩水险些溺亡，被一位游方道人所救。道人看了看你的骨相，若有所思地离去。", "effects": { "tipo": 1 } },
-  { "id": "e003", "realmMax": 0, "ageMin": 3, "ageMax": 6, "once": true, "cond": { "minAttrs": { "jiashi": 6 } }, "text": "家中重金请来测灵师为你测灵根，测灵盘光华大放，全家欣喜若狂。", "effects": { "daoxin": 1 } },
-  { "id": "e004", "realmMax": 0, "ageMin": 3, "ageMax": 7, "once": true, "cond": { "maxAttrs": { "jiashi": 3 } }, "text": "家中贫寒，你从小跟着爹娘下地干活，晒得黢黑，却也筋骨结实。", "effects": { "tipo": 1 } },
-  { "id": "e005", "realmMax": 0, "ageMin": 5, "ageMax": 10, "once": true, "text": "村口老槐树下，说书先生讲起仙人御剑飞天的故事，你听得入了迷，在心里埋下一颗种子。", "effects": { "daoxin": 1 } },
-  { "id": "e006", "realmMax": 0, "ageMin": 6, "ageMax": 12, "once": true, "cond": { "minAttrs": { "wuxing": 6 } }, "text": "私塾先生惊叹你读书过目成诵，连称『此子非池中之物』。", "effects": { "wuxing": 1 } },
-  { "id": "e007", "realmMax": 0, "ageMin": 6, "ageMax": 14, "text": "你上山采药补贴家用，认识了不少草药。", "effects": { "wuxing": 1 } },
-  { "id": "e008", "realmMax": 0, "ageMin": 8, "ageMax": 14, "text": "山中遇到野狼！你连滚带爬逃了回来。", "effects": { "tipo": 1, "daoxin": -1 }, "deathChance": 0.03, "deathText": "你没能跑过狼群，一条小命葬送山野。" },
-  { "id": "e009", "realmMax": 0, "ageMin": 10, "ageMax": 16, "once": true, "cond": { "talent": "jiangu" }, "text": "你捡到一柄锈剑，握住剑柄的一瞬，血脉里似有嗡鸣回应。", "effects": { "cultivation": 10, "daoxin": 1 }, "achievement": "剑缘初结" },
-  { "id": "e010", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "minAttrs": { "linggen": 5 } }, "text": "仙门下山招收弟子！你在测灵大典上灵光冲霄，被执事长老当场收入门墙。", "effects": { "cultivation": 20, "daoxin": 1 }, "achievement": "踏入仙门" },
-  { "id": "e011", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "maxAttrs": { "linggen": 4 }, "minAttrs": { "jiashi": 7 } }, "text": "灵根平平的你靠家中重礼打点，勉强进了一家小宗门做外门杂役。", "effects": { "cultivation": 10 } },
-  { "id": "e012", "realmMax": 0, "ageMin": 12, "ageMax": 20, "once": true, "cond": { "flag": "qiyun" }, "text": "你在后山迷路，误入一处废弃洞府，得到半卷无名功法！", "effects": { "cultivation": 30, "linggen": 1 }, "achievement": "洞府奇遇" },
-  { "id": "e013", "realmMax": 0, "ageMin": 14, "ageMax": 25, "once": true, "cond": { "flag": "meimao" }, "text": "镇上首富看中你的容貌，想招你入赘。你婉言谢绝，一心向道。", "effects": { "daoxin": 1 } },
-  { "id": "e014", "realmMax": 0, "ageMin": 6, "weight": 3, "text": "平平淡淡又一年，你日出而作，日落而息。" },
-  { "id": "e015", "realmMax": 0, "ageMin": 16, "ageMax": 60, "cond": { "maxAttrs": { "linggen": 2 } }, "weight": 2, "text": "你渐渐认了命：仙缘渺茫，不如把眼前的日子过好。", "effects": { "daoxin": 1 } },
-  { "id": "e016", "realmMax": 0, "ageMin": 18, "ageMax": 50, "once": true, "cond": { "maxAttrs": { "linggen": 3 } }, "text": "你成了亲，伴侣温柔体贴，日子清贫却安稳。", "effects": { "daoxin": 2, "tipo": 1 } },
-  { "id": "e017", "realmMax": 0, "ageMin": 6, "ageMax": 30, "once": true, "text": "瘟疫过境，村里病倒了一大片。", "effects": { "tipo": -1 }, "deathChance": 0.04, "deathText": "你没能熬过这场瘟疫。" },
-  { "id": "e018", "realmMin": 1, "realmMax": 1, "once": true, "weight": 2, "text": "初入练气，你第一次感受到灵气在经脉中流转，如溪流淌过周身，妙不可言。", "effects": { "daoxin": 1 } },
-  { "id": "e019", "realmMin": 1, "realmMax": 1, "text": "你在门中领了洒扫任务，一边扫地一边吐纳，倒也两不耽误。", "effects": { "cultivation": 5 } },
-  { "id": "e020", "realmMin": 1, "realmMax": 2, "cond": { "minAttrs": { "wuxing": 6 } }, "text": "夜观星斗，你对功法中一处晦涩经文豁然开朗。", "effects": { "cultivation": 15 } },
-  { "id": "e021", "realmMin": 1, "realmMax": 2, "text": "同门师兄以切磋为名下狠手，你被打得吐血，躺了半个月。", "effects": { "tipo": -1, "daoxin": -1 } },
-  { "id": "e022", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "shijia" }, "text": "家族送来一批灵石丹药，助你修行一臂之力。", "effects": { "cultivation": 25 } },
-  { "id": "e023", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "dandao" }, "text": "你在丹房帮工时指出一炉丹药火候之误，丹长老抚须大笑，收你做了记名弟子。", "effects": { "cultivation": 15, "jiashi": 1 }, "achievement": "丹道入门" },
-  { "id": "e024", "realmMin": 1, "realmMax": 1, "once": true, "text": "坊市偶遇一位摆摊老者，他送你一枚不起眼的木牌，说日后自有用处。", "effects": { "flag": "mupai" } },
-  { "id": "e025", "realmMin": 1, "realmMax": 2, "text": "灵田除虫、伙房烧火、藏经阁抄书……杂役岁月枯燥，你的心性却磨得愈发坚韧。", "effects": { "daoxin": 1 } },
-  { "id": "e026", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "minAttrs": { "daoxin": 7 } }, "text": "宗门大比，你以下克上连胜三场，一战成名！", "effects": { "cultivation": 20, "jiashi": 1 }, "achievement": "大比扬名" },
-  { "id": "e027", "realmMin": 1, "realmMax": 2, "text": "你下山历练，路遇山贼劫道。", "effects": { "tipo": 1 }, "deathChance": 0.03, "deathText": "山贼人多势众，你交代在了荒山野岭。" },
-  { "id": "e028", "realmMin": 1, "realmMax": 2, "once": true, "text": "你对一位同门暗生情愫，几次欲言又止，终究把心事压进了丹田。", "effects": { "daoxin": -1, "cultivation": 5 } },
-  { "id": "e029", "realmMin": 1, "realmMax": 6, "weight": 3, "text": "闭关苦修，寒来暑往，修为稳步精进。", "effects": { "cultivation": 10 } },
-  { "id": "e030", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "qiyun" }, "text": "雷雨夜，一道紫雷劈中你门前古树，树心中竟藏着一枚雷灵果！", "effects": { "linggen": 1, "cultivation": 20 }, "achievement": "雷灵造化" },
-  { "id": "e031", "realmMin": 1, "realmMax": 2, "cond": { "maxAttrs": { "jiashi": 2 } }, "text": "囊中羞涩，你连最便宜的聚气丹都买不起，只能靠打坐硬熬。", "effects": { "daoxin": -1, "cultivation": 3 } },
-  { "id": "e032", "realmMin": 1, "realmMax": 2, "once": true, "text": "一场大战波及山门，你随众撤离，亲眼见识了金丹修士移山填海的恐怖伟力。", "effects": { "daoxin": 1 } },
-  { "id": "e033", "realmMax": 0, "ageMin": 55, "weight": 2, "text": "你坐在村口晒太阳，给孙辈讲年轻时差点遇仙的故事，孩子们听得眼睛发亮。", "effects": { "daoxin": 1 } },
-  { "id": "e034", "realmMax": 0, "ageMin": 50, "weight": 2, "text": "岁月催人老，你的背驼了，眼也花了，好在儿孙孝顺，粗茶淡饭也有滋味。", "effects": { "tipo": -1, "daoxin": 1 } },
-  { "id": "e035", "realmMax": 0, "ageMin": 60, "once": true, "text": "花甲寿宴，全村人都来道贺。你举杯环顾，恍惚觉得这辈子虽无仙缘，也算圆满。", "effects": { "daoxin": 1 } }
+  {
+    "id": "e001", "realmMax": 0, "ageMax": 2, "once": true, "weight": 2,
+    "text": "你呱呱坠地，睁眼看到的是产婆布满皱纹的脸。",
+    "options": [
+      { "text": "放声大哭", "resultText": "哭声洪亮，中气十足，全家都说这孩子身子骨结实。", "effects": { "tipo": 1 } },
+      { "text": "安静打量世界", "resultText": "你不哭不闹，黑亮的眼珠滴溜溜转，老人说这孩子心里有数。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e002", "realmMax": 0, "ageMin": 1, "ageMax": 5, "once": true,
+    "text": "你在河边玩水，脚下一滑跌进深潭！",
+    "options": [
+      { "text": "拼命挣扎呼救", "resultText": "呛了好几口水后，一位游方道人将你捞起。他看了看你的骨相，若有所思地离去。", "effects": { "tipo": 1 }, "deathChance": 0.1, "deathText": "呼救声没能传到岸上，你沉入了冰冷的潭底。" },
+      { "text": "屏住呼吸放松漂浮", "resultText": "你竟凭本能仰面浮住，顺水漂到浅滩自己爬了上来。这份镇定日后救过你许多次。", "effects": { "wuxing": 1 }, "deathChance": 0.05, "deathText": "潭底暗流卷住了你小小的身体，再没能浮上来。" }
+    ]
+  },
+  {
+    "id": "e003", "realmMax": 0, "ageMin": 3, "ageMax": 6, "once": true, "cond": { "minAttrs": { "jiashi": 6 } },
+    "text": "家中重金请来测灵师为你测灵根，测灵盘光华微动，全家屏息看着你。",
+    "options": [
+      { "text": "全力催动气血", "resultText": "光华大放！测灵师连声道贺，爹娘喜极而泣。", "effects": { "daoxin": 1 } },
+      { "text": "有所藏拙", "resultText": "你本能地收敛了几分。测灵师说资质平平，你却看清了他眼底一闪而过的讶异。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e005", "realmMax": 0, "ageMin": 5, "ageMax": 10, "once": true,
+    "text": "村口老槐树下，说书先生讲起仙人御剑飞天、朝游北海暮苍梧的故事。",
+    "options": [
+      { "text": "听得入迷，心生向往", "resultText": "一颗种子在心里生根发芽：此生必要求个仙缘！", "effects": { "daoxin": 1 } },
+      { "text": "追问故事的破绽", "resultText": "『御剑飞行，逆风怎么办？』先生被你问得语塞，围观的大人们哄堂大笑。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e007", "realmMax": 0, "ageMin": 6, "ageMax": 14,
+    "text": "听闻后山险峰上长着值钱的七叶莲，采一株够全家吃半年。",
+    "options": [
+      { "text": "攀上险峰去采", "resultText": "你手脚并用爬上崖壁，采到了七叶莲，也在心里踩实了胆气。", "effects": { "jiashi": 1, "tipo": 1 }, "deathChance": 0.08, "deathText": "一块松动的岩石让你坠落山崖，采药的背篓散落一地。" },
+      { "text": "只在山脚转转", "resultText": "你在山脚采了些寻常草药，顺便认全了百草图谱。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e008", "realmMax": 0, "ageMin": 8, "ageMax": 14,
+    "text": "暮色四合，几双绿油油的眼睛从林子里围了上来——狼群！",
+    "options": [
+      { "text": "抄起柴刀拼死一搏", "resultText": "你浑身是血地劈退头狼，狼群竟被这股狠劲吓退了。", "effects": { "tipo": 1, "daoxin": 1 }, "deathChance": 0.15, "deathText": "你终究没能敌过狼群，葬身山野。" },
+      { "text": "扔下柴火转身逃命", "resultText": "你连滚带爬逃回村里，丢了柴刀，也丢了半条胆。", "effects": { "daoxin": -1 }, "deathChance": 0.05, "deathText": "慌不择路之下你摔下陡坡，再没能爬起来。" }
+    ]
+  },
+  {
+    "id": "e010", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "minAttrs": { "linggen": 5 } },
+    "text": "仙门下山招收弟子！测灵大典上你灵光冲霄，执事长老当场向你伸出了手。",
+    "options": [
+      { "text": "拜入仙门", "resultText": "你叩别爹娘，一步三回头地上了仙山。从此山高路远，大道朝天。", "effects": { "cultivation": 20, "daoxin": 1 }, "achievement": "踏入仙门" },
+      { "text": "放不下爹娘，婉拒长老", "resultText": "长老叹息离去。你留在家中晨昏定省，只在夜深人静时自己摸索吐纳。", "effects": { "daoxin": 2, "cultivation": 5 } }
+    ]
+  },
+  {
+    "id": "e011", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "maxAttrs": { "linggen": 4 }, "minAttrs": { "jiashi": 7 } },
+    "text": "灵根平平，仙门无望。管家却打听到一家小宗门收『记名杂役』，只是要一大笔打点银子。",
+    "options": [
+      { "text": "散尽家财也要入门", "resultText": "你背着全家的积蓄上了山，成了外门一名扫地杂役。仙路从最低处开始。", "effects": { "jiashi": -2, "cultivation": 15 } },
+      { "text": "安心做个富家翁", "resultText": "你接手了家中生意，日子富足安稳，只是偶尔望着远山出神。", "effects": { "jiashi": 1, "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "e012", "realmMax": 0, "ageMin": 12, "ageMax": 20, "once": true, "cond": { "flag": "qiyun" },
+    "text": "你在后山迷路，拨开藤蔓，一扇布满符文的石门在眼前缓缓显现。",
+    "options": [
+      { "text": "推门而入", "resultText": "这是一处废弃洞府！你在蒲团下摸出半卷无名功法，如获至宝。", "effects": { "cultivation": 30, "linggen": 1 }, "achievement": "洞府奇遇", "deathChance": 0.1, "deathText": "你触发了洞府残存的护山禁制，化作了一缕青烟。" },
+      { "text": "记下位置，先行离开", "resultText": "你没敢进去，把位置卖给了镇上的游方修士，换了一笔不小的银钱。", "effects": { "jiashi": 2 } }
+    ]
+  },
+  {
+    "id": "e014", "realmMax": 0, "ageMin": 6, "weight": 3,
+    "text": "又是一年春耕秋收。这一年，你打算怎么过？",
+    "options": [
+      { "text": "勤恳劳作", "resultText": "日出而作日落而息，筋骨在劳作中愈发结实。", "effects": { "tipo": 1 } },
+      { "text": "读书识字", "resultText": "你借来邻村先生的旧书，在油灯下一个字一个字地啃。", "effects": { "wuxing": 1 } },
+      { "text": "走乡串镇长见识", "resultText": "你跟着货郎跑遍了十里八乡，学会了看人下菜碟。", "effects": { "jiashi": 1 } }
+    ]
+  },
+  {
+    "id": "e015", "realmMax": 0, "ageMin": 16, "cond": { "maxAttrs": { "linggen": 2 } }, "weight": 2,
+    "text": "又一批仙门弟子御剑掠过村庄上空，引来孩童阵阵欢呼。你抬头看了很久。",
+    "options": [
+      { "text": "认命，过好眼前日子", "resultText": "仙缘渺茫，不如把地种好、把家看好。你低头继续手里的活计，心里反而踏实了。", "effects": { "daoxin": 1 } },
+      { "text": "不甘心，夜夜苦练吐纳", "resultText": "明知灵根浅薄，你仍偷偷练着不知名的吐纳法，进境微末，执念渐深。", "effects": { "cultivation": 3, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "e016", "realmMax": 0, "ageMin": 18, "ageMax": 50, "once": true, "cond": { "maxAttrs": { "linggen": 3 } },
+    "text": "媒婆踏破了门槛——邻村那位勤快温柔的姑娘家，托人来探你的口风。",
+    "options": [
+      { "text": "成亲，安家立业", "resultText": "红烛高照，宾客盈门。从此粗茶淡饭里，也有了牵挂的滋味。", "effects": { "daoxin": 2, "tipo": 1 } },
+      { "text": "婉拒，此心向道", "resultText": "你说这辈子想再等等那个『万一』。媒婆摇头走了，屋里比往常更静。", "effects": { "cultivation": 5, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "e017", "realmMax": 0, "ageMin": 6, "ageMax": 30, "once": true,
+    "text": "瘟疫过境，村里病倒了一大片，你的家人也开始发热咳嗽。",
+    "options": [
+      { "text": "留下照顾家人", "resultText": "你衣不解带地熬了一个月，家人挺了过来，你也在鬼门关前走了一遭。", "effects": { "daoxin": 2, "tipo": -1 }, "deathChance": 0.15, "deathText": "你染上了疫病，没能熬过那个冬天。" },
+      { "text": "独自进山避疫", "resultText": "你在山洞里躲了两个月，回村时坟头多了几座。没人怪你，你却夜夜梦见他们。", "effects": { "daoxin": -2 }, "deathChance": 0.03, "deathText": "山中寒瘴入体，你死在了避疫的山洞里。" }
+    ]
+  },
+  {
+    "id": "e033", "realmMax": 0, "ageMin": 55, "weight": 2,
+    "text": "你坐在村口晒太阳，孙辈缠着你讲年轻时的故事。",
+    "options": [
+      { "text": "添油加醋讲一段", "resultText": "『那年爷爷差一点就遇到仙人了……』孩子们听得眼睛发亮，你也讲得眉飞色舞。", "effects": { "daoxin": 1 } },
+      { "text": "笑而不语", "resultText": "有些事讲了没人信，你眯眼晒着太阳，让往事在心里过了一遍。", "effects": {} }
+    ]
+  },
+  {
+    "id": "e034", "realmMax": 0, "ageMin": 50, "weight": 2,
+    "text": "岁月催人老，你的背驼了，眼也花了，儿孙劝你别再下地。",
+    "options": [
+      { "text": "硬撑着继续干活", "resultText": "闲不住的命。只是收工后腰疼得整宿睡不着。", "effects": { "tipo": -1 } },
+      { "text": "服老，含饴弄孙", "resultText": "你把锄头挂上了墙，粗茶淡饭，儿孙绕膝，也有滋有味。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "e018", "realmMin": 1, "realmMax": 1, "once": true, "weight": 2,
+    "text": "初入练气，灵气第一次淌过经脉，如溪流过周身。师长问你接下来作何打算。",
+    "options": [
+      { "text": "闭门勤修不辍", "resultText": "你一头扎进修炼里，进境喜人，只是同门都说你是个闷葫芦。", "effects": { "cultivation": 12 } },
+      { "text": "先逛遍坊市开开眼", "resultText": "灵石、法器、符箓、灵兽蛋……你把坊市摸了个门清，还顺手做成了两笔小买卖。", "effects": { "jiashi": 1, "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e021", "realmMin": 1, "realmMax": 2,
+    "text": "一位同门师兄以切磋为名当众挑衅，话里话外羞辱你的出身。",
+    "options": [
+      { "text": "应战", "resultText": "你被打得吐血，却撑到了最后一刻没有认输。此后再没人小瞧你。", "effects": { "tipo": 1, "daoxin": 1 }, "deathChance": 0.08, "deathText": "师兄下手没了轻重，一掌打碎了你的心脉。" },
+      { "text": "拱手认输", "resultText": "『技不如人。』你平静行礼退场，背后的哄笑像针一样扎人。", "effects": { "daoxin": -1, "cultivation": 5 } }
+    ]
+  },
+  {
+    "id": "e022", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "shijia" },
+    "text": "家族送来一批灵石丹药，捎信的族叔说：族里就指望你了。",
+    "options": [
+      { "text": "全部用于自身修行", "resultText": "灵石铺路，丹药开道，你的修为一日千里。", "effects": { "cultivation": 25 } },
+      { "text": "分赠有恩于己的同门", "resultText": "你把半数资源送了出去。日后你落难时，是这些人星夜赶来。", "effects": { "cultivation": 10, "daoxin": 2 } }
+    ]
+  },
+  {
+    "id": "e023", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "dandao" },
+    "text": "你在丹房帮工时，发现丹长老那炉筑基丹的火候错了半分。",
+    "options": [
+      { "text": "直言指出", "resultText": "满室寂静后，丹长老抚须大笑，当场收你做了记名弟子。", "effects": { "cultivation": 15, "jiashi": 1 }, "achievement": "丹道入门" },
+      { "text": "多一事不如少一事", "resultText": "那炉丹果然炸了。你看着长老焦黑的胡子，把到嘴边的话咽了回去。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "e026", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "minAttrs": { "daoxin": 7 } },
+    "text": "宗门大比开幕，你抽中的对手比你高了整整一个小境界。",
+    "options": [
+      { "text": "全力出战", "resultText": "你以命相搏连胜三场，一战成名！长老们记住了你的名字。", "effects": { "cultivation": 20, "jiashi": 1 }, "achievement": "大比扬名", "deathChance": 0.08, "deathText": "对手的飞剑快了半分，你倒在了大比的擂台上。" },
+      { "text": "点到即止，保存实力", "resultText": "你试探两招便认负下台。没人喝彩，也没人受伤。", "effects": { "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "e027", "realmMin": 1, "realmMax": 2,
+    "text": "下山历练，山道拐角处窜出一伙持刀的山贼：『此路是我开！』",
+    "options": [
+      { "text": "拔剑相向", "resultText": "一场血战，你的剑第一次沾了血。翻检贼窝，倒有些意外之财。", "effects": { "tipo": 1, "jiashi": 1 }, "deathChance": 0.12, "deathText": "双拳难敌四手，你倒在了荒山野岭的乱刀之下。" },
+      { "text": "破财免灾", "resultText": "你扔下钱袋从容离去。命比钱重，只是心里憋了一口气。", "effects": { "jiashi": -1, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "e029", "realmMin": 1, "realmMax": 6, "weight": 3,
+    "text": "洞中无岁月，又到一次闭关的关口。这一关，你打算怎么修？",
+    "options": [
+      { "text": "稳扎稳打", "resultText": "寒来暑往，修为稳步精进，道基愈发扎实。", "effects": { "cultivation": 10 } },
+      { "text": "服丹激进猛修", "resultText": "你以丹药强催修为，进境飞快，经脉却隐隐作痛。", "effects": { "cultivation": 20, "tipo": -1 }, "deathChance": 0.05, "deathText": "药力反噬，你在闭关的蒲团上悄无声息地坐化了。" }
+    ]
+  },
+  {
+    "id": "e030", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "flag": "qiyun" },
+    "text": "雷雨夜，一道紫雷劈中你门前古树——焦黑的树心里，静静躺着一枚流转电光的雷灵果。",
+    "options": [
+      { "text": "当场服下", "resultText": "雷力在体内横冲直撞，你硬生生炼化了它，灵根竟被淬炼了一层！", "effects": { "linggen": 1, "cultivation": 20 }, "achievement": "雷灵造化", "deathChance": 0.12, "deathText": "狂暴的雷力撑碎了你的经脉，你死在了机缘手里。" },
+      { "text": "拿去坊市高价卖掉", "resultText": "灵果拍出了天价。摸着鼓鼓的储物袋，你安慰自己：稳一点，没错。", "effects": { "jiashi": 3 } }
+    ]
+  }
 ]

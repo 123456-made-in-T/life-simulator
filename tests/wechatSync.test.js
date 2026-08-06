@@ -31,19 +31,23 @@ describe('微信小程序同步产物', () => {
     const { EVENT_POOL } = await import('../src/data/index.js');
 
     const alloc = { linggen: 8, wuxing: 5, tipo: 4, jiashi: 3 };
-    const runLife = (advanceTick, createRng) => {
+    const runLife = (sim, createRng) => {
       let state = createCharacter(alloc, []);
       const rng = createRng(2026);
       let ticks = 0;
       while (state.alive && !state.ascended && ticks < 500) {
-        state = advanceTick(state, EVENT_POOL, rng).state;
+        const result = sim.advanceTick(state, EVENT_POOL, rng);
+        state = result.state;
+        if (result.pending && state.alive) {
+          const count =
+            result.pending.kind === 'event' ? result.pending.event.options.length : 2;
+          state = sim.resolveChoice(state, result.pending, Math.floor(rng() * count), rng).state;
+        }
         ticks += 1;
       }
       return state;
     };
 
-    expect(runLife(wxSim.advanceTick, wxRng.createRng)).toEqual(
-      runLife(srcSim.advanceTick, srcRng.createRng),
-    );
+    expect(runLife(wxSim, wxRng.createRng)).toEqual(runLife(srcSim, srcRng.createRng));
   });
 });

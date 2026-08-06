@@ -1,4 +1,5 @@
-// 事件系统：按境界/年龄/条件筛选可用事件，按权重随机抽取，应用效果（纯函数）
+// 事件系统：按境界/年龄/条件筛选、按权重抽取（不变）；
+// 事件不再自动结算——每个事件带 options，由玩家抉择后经 applyOption 应用
 
 import { clampAttr } from './character.js';
 
@@ -47,11 +48,11 @@ export function pickEvent(pool, state, rng) {
 }
 
 /**
- * 应用事件效果，返回 { state, died, deathText }。
+ * 应用玩家选中的选项，返回 { state, died, deathText }。
  * 不修改传入的 state（返回新对象）。
  */
-export function applyEvent(state, event, rng) {
-  const effects = event.effects || {};
+export function applyOption(state, option, rng) {
+  const effects = option.effects || {};
   const attrs = { ...state.attrs };
   for (const key of ATTR_KEYS) {
     if (effects[key]) {
@@ -68,14 +69,13 @@ export function applyEvent(state, event, rng) {
     lifespan: state.lifespan + lifespanDelta,
     lifespanBonus: state.lifespanBonus + lifespanDelta,
     flags: effects.flag ? { ...state.flags, [effects.flag]: true } : state.flags,
-    usedEventIds: event.once ? [...state.usedEventIds, event.id] : state.usedEventIds,
-    achievements: event.achievement
-      ? [...state.achievements, event.achievement]
+    achievements: option.achievement
+      ? [...state.achievements, option.achievement]
       : state.achievements,
   };
 
-  if (event.deathChance && rng() < event.deathChance) {
-    return { state: next, died: true, deathText: event.deathText || '不幸殒命。' };
+  if (option.deathChance && rng() < option.deathChance) {
+    return { state: next, died: true, deathText: option.deathText || '不幸殒命。' };
   }
   return { state: next, died: false, deathText: null };
 }

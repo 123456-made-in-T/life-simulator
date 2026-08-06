@@ -208,15 +208,31 @@
 }
 
 .tone-bad .log-text { color: #7a4a1e; }
+.tone-choice .log-text { color: var(--indigo); }
 .tone-breakthrough .log-text { color: var(--indigo); font-weight: 600; }
 .tone-death .log-text { color: var(--cinnabar); font-weight: 600; }
 .tone-ascend .log-text { color: var(--gold); font-weight: 700; }
 
 .controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 16rpx 0 24rpx;
   border-top: 1rpx solid var(--line);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 16rpx 0 24rpx;
+  border-top: 4rpx solid var(--cinnabar);
+}
+
+.choice-btn {
+  text-align: left;
+  border-color: var(--cinnabar);
+  color: var(--cinnabar);
+  padding: 16rpx 24rpx;
 }
 
 .btn.small {

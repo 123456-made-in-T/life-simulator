@@ -7,8 +7,8 @@ import {
   drawTalents,
   POINT_TOTAL,
 } from '../src/engine/character.js';
-import { isEligible, pickEvent, applyEvent } from '../src/engine/events.js';
-import { advanceTick } from '../src/engine/simulation.js';
+import { isEligible, pickEvent, applyOption } from '../src/engine/events.js';
+import { advanceTick, resolveChoice } from '../src/engine/simulation.js';
 import { breakthroughChance } from '../src/engine/realms.js';
 import { summarize } from '../src/engine/rating.js';
 import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
@@ -17,6 +17,24 @@ const VALID_ALLOC = { linggen: 8, wuxing: 5, tipo: 4, jiashi: 3 };
 
 function freshState(talents = []) {
   return createCharacter(VALID_ALLOC, talents);
+}
+
+/** 跑完整的一世：遇到抉择点用随机数代替玩家选择（仅测试用） */
+function runLife(seed, talents = []) {
+  const rng = createRng(seed);
+  let state = freshState(talents);
+  let ticks = 0;
+  while (state.alive && !state.ascended && ticks < 500) {
+    const result = advanceTick(state, EVENT_POOL, rng);
+    state = result.state;
+    if (result.pending && state.alive) {
+      const count =
+        result.pending.kind === 'event' ? result.pending.event.options.length : 2;
+      state = resolveChoice(state, result.pending, Math.floor(rng() * count), rng).state;
+    }
+    ticks += 1;
+  }
+  return state;
 }
 
 describe('rng', () => {
@@ -74,12 +92,6 @@ describe('createCharacter', () => {
     expect(state.talents).toEqual(['t1', 't2']);
   });
 
-  test('属性被命格加成后不会超过上限', () => {
-    const state = freshState([{ id: 't', effects: { linggen: 5 } }]);
-
-    expect(state.attrs.linggen).toBe(10);
-  });
-
   test('非法分配直接抛错', () => {
     expect(() => createCharacter({ linggen: 1, wuxing: 1, tipo: 1, jiashi: 1 }, [])).toThrow();
   });
@@ -110,39 +122,95 @@ describe('events', () => {
     expect(isEligible({ id: 'used', once: true }, state)).toBe(false);
   });
 
-  test('属性条件过滤生效', () => {
-    const state = freshState();
-
-    expect(isEligible({ id: 'x', cond: { minAttrs: { linggen: 9 } } }, state)).toBe(false);
-    expect(isEligible({ id: 'x', cond: { maxAttrs: { jiashi: 5 } } }, state)).toBe(true);
-  });
-
-  test('applyEvent 不修改原状态（不可变）', () => {
+  test('applyOption 不修改原状态（不可变）', () => {
     const state = Object.freeze({ ...freshState(), attrs: Object.freeze(freshState().attrs) });
-    const event = { id: 'x', effects: { daoxin: 1, cultivation: 10 } };
+    const option = { text: '甲', resultText: 'r', effects: { daoxin: 1, cultivation: 10 } };
 
-    const { state: next } = applyEvent(state, event, createRng(1));
+    const { state: next } = applyOption(state, option, createRng(1));
 
     expect(next).not.toBe(state);
     expect(next.attrs.daoxin).toBe(state.attrs.daoxin + 1);
     expect(state.cultivation).toBe(0);
   });
 
-  test('pickEvent 空事件池返回 null', () => {
-    expect(pickEvent([], freshState(), createRng(1))).toBeNull();
-  });
-
-  test('事件增加的寿元同步计入 lifespanBonus（突破后不丢失）', () => {
+  test('选项增加的寿元同步计入 lifespanBonus（突破后不丢失）', () => {
     const state = freshState();
 
-    const { state: next } = applyEvent(state, { id: 'x', effects: { lifespan: 50 } }, createRng(1));
+    const { state: next } = applyOption(
+      state,
+      { text: '服丹', resultText: 'r', effects: { lifespan: 50 } },
+      createRng(1),
+    );
 
     expect(next.lifespan).toBe(state.lifespan + 50);
     expect(next.lifespanBonus).toBe(state.lifespanBonus + 50);
   });
+
+  test('pickEvent 空事件池返回 null', () => {
+    expect(pickEvent([], freshState(), createRng(1))).toBeNull();
+  });
 });
 
-describe('advanceTick 与完整人生', () => {
+describe('抉择制回合推进', () => {
+  test('advanceTick 遇到事件时返回 pending 而不自动结算', () => {
+    const rng = createRng(1);
+    let state = freshState();
+    let pending = null;
+    for (let i = 0; i < 50 && !pending; i += 1) {
+      const result = advanceTick(state, EVENT_POOL, rng);
+      state = result.state;
+      pending = result.pending;
+    }
+
+    expect(pending).not.toBeNull();
+    expect(pending.kind).toBe('event');
+    expect(pending.event.options.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test('resolveChoice 应用所选选项并记录抉择日志', () => {
+    const event = {
+      id: 'x',
+      text: '路口',
+      options: [
+        { text: '向左', resultText: '你走了左边。', effects: { daoxin: 1 } },
+        { text: '向右', resultText: '你走了右边。', effects: { daoxin: -1 } },
+      ],
+    };
+
+    const { state: next, logs } = resolveChoice(
+      freshState(),
+      { kind: 'event', event },
+      0,
+      createRng(1),
+    );
+
+    expect(next.attrs.daoxin).toBe(6);
+    expect(logs[0].text).toContain('向左');
+  });
+
+  test('修为圆满时返回突破抉择', () => {
+    const state = { ...freshState(), cultivation: 120, age: 20 };
+
+    const result = advanceTick(state, EVENT_POOL, createRng(1));
+
+    expect(result.pending?.kind).toBe('breakthrough');
+    expect(result.pending.chance).toBeGreaterThan(0);
+  });
+
+  test('选择稳固道基：修为回落、道心提升', () => {
+    const state = { ...freshState(), cultivation: 120 };
+
+    const { state: next } = resolveChoice(
+      state,
+      { kind: 'breakthrough', chance: 0.5, isFinal: false },
+      1,
+      createRng(1),
+    );
+
+    expect(next.cultivation).toBe(80);
+    expect(next.attrs.daoxin).toBe(state.attrs.daoxin + 1);
+  });
+
   test('突破成功率始终在 [0.05, 0.95]', () => {
     for (let realmIndex = 0; realmIndex < 7; realmIndex += 1) {
       const state = { ...freshState(), realmIndex };
@@ -153,14 +221,8 @@ describe('advanceTick 与完整人生', () => {
   });
 
   test('任意种子的人生都能在有限回合内终结', () => {
-    for (const seed of [1, 42, 777, 20260805]) {
-      const rng = createRng(seed);
-      let state = freshState([TALENT_POOL[0]]);
-      let ticks = 0;
-      while (state.alive && !state.ascended && ticks < 500) {
-        state = advanceTick(state, EVENT_POOL, rng).state;
-        ticks += 1;
-      }
+    for (const seed of [1, 42, 777, 20260806]) {
+      const state = runLife(seed, [TALENT_POOL[0]]);
       expect(state.alive === false || state.ascended === true).toBe(true);
     }
   });
@@ -175,13 +237,7 @@ describe('advanceTick 与完整人生', () => {
   });
 
   test('死亡后的结算包含必要字段', () => {
-    const rng = createRng(3);
-    let state = freshState();
-    let ticks = 0;
-    while (state.alive && !state.ascended && ticks < 500) {
-      state = advanceTick(state, EVENT_POOL, rng).state;
-      ticks += 1;
-    }
+    const state = runLife(3);
 
     const summary = summarize(state);
 

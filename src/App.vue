@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, computed, onBeforeUnmount } from 'vue';
 import { createRng, randomSeed } from './engine/rng.js';
 import { createCharacter, drawTalents } from './engine/character.js';
-import { advanceTick } from './engine/simulation.js';
+import { advanceTick, resolveChoice } from './engine/simulation.js';
 import { summarize } from './engine/rating.js';
 import { TALENT_POOL, EVENT_POOL } from './data/index.js';
 import SetupPanel from './components/SetupPanel.vue';
@@ -22,6 +22,19 @@ const state = ref(null);
 const logs = ref([]);
 const speed = ref('slow');
 const summary = ref(null);
+const pending = ref(null);
+
+const pendingOptions = computed(() => {
+  if (!pending.value) return [];
+  if (pending.value.kind === 'breakthrough') {
+    const pct = Math.round(pending.value.chance * 100);
+    return [
+      pending.value.isFinal ? `问鼎天劫（成功率约 ${pct}%，败则身死道消）` : `逆天冲关（成功率约 ${pct}%）`,
+      '稳固道基，来日再战',
+    ];
+  }
+  return pending.value.event.options.map((option) => option.text);
+});
 
 let rng = null;
 let allocation = null;
@@ -66,6 +79,26 @@ function step() {
   const result = advanceTick(state.value, EVENT_POOL, rng);
   state.value = result.state;
   logs.value = [...logs.value, ...result.logs];
+  if (result.pending) {
+    // 遇到抉择点：停下光阴，等玩家做决定
+    stopTimer();
+    pending.value = result.pending;
+  } else if (!result.state.alive) {
+    finishLife();
+  }
+}
+
+function choose(index) {
+  if (!pending.value) return;
+  const result = resolveChoice(state.value, pending.value, index, rng);
+  pending.value = null;
+  state.value = result.state;
+  logs.value = [...logs.value, ...result.logs];
+  if (!result.state.alive || result.state.ascended) {
+    finishLife();
+    return;
+  }
+  startTimer();
 }
 
 function finishLife() {
@@ -95,20 +128,6 @@ function toggleSpeed() {
   }
 }
 
-function skipToEnd() {
-  // 已在结算等待中：直接跳到结算页
-  if (summaryTimer) {
-    clearSummaryTimer();
-    phase.value = 'summary';
-    return;
-  }
-  stopTimer();
-  while (state.value.alive && !state.value.ascended && tickCount < MAX_TICKS) {
-    step();
-  }
-  finishLife();
-}
-
 function restart() {
   stopTimer();
   clearSummaryTimer();
@@ -116,6 +135,7 @@ function restart() {
   state.value = null;
   logs.value = [];
   summary.value = null;
+  pending.value = null;
   rng = null;
   allocation = null;
 }
@@ -140,8 +160,9 @@ onBeforeUnmount(() => {
       :state="state"
       :logs="logs"
       :speed="speed"
+      :pending-options="pendingOptions"
       @toggle-speed="toggleSpeed"
-      @skip="skipToEnd"
+      @choose="choose"
     />
     <SummaryCard v-else :summary="summary" :seed="seed" @restart="restart" />
   </main>
