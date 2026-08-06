@@ -1,0 +1,305 @@
+.masthead {
+  text-align: center;
+  padding: 24rpx 0 12rpx;
+  border-bottom: 4rpx solid var(--ink);
+  margin: 0 24rpx 8rpx;
+}
+
+.title {
+  font-size: 64rpx;
+  font-weight: 600;
+  letter-spacing: 0.6em;
+  text-indent: 0.6em;
+}
+
+.subtitle {
+  color: var(--ink-soft);
+  font-size: 24rpx;
+  letter-spacing: 0.15em;
+}
+
+.warn {
+  color: var(--cinnabar);
+  font-weight: 600;
+}
+
+/* ---------- 资质分配 ---------- */
+
+.attr-row {
+  padding: 16rpx 0;
+  border-bottom: 1rpx dashed var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.attr-name {
+  font-size: 32rpx;
+}
+
+.attr-hint {
+  font-size: 22rpx;
+  color: var(--ink-soft);
+}
+
+.attr-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.btn.mini {
+  width: 64rpx;
+  height: 64rpx;
+  padding: 0;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.attr-value {
+  min-width: 1.6em;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.attr-bar {
+  width: 100%;
+  height: 8rpx;
+  background: var(--paper-deep);
+  margin-top: 12rpx;
+}
+
+.attr-fill {
+  height: 100%;
+  background: var(--indigo);
+  transition: width 240ms ease-out;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+}
+
+.actions.end {
+  justify-content: flex-end;
+}
+
+/* ---------- 命格 ---------- */
+
+.talent {
+  border: 1rpx solid var(--line);
+  border-left-width: 6rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 12rpx;
+}
+
+.talent.picked {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.rarity-1 { border-left-color: var(--ink-soft); }
+.rarity-2 { border-left-color: var(--indigo); }
+.rarity-3 { border-left-color: var(--gold); }
+
+.talent-name {
+  font-weight: 600;
+  margin-right: 16rpx;
+}
+
+.talent-rarity {
+  font-size: 22rpx;
+  color: var(--ink-soft);
+  margin-right: 16rpx;
+}
+
+.talent.picked .talent-rarity {
+  color: var(--paper-deep);
+}
+
+.talent-desc {
+  font-size: 26rpx;
+}
+
+/* ---------- 人生进行中 ---------- */
+
+.life {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 160rpx);
+  padding: 0 24rpx;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8rpx 24rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.realm-badge {
+  background: var(--indigo);
+  color: var(--paper);
+  padding: 2rpx 20rpx;
+  font-size: 26rpx;
+  letter-spacing: 0.2em;
+}
+
+.age {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.lifespan {
+  font-weight: 400;
+  font-size: 24rpx;
+  color: var(--ink-soft);
+}
+
+.cult-bar {
+  flex: 1;
+  min-width: 120rpx;
+  height: 10rpx;
+  background: var(--paper-deep);
+}
+
+.cult-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo), var(--gold));
+  transition: width 240ms ease-out;
+}
+
+.attrs {
+  width: 100%;
+  display: flex;
+  gap: 24rpx;
+  font-size: 24rpx;
+  color: var(--ink-soft);
+}
+
+.log-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 16rpx 0;
+}
+
+.log {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 14rpx;
+}
+
+.log-age {
+  flex-shrink: 0;
+  min-width: 4em;
+  text-align: right;
+  color: var(--ink-soft);
+  font-size: 24rpx;
+  padding-top: 4rpx;
+}
+
+.log-text {
+  font-size: 28rpx;
+}
+
+.tone-bad .log-text { color: #7a4a1e; }
+.tone-breakthrough .log-text { color: var(--indigo); font-weight: 600; }
+.tone-death .log-text { color: var(--cinnabar); font-weight: 600; }
+.tone-ascend .log-text { color: var(--gold); font-weight: 700; }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0 24rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.btn.small {
+  font-size: 26rpx;
+  padding: 8rpx 24rpx;
+}
+
+/* ---------- 结算 ---------- */
+
+.summary {
+  text-align: center;
+}
+
+.grade {
+  font-size: 120rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.grade-仙 { color: var(--gold); }
+.grade-S { color: var(--cinnabar); }
+.grade-A { color: var(--indigo); }
+.grade-B, .grade-C, .grade-D { color: var(--ink-soft); }
+
+.summary-title {
+  font-size: 44rpx;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  font-weight: 600;
+  margin: 8rpx 0 16rpx;
+}
+
+.ending {
+  color: var(--ink-soft);
+  font-size: 27rpx;
+  margin-bottom: 40rpx;
+}
+
+.facts {
+  display: flex;
+  justify-content: center;
+  gap: 48rpx;
+  margin-bottom: 40rpx;
+}
+
+.fact-label {
+  font-size: 22rpx;
+  color: var(--ink-soft);
+}
+
+.fact-value {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.ach-title {
+  font-size: 28rpx;
+  letter-spacing: 0.2em;
+  margin-bottom: 12rpx;
+}
+
+.ach-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12rpx;
+  margin-bottom: 32rpx;
+}
+
+.ach {
+  border: 1rpx solid var(--gold);
+  color: var(--gold);
+  font-size: 24rpx;
+  padding: 2rpx 20rpx;
+}
+
+.seed {
+  font-size: 22rpx;
+  color: var(--ink-soft);
+  margin-bottom: 32rpx;
+}
+
+.restart {
+  font-size: 32rpx;
+  padding: 14rpx 80rpx;
+}

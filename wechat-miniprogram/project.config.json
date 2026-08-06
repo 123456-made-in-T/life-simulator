@@ -1,0 +1,12 @@
+{
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "projectname": "wendao-life-simulator",
+  "libVersion": "latest",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "minified": false,
+    "urlCheck": false
+  }
+}

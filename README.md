@@ -58,6 +58,10 @@ src/
 
 字段全部可选（除 id/text）。写错字段名不会报错但事件不生效——`npm test` 里的数据校验测试会帮你抓出来。
 
+## 微信小程序版
+
+`wechat-miniprogram/` 是原生小程序移植（引擎与数据复用，界面用 WXML 重写）。用微信开发者工具导入该目录即可运行，详见 [wechat-miniprogram/README.md](wechat-miniprogram/README.md)。改动 `src/` 后运行 `npm run sync:wx` 同步。
+
 ## 练习任务（由易到难）
 
 - [ ] 新增 20 个事件充实中后期剧情

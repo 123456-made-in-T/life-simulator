@@ -1,0 +1,10 @@
+{
+  "pages": ["pages/index/index"],
+  "window": {
+    "navigationBarTitleText": "问道 · 修仙人生",
+    "navigationBarBackgroundColor": "#f2ecdf",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2ecdf"
+  },
+  "sitemapLocation": "sitemap.json"
+}

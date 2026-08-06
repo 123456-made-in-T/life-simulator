@@ -1,0 +1,61 @@
+/* 设计基调与网页版一致：宣纸墨色，朱砂点睛 */
+page {
+  --paper: #f2ecdf;
+  --paper-deep: #e8e0cd;
+  --ink: #2a2620;
+  --ink-soft: #6b6355;
+  --cinnabar: #a83a24;
+  --indigo: #3d5a63;
+  --gold: #9a7b2d;
+  --line: rgba(42, 38, 32, 0.14);
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'STKaiti', 'KaiTi', serif;
+  line-height: 1.7;
+  font-size: 30rpx;
+}
+
+.panel {
+  border: 1rpx solid var(--line);
+  background: rgba(255, 253, 247, 0.55);
+  padding: 40rpx;
+  margin: 24rpx;
+}
+
+.btn {
+  display: inline-block;
+  border: 1rpx solid var(--ink);
+  border-radius: 4rpx;
+  padding: 12rpx 40rpx;
+  font-size: 30rpx;
+  text-align: center;
+}
+
+.btn-hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn.primary {
+  background: var(--cinnabar);
+  border-color: var(--cinnabar);
+  color: var(--paper);
+}
+
+.btn.disabled {
+  opacity: 0.35;
+}
+
+.section-title {
+  font-size: 38rpx;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 26rpx;
+  margin-bottom: 24rpx;
+}

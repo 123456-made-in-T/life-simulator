@@ -1,0 +1,98 @@
+<view class="masthead">
+  <view class="title">问道</view>
+  <view class="subtitle">修仙人生模拟器 · 一念入道，百年浮生</view>
+</view>
+
+<!-- 资质分配 -->
+<view class="panel" wx:if="{{phase === 'setup'}}">
+  <view class="section-title">投胎 · 分配资质</view>
+  <view class="hint">剩余点数：<text class="{{remaining !== 0 ? 'warn' : ''}}">{{remaining}}</text> / {{pointTotal}}</view>
+
+  <view class="attr-row" wx:for="{{allocKeys}}" wx:for-item="key" wx:key="*this">
+    <view class="attr-name">
+      {{attrLabels[key]}}
+      <view class="attr-hint">{{attrHints[key]}}</view>
+    </view>
+    <view class="attr-ctrl">
+      <view class="btn mini" hover-class="btn-hover" data-key="{{key}}" data-delta="-1" bindtap="onAdjust">−</view>
+      <text class="attr-value">{{alloc[key]}}</text>
+      <view class="btn mini" hover-class="btn-hover" data-key="{{key}}" data-delta="1" bindtap="onAdjust">＋</view>
+    </view>
+    <view class="attr-bar"><view class="attr-fill" style="width: {{alloc[key] * 10}}%"></view></view>
+  </view>
+
+  <view class="actions">
+    <view class="btn" hover-class="btn-hover" bindtap="onRandomize">听天由命</view>
+    <view class="btn primary {{remaining !== 0 ? 'disabled' : ''}}" bindtap="onConfirmAlloc">入世投胎</view>
+  </view>
+</view>
+
+<!-- 命格抽取 -->
+<view class="panel" wx:elif="{{phase === 'talent'}}">
+  <view class="section-title">抽取命格</view>
+  <view class="hint">天命十签，择其三。（已选 {{selectedCount}} / {{pickCount}}）</view>
+
+  <view
+    class="talent rarity-{{item.rarity}} {{selectedMap[item.id] ? 'picked' : ''}}"
+    wx:for="{{talentOptions}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="onToggleTalent"
+  >
+    <text class="talent-name">{{item.name}}</text>
+    <text class="talent-rarity">{{rarityLabels[item.rarity]}}</text>
+    <text class="talent-desc">{{item.desc}}</text>
+  </view>
+
+  <view class="actions end">
+    <view class="btn primary {{selectedCount !== pickCount ? 'disabled' : ''}}" bindtap="onConfirmTalents">带此命格降生</view>
+  </view>
+</view>
+
+<!-- 人生进行中 -->
+<view class="life" wx:elif="{{phase === 'living'}}">
+  <view class="status">
+    <text class="realm-badge">{{view.realmName}}</text>
+    <text class="age">{{view.age}} 岁 <text class="lifespan">/ 寿元 {{view.lifespan}}</text></text>
+    <view class="cult-bar"><view class="cult-fill" style="width: {{view.cultPercent}}%"></view></view>
+    <view class="attrs">
+      <text wx:for="{{view.attrs}}" wx:key="label" class="attr-chip">{{item.label}} {{item.value}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="log-scroll" scroll-y scroll-into-view="{{lastLogId}}" scroll-with-animation>
+    <view class="log tone-{{item.tone}}" wx:for="{{logs}}" wx:key="index" id="log-{{index}}">
+      <text class="log-age">{{item.age}}岁</text>
+      <text class="log-text">{{item.text}}</text>
+    </view>
+    <view id="log-bottom"></view>
+  </scroll-view>
+
+  <view class="controls">
+    <view class="btn small" hover-class="btn-hover" bindtap="onToggleSpeed">{{speed === 'slow' ? '光阴加速 »' : '细品岁月 «'}}</view>
+    <view class="btn small" hover-class="btn-hover" bindtap="onSkip">一键闭关至终局</view>
+  </view>
+</view>
+
+<!-- 结算 -->
+<view class="panel summary" wx:elif="{{phase === 'summary'}}">
+  <view class="grade grade-{{summary.grade}}">{{summary.grade}}</view>
+  <view class="summary-title">{{summary.title}}</view>
+  <view class="ending">{{summary.endingText}}</view>
+
+  <view class="facts">
+    <view class="fact"><view class="fact-label">终此一生</view><view class="fact-value">{{summary.age}} 岁</view></view>
+    <view class="fact"><view class="fact-label">最终境界</view><view class="fact-value">{{summary.realmName}}</view></view>
+    <view class="fact"><view class="fact-label">此生评分</view><view class="fact-value">{{summary.score}}</view></view>
+  </view>
+
+  <view class="achievements" wx:if="{{summary.achievements.length > 0}}">
+    <view class="ach-title">此生高光</view>
+    <view class="ach-list">
+      <text class="ach" wx:for="{{summary.achievements}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="seed">命盘编号 #{{seed}}</view>
+  <view class="btn primary restart" hover-class="btn-hover" bindtap="onRestart">再入轮回</view>
+</view>
