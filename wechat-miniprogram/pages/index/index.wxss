@@ -1,8 +1,20 @@
 .masthead {
+  position: relative;
   text-align: center;
   padding: 24rpx 0 12rpx;
   border-bottom: 4rpx solid var(--ink);
   margin: 0 24rpx 8rpx;
+}
+
+.music-toggle {
+  position: absolute;
+  top: 28rpx;
+  right: 0;
+  font-size: 24rpx;
+  color: var(--ink-soft);
+  border: 1rpx solid var(--line);
+  border-radius: 4rpx;
+  padding: 4rpx 16rpx;
 }
 
 .title {

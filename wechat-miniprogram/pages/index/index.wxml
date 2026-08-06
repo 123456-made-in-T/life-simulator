@@ -1,6 +1,7 @@
 <view class="masthead">
   <view class="title">问道</view>
   <view class="subtitle">修仙人生模拟器 · 一念入道，百年浮生</view>
+  <view class="music-toggle" bindtap="onToggleMusic">{{musicOn ? '♪ 乐' : '♪ 静'}}</view>
 </view>
 
 <!-- 资质分配 -->

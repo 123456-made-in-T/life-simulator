@@ -54,15 +54,54 @@ Page({
     summary: null,
     seed: 0,
     pendingOptions: [],
+    musicOn: true,
   },
 
   onLoad() {
     this.updateRemaining();
+    this.bgm = wx.createInnerAudioContext();
+    this.bgm.src = '/assets/bgm.mp3';
+    this.bgm.loop = true;
+    this.bgm.volume = 0.45;
+    // 不受 iOS 静音键影响（游戏 BGM 的惯例）
+    this.bgm.obeyMuteSwitch = false;
+  },
+
+  onShow() {
+    if (this.data.musicOn && this.bgmStarted) {
+      this.bgm.play();
+    }
+  },
+
+  onHide() {
+    if (this.bgm) {
+      this.bgm.pause();
+    }
   },
 
   onUnload() {
     this.stopTimer();
     this.clearSummaryTimer();
+    if (this.bgm) {
+      this.bgm.destroy();
+    }
+  },
+
+  playBgm() {
+    if (this.data.musicOn) {
+      this.bgmStarted = true;
+      this.bgm.play();
+    }
+  },
+
+  onToggleMusic() {
+    const musicOn = !this.data.musicOn;
+    this.setData({ musicOn });
+    if (musicOn) {
+      this.playBgm();
+    } else {
+      this.bgm.pause();
+    }
   },
 
   // ---------- 资质分配 ----------
@@ -87,6 +126,7 @@ Page({
 
   onConfirmAlloc() {
     if (this.data.remaining !== 0) return;
+    this.playBgm();
     this.allocation = { ...this.data.alloc };
     const seed = randomSeed();
     this.rng = createRng(seed);

@@ -9,6 +9,7 @@ import SetupPanel from './components/SetupPanel.vue';
 import TalentPick from './components/TalentPick.vue';
 import LifeLog from './components/LifeLog.vue';
 import SummaryCard from './components/SummaryCard.vue';
+import bgmUrl from './assets/bgm.mp3';
 
 const TALENT_OPTIONS_COUNT = 10;
 const TICK_INTERVAL_MS = { slow: 700, fast: 220 };
@@ -42,7 +43,32 @@ let timer = null;
 let summaryTimer = null;
 let tickCount = 0;
 
+const isMusicOn = ref(true);
+let bgm = null;
+
+function ensureBgm() {
+  if (!bgm) {
+    bgm = new Audio(bgmUrl);
+    bgm.loop = true;
+    bgm.volume = 0.45;
+  }
+  if (isMusicOn.value) {
+    // 浏览器要求用户交互后才允许出声，播放失败静默忽略
+    bgm.play().catch(() => {});
+  }
+}
+
+function toggleMusic() {
+  isMusicOn.value = !isMusicOn.value;
+  if (isMusicOn.value) {
+    ensureBgm();
+  } else if (bgm) {
+    bgm.pause();
+  }
+}
+
 function handleAllocation(alloc) {
+  ensureBgm();
   allocation = alloc;
   seed.value = randomSeed();
   rng = createRng(seed.value);
@@ -143,6 +169,9 @@ function restart() {
 onBeforeUnmount(() => {
   stopTimer();
   clearSummaryTimer();
+  if (bgm) {
+    bgm.pause();
+  }
 });
 </script>
 
@@ -150,6 +179,7 @@ onBeforeUnmount(() => {
   <header class="masthead">
     <h1>问道</h1>
     <p class="subtitle">修仙人生模拟器 · 一念入道，百年浮生</p>
+    <button class="music-toggle" @click="toggleMusic">{{ isMusicOn ? '♪ 乐' : '♪ 静' }}</button>
   </header>
 
   <main class="stage">
@@ -170,10 +200,21 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .masthead {
+  position: relative;
   text-align: center;
   padding: var(--space-2) 0 var(--space-1);
   border-bottom: 2px solid var(--ink);
   margin-bottom: var(--space-2);
+}
+
+.music-toggle {
+  position: absolute;
+  top: var(--space-2);
+  right: 0;
+  font-size: 0.8rem;
+  padding: 0.2em 0.7em;
+  color: var(--ink-soft);
+  border-color: var(--line);
 }
 
 .masthead h1 {
