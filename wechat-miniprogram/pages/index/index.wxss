@@ -252,10 +252,11 @@
   line-height: 1;
 }
 
-.grade-仙 { color: var(--gold); }
-.grade-S { color: var(--cinnabar); }
-.grade-A { color: var(--indigo); }
-.grade-B, .grade-C, .grade-D { color: var(--ink-soft); }
+/* WXSS 不支持中文类名，评级样式用拼音/字母类名（页面 JS 里做映射） */
+.grade-immortal { color: var(--gold); }
+.grade-s { color: var(--cinnabar); }
+.grade-a { color: var(--indigo); }
+.grade-b, .grade-c, .grade-d { color: var(--ink-soft); }
 
 .summary-title {
   font-size: 44rpx;

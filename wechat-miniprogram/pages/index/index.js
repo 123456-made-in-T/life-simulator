@@ -22,6 +22,9 @@ const TICK_INTERVAL_MS = { slow: 700, fast: 220 };
 const MAX_TICKS = 500;
 const SUMMARY_DELAY_MS = 1600;
 
+// WXSS 不支持中文类名选择器，评级到样式类名的映射
+const GRADE_CLASS = { 仙: 'immortal', S: 's', A: 'a', B: 'b', C: 'c', D: 'd' };
+
 const ATTR_HINTS = {
   linggen: '修炼速度与突破之资',
   wuxing: '悟道参法之能',
@@ -217,7 +220,8 @@ Page({
     // 幂等保护：结算等待期内的重复触发一律忽略
     if (this.summaryTimer || this.data.phase === 'summary') return;
     this.stopTimer();
-    this.pendingSummary = summarize(this.state);
+    const summary = summarize(this.state);
+    this.pendingSummary = { ...summary, gradeClass: GRADE_CLASS[summary.grade] || 'd' };
     this.summaryTimer = setTimeout(() => {
       this.summaryTimer = null;
       this.setData({ phase: 'summary', summary: this.pendingSummary });

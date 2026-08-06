@@ -85,7 +85,7 @@
 
 <!-- 结算 -->
 <view class="panel summary" wx:elif="{{phase === 'summary'}}">
-  <view class="grade grade-{{summary.grade}}">{{summary.grade}}</view>
+  <view class="grade grade-{{summary.gradeClass}}">{{summary.grade}}</view>
   <view class="summary-title">{{summary.title}}</view>
   <view class="ending">{{summary.endingText}}</view>
 
