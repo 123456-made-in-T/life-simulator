@@ -11,19 +11,21 @@ import {
   ENLIGHTEN_AGE,
   cultivationGain,
   breakthroughChance,
+  requiredStayYears,
 } from './realms.js';
 import { clampAttr, trackStats } from './character.js';
 import { adjustedDeathChance } from './difficulty.js';
 import { pickEvent, applyOption, formatEffects } from './events.js';
 
-const INNER_DEMON_DEATH_CHANCE = 0.5;
-const QI_DEVIATION_CHANCE = 0.25;
-const TRIBULATION_FAIL_DEATH_CHANCE = 0.55;
+const INNER_DEMON_DEATH_CHANCE = 0.55;
+const QI_DEVIATION_CHANCE = 0.3;
+const TRIBULATION_FAIL_DEATH_CHANCE = 0.6;
 // 金丹及以上突破失败有直接殒命之险，境界越高越凶险
-const BREAK_FAIL_DEATH_BASE = 0.1;
-const BREAK_FAIL_DEATH_PER_REALM = 0.05;
+const BREAK_FAIL_DEATH_BASE = 0.12;
+const BREAK_FAIL_DEATH_PER_REALM = 0.06;
 const BREAK_FAIL_DEATH_REALM = 3;
 const CONSOLIDATE_CULTIVATION = 80;
+const BREAK_FAIL_CULTIVATION = 50;
 
 export const BREAKTHROUGH_OPTIONS = { ATTEMPT: 0, CONSOLIDATE: 1 };
 
@@ -44,13 +46,25 @@ export function advanceTick(state, pool, rng) {
     next = { ...next, cultivation: next.cultivation + cultivationGain(next, tickYears) };
   }
 
-  // 修为圆满：是否冲关由玩家决定
+  // 修为圆满：还需满足境界沉淀年数，方可由玩家决定是否冲关
   if (next.cultivation >= CULTIVATION_CAP) {
-    const chance = breakthroughChance(next);
-    const isFinal = next.realmIndex === MAX_REALM_INDEX;
-    const target = isFinal ? '天劫已在头顶酝酿' : `【${REALMS[next.realmIndex + 1].name}】境近在眼前`;
-    logs.push(entry(next, `修为圆满！${target}，此番冲关成功率约 ${Math.round(chance * 100)}%。何去何从？`, 'choice'));
-    return { state: next, logs, pending: { kind: 'breakthrough', chance, isFinal } };
+    const stayed = next.age - next.realmEnteredAge;
+    const required = requiredStayYears(next);
+    if (stayed >= required) {
+      const chance = breakthroughChance(next);
+      const isFinal = next.realmIndex === MAX_REALM_INDEX;
+      const target = isFinal ? '天劫已在头顶酝酿' : `【${REALMS[next.realmIndex + 1].name}】境近在眼前`;
+      logs.push(entry(next, `修为圆满，底蕴已足！${target}，此番冲关成功率约 ${Math.round(chance * 100)}%。何去何从？`, 'choice'));
+      return { state: next, logs, pending: { kind: 'breakthrough', chance, isFinal } };
+    }
+    // 沉淀未足：修为封顶等待，岁月继续，事件照常
+    next = { ...next, cultivation: CULTIVATION_CAP };
+    if (next.capNotedRealm !== next.realmIndex) {
+      next = { ...next, capNotedRealm: next.realmIndex };
+      logs.push(
+        entry(next, `修为已至【${REALMS[next.realmIndex].name}】圆满，然道基底蕴未足——尚需沉淀约 ${Math.ceil(required - stayed)} 年方可冲关。`, 'normal'),
+      );
+    }
   }
 
   // 随机事件：只呈现，不结算，等玩家抉择
@@ -120,6 +134,7 @@ function attemptBreakthrough(state, rng, logs) {
       ...state,
       realmIndex,
       cultivation: 0,
+      realmEnteredAge: state.age,
       lifespan: REALMS[realmIndex].lifespan + state.lifespanBonus,
     };
     logs.push(entry(next, `丹田轰鸣，气象一新——突破至【${REALMS[realmIndex].name}】境！寿元大增。`, 'breakthrough'));
@@ -129,7 +144,7 @@ function attemptBreakthrough(state, rng, logs) {
   // 冲关失败
   let next = {
     ...state,
-    cultivation: CONSOLIDATE_CULTIVATION - 20,
+    cultivation: BREAK_FAIL_CULTIVATION,
     attrs: { ...state.attrs, daoxin: clampAttr(state.attrs.daoxin - 1) },
   };
   if (next.stats) {

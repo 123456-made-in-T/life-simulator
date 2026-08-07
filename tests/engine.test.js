@@ -9,7 +9,7 @@ import {
 } from '../src/engine/character.js';
 import { isEligible, pickEvent, applyOption } from '../src/engine/events.js';
 import { advanceTick, resolveChoice } from '../src/engine/simulation.js';
-import { breakthroughChance } from '../src/engine/realms.js';
+import { breakthroughChance, REALMS } from '../src/engine/realms.js';
 import { summarize } from '../src/engine/rating.js';
 import { DIFFICULTIES, adjustedDeathChance } from '../src/engine/difficulty.js';
 import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
@@ -153,12 +153,47 @@ describe('events', () => {
 });
 
 describe('难度模式与结算成就', () => {
-  test('死亡概率按难度放大且封顶 95%', () => {
+  test('死亡概率按全局加压与难度放大且封顶 95%', () => {
     const diyu = DIFFICULTIES.find((d) => d.id === 'diyu');
 
-    expect(adjustedDeathChance(0.1, diyu)).toBeCloseTo(0.15);
+    // 全局 ×1.25 再乘难度倍率
+    expect(adjustedDeathChance(0.1, diyu)).toBeCloseTo(0.1875);
     expect(adjustedDeathChance(0.9, diyu)).toBe(0.95);
-    expect(adjustedDeathChance(0.1, undefined)).toBe(0.1);
+    expect(adjustedDeathChance(0.1, undefined)).toBeCloseTo(0.125);
+  });
+
+  test('境界沉淀年数合计 1000，各难度最短飞升年限正确', () => {
+    const totalStay = REALMS.reduce((sum, realm) => sum + realm.minStay, 0);
+
+    expect(totalStay).toBe(1000);
+    for (const [id, years] of [['fanren', 1000], ['tianjiao', 800], ['diyu', 1500]]) {
+      const mode = DIFFICULTIES.find((d) => d.id === id);
+      expect(totalStay * mode.timeMul, id).toBe(years);
+    }
+  });
+
+  test('沉淀不足时修为圆满也不能冲关，修为封顶等待', () => {
+    const state = { ...freshState(), realmIndex: 1, age: 30, realmEnteredAge: 20, cultivation: 120 };
+
+    const result = advanceTick(state, EVENT_POOL, createRng(1));
+
+    expect(result.pending?.kind).not.toBe('breakthrough');
+    expect(result.state.cultivation).toBe(100);
+  });
+
+  test('沉淀足够后出现突破抉择', () => {
+    const state = {
+      ...freshState(),
+      realmIndex: 1,
+      age: 90,
+      realmEnteredAge: 20,
+      cultivation: 120,
+      lifespan: 150,
+    };
+
+    const result = advanceTick(state, EVENT_POOL, createRng(1));
+
+    expect(result.pending?.kind).toBe('breakthrough');
   });
 
   test('地狱模式 16 点开局并记录难度，20 点分配报错', () => {

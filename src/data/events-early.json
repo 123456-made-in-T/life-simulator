@@ -48,7 +48,7 @@
     ]
   },
   {
-    "id": "e010", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "minAttrs": { "linggen": 5 } },
+    "id": "e010", "realmMax": 0, "ageMin": 10, "ageMax": 24, "once": true, "cond": { "minAttrs": { "linggen": 5 } },
     "text": "仙门下山招收弟子！测灵大典上你灵光冲霄，执事长老当场向你伸出了手。",
     "options": [
       { "text": "拜入仙门", "resultText": "你叩别爹娘，一步三回头地上了仙山。从此山高路远，大道朝天。", "effects": { "cultivation": 20, "daoxin": 1 }, "achievement": "踏入仙门" },
@@ -56,7 +56,7 @@
     ]
   },
   {
-    "id": "e011", "realmMax": 0, "ageMin": 10, "ageMax": 18, "once": true, "cond": { "maxAttrs": { "linggen": 4 }, "minAttrs": { "jiashi": 7 } },
+    "id": "e011", "realmMax": 0, "ageMin": 10, "ageMax": 24, "once": true, "cond": { "maxAttrs": { "linggen": 4 }, "minAttrs": { "jiashi": 7 } },
     "text": "灵根平平，仙门无望。管家却打听到一家小宗门收『记名杂役』，只是要一大笔打点银子。",
     "options": [
       { "text": "散尽家财也要入门", "resultText": "你背着全家的积蓄上了山，成了外门一名扫地杂役。仙路从最低处开始。", "effects": { "jiashi": -2, "cultivation": 15 } },
@@ -64,7 +64,7 @@
     ]
   },
   {
-    "id": "e012", "realmMax": 0, "ageMin": 12, "ageMax": 20, "once": true, "cond": { "flag": "qiyun" },
+    "id": "e012", "realmMax": 0, "ageMin": 12, "ageMax": 26, "once": true, "cond": { "flag": "qiyun" },
     "text": "你在后山迷路，拨开藤蔓，一扇布满符文的石门在眼前缓缓显现。",
     "options": [
       { "text": "推门而入", "resultText": "这是一处废弃洞府！你在蒲团下摸出半卷无名功法，如获至宝。", "effects": { "cultivation": 30, "linggen": 1 }, "achievement": "洞府奇遇", "deathChance": 0.1, "deathText": "你触发了洞府残存的护山禁制，化作了一缕青烟。" },

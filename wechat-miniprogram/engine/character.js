@@ -97,8 +97,12 @@ export function createCharacter(alloc, talents, difficulty = DEFAULT_DIFFICULTY)
       id: difficulty.id,
       name: difficulty.name,
       deathMul: difficulty.deathMul,
+      timeMul: difficulty.timeMul,
       scoreMul: difficulty.scoreMul,
     },
+    // 境界沉淀：记录进入当前境界时的年龄
+    realmEnteredAge: 0,
+    capNotedRealm: -1,
     // 结算成就用的统计
     stats: { breakFails: 0, riskSurvived: 0, minDaoxin: attrs.daoxin },
   };
