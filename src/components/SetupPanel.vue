@@ -9,7 +9,7 @@ import {
 } from '../engine/character.js';
 import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../engine/difficulty.js';
 
-const emit = defineEmits(['confirm']);
+const emit = defineEmits(['confirm', 'records']);
 
 const ATTR_HINTS = {
   linggen: '修炼速度与突破之资',
@@ -86,7 +86,10 @@ function confirm() {
     </div>
 
     <div class="actions">
-      <button @click="randomize">听天由命</button>
+      <span class="actions-left">
+        <button @click="randomize">听天由命</button>
+        <button @click="emit('records')">生平战绩</button>
+      </span>
       <button class="primary" :disabled="remaining !== 0" @click="confirm">入世投胎</button>
     </div>
   </section>
@@ -188,5 +191,10 @@ h2 {
   display: flex;
   justify-content: space-between;
   margin-top: var(--space-3);
+}
+
+.actions-left {
+  display: flex;
+  gap: var(--space-1);
 }
 </style>

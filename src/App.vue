@@ -9,6 +9,9 @@ import SetupPanel from './components/SetupPanel.vue';
 import TalentPick from './components/TalentPick.vue';
 import LifeLog from './components/LifeLog.vue';
 import SummaryCard from './components/SummaryCard.vue';
+import RecordsPanel from './components/RecordsPanel.vue';
+import { buildRecord, addRecord } from './engine/records.js';
+import { loadRecords, saveRecords, clearRecords } from './lib/recordsStore.js';
 import bgmUrl from './assets/bgm.mp3';
 import sfxChoiceUrl from './assets/sfx-choice.mp3';
 import sfxBreakUrl from './assets/sfx-break.mp3';
@@ -28,6 +31,14 @@ const logs = ref([]);
 const speed = ref('slow');
 const summary = ref(null);
 const pending = ref(null);
+const records = ref(loadRecords());
+
+function handleClearRecords() {
+  if (window.confirm('确定清空全部战绩？此操作不可恢复。')) {
+    records.value = [];
+    clearRecords();
+  }
+}
 
 const pendingOptions = computed(() => {
   if (!pending.value) return [];
@@ -170,6 +181,8 @@ function finishLife() {
   }
   stopTimer();
   summary.value = summarize(state.value);
+  records.value = addRecord(records.value, buildRecord(summary.value, seed.value, Date.now()));
+  saveRecords(records.value);
   summaryTimer = setTimeout(() => {
     summaryTimer = null;
     phase.value = 'summary';
@@ -219,7 +232,13 @@ onBeforeUnmount(() => {
   </header>
 
   <main class="stage">
-    <SetupPanel v-if="phase === 'setup'" @confirm="handleAllocation" />
+    <SetupPanel v-if="phase === 'setup'" @confirm="handleAllocation" @records="phase = 'records'" />
+    <RecordsPanel
+      v-else-if="phase === 'records'"
+      :records="records"
+      @back="phase = 'setup'"
+      @clear="handleClearRecords"
+    />
     <TalentPick v-else-if="phase === 'talent'" :options="talentOptions" @confirm="handleTalents" />
     <LifeLog
       v-else-if="phase === 'living'"

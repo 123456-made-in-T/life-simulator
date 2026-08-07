@@ -35,8 +35,40 @@
   </view>
 
   <view class="actions">
-    <view class="btn" hover-class="btn-hover" bindtap="onRandomize">听天由命</view>
+    <view class="actions-left">
+      <view class="btn" hover-class="btn-hover" bindtap="onRandomize">听天由命</view>
+      <view class="btn" hover-class="btn-hover" bindtap="onShowRecords">生平战绩</view>
+    </view>
     <view class="btn primary {{remaining !== 0 ? 'disabled' : ''}}" bindtap="onConfirmAlloc">入世投胎</view>
+  </view>
+</view>
+
+<!-- 生平战绩 -->
+<view class="panel" wx:elif="{{phase === 'records'}}">
+  <view class="section-title">生平战绩</view>
+
+  <view class="career">
+    <view class="stat"><view class="stat-label">轮回</view><view class="stat-value">{{career.total}} 世</view></view>
+    <view class="stat"><view class="stat-label">最高评分</view><view class="stat-value">{{career.bestScore}}</view></view>
+    <view class="stat"><view class="stat-label">飞升</view><view class="stat-value">{{career.ascensions}} 次</view></view>
+    <view class="stat"><view class="stat-label">最高寿数</view><view class="stat-value">{{career.maxAge}} 岁</view></view>
+  </view>
+
+  <view wx:if="{{records.length === 0}}" class="records-empty">尚无一世修行。回去投个胎吧。</view>
+  <scroll-view wx:else scroll-y class="records-list">
+    <view wx:for="{{records}}" wx:key="at" class="record-row">
+      <text class="rr-grade">{{item.grade}}</text>
+      <view class="rr-main">
+        {{item.title}} · {{item.realmName}} · {{item.age}}岁 · {{item.difficultyName}}
+        <text class="rr-date">{{item.dateText}}</text>
+      </view>
+      <text class="rr-score">{{item.score}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="actions">
+    <view class="btn {{records.length === 0 ? 'disabled' : ''}}" hover-class="btn-hover" bindtap="onClearRecords">清空战绩</view>
+    <view class="btn primary" hover-class="btn-hover" bindtap="onBackFromRecords">返回</view>
   </view>
 </view>
 

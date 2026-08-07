@@ -11,6 +11,8 @@ import {
   drawTalents,
 } from '../../engine/character.js';
 import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../../engine/difficulty.js';
+import { buildRecord, addRecord, computeCareer } from '../../engine/records.js';
+import { loadRecords, saveRecords, clearRecords } from '../../lib/recordsStore.js';
 import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
@@ -59,10 +61,13 @@ Page({
     pendingOptions: [],
     musicOn: true,
     showRecord: false,
+    records: [],
+    career: { total: 0, bestScore: 0, ascensions: 0, maxAge: 0 },
   },
 
   onLoad() {
     this.difficulty = DEFAULT_DIFFICULTY;
+    this.records = loadRecords();
     this.updateRemaining();
     this.bgm = wx.createInnerAudioContext();
     this.bgm.src = '/assets/bgm.mp3';
@@ -309,6 +314,8 @@ Page({
     this.stopTimer();
     const summary = summarize(this.state);
     this.pendingSummary = { ...summary, gradeClass: GRADE_CLASS[summary.grade] || 'd' };
+    this.records = addRecord(this.records, buildRecord(summary, this.data.seed, Date.now()));
+    saveRecords(this.records);
     this.summaryTimer = setTimeout(() => {
       this.summaryTimer = null;
       this.setData({ phase: 'summary', summary: this.pendingSummary });
@@ -325,6 +332,32 @@ Page({
 
   onToggleRecord() {
     this.setData({ showRecord: !this.data.showRecord });
+  },
+
+  onShowRecords() {
+    this.setData({
+      phase: 'records',
+      records: this.records,
+      career: computeCareer(this.records),
+    });
+  },
+
+  onBackFromRecords() {
+    this.setData({ phase: 'setup' });
+  },
+
+  onClearRecords() {
+    wx.showModal({
+      title: '清空战绩',
+      content: '确定清空全部战绩？此操作不可恢复。',
+      success: (res) => {
+        if (res.confirm) {
+          this.records = [];
+          clearRecords();
+          this.setData({ records: [], career: computeCareer([]) });
+        }
+      },
+    });
   },
 
   onRestart() {
