@@ -28,7 +28,7 @@ export default [
     "id": "m005", "realmMin": 2, "realmMax": 3, "once": true, "cond": { "minAttrs": { "daoxin": 6 } },
     "text": "与你相识多年的那位修士在月下问你：可愿结为道侣，此后仙路同行？",
     "options": [
-      { "text": "应下", "resultText": "从此洞府的灯下有人共剪烛花，闭关的门外有人守候。", "effects": { "daoxin": 2 }, "achievement": "结为道侣" },
+      { "text": "应下", "resultText": "从此洞府的灯下有人共剪烛花，闭关的门外有人守候。", "effects": { "daoxin": 2, "flag": "daolv" }, "achievement": "结为道侣" },
       { "text": "婉拒，大道独行", "resultText": "『情之一字，误道。』你转身离去，没敢回头看那双眼睛。", "effects": { "cultivation": 15, "daoxin": -2 } }
     ]
   },
@@ -110,6 +110,70 @@ export default [
     "options": [
       { "text": "收入门墙，倾囊相授", "resultText": "看着少年懵懂的眼睛，你仿佛看到当年的自己。", "effects": { "daoxin": 1 }, "achievement": "传道授业" },
       { "text": "拒之门外", "resultText": "『修行是自己的事。』你闭了洞门。少年磕了三个头，一步一回头地走了。", "effects": { "cultivation": 8, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "z101", "realmMin": 3, "realmMax": 3, "once": true,
+    "text": "宗门一位长老坐化，之位空悬。论修为你有资格一争，但对手是掌门的亲传弟子。",
+    "options": [
+      { "text": "放手一争", "resultText": "明枪暗箭三个月，你硬是凭战功和人望坐上了长老之位。", "effects": { "jiashi": 2, "daoxin": -1 }, "achievement": "宗门长老", "deathChance": 0.08, "deathText": "夺位之争远比台面凶险，你死在一场『意外』的护山阵故障里。" },
+      { "text": "无意权位，退出竞逐", "resultText": "你在贺信上第一个署名。掌门弟子上位后，反倒处处给你行方便。", "effects": { "daoxin": 1, "cultivation": 8 } }
+    ]
+  },
+  {
+    "id": "z102", "realmMin": 2, "realmMax": 3,
+    "text": "宗门藏宝阁失窃，叛徒携镇派玉璧连夜出逃，长老悬赏缉拿。",
+    "options": [
+      { "text": "追缉叛徒", "resultText": "三千里追踪，你在一处海崖截住了他。玉璧归宗那日，山门为你鸣钟三响。", "effects": { "cultivation": 12, "jiashi": 1 }, "achievement": "追回镇派之宝", "deathChance": 0.12, "deathText": "叛徒身后还藏着接应的魔修，你中伏陨落在海崖之下。" },
+      { "text": "守好自己的山头", "resultText": "重赏之下必有勇夫，轮不到你。你继续闭关，只在出关时听说叛徒已伏诛。", "effects": { "cultivation": 8 } }
+    ]
+  },
+  {
+    "id": "q101", "realmMin": 2, "realmMax": 4, "weight": 2, "cond": { "flag": "daolv" },
+    "text": "月圆之夜，道侣提议：与其各自闭关，不如印证双修，同参大道。",
+    "options": [
+      { "text": "双修共进", "resultText": "两道气机水乳交融，许多独自参不透的关窍，两人一碰就透了。", "effects": { "cultivation": 15, "daoxin": 1 } },
+      { "text": "道不同参，各自苦修", "resultText": "你说大道终须独行。她笑了笑没反驳，只是那晚的月色格外冷清。", "effects": { "cultivation": 10, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "q102", "realmMin": 3, "realmMax": 4, "once": true, "cond": { "flag": "daolv" },
+    "text": "噩耗传来：道侣外出历练时被魔修掳走，生死不明——这是冲着你来的。",
+    "options": [
+      { "text": "孤身闯魔窟", "resultText": "你一人一剑踏平了那座魔窟。抱着昏迷的她走出来时，你的道袍已被血浸成了黑色。", "effects": { "daoxin": 2 }, "achievement": "情之所至", "deathChance": 0.2, "deathText": "魔窟深处的大阵等你多时，你们最终死在了一起。" },
+      { "text": "联络宗门，稳妥营救", "resultText": "大军压境，魔修弃巢而逃。她获救了，只是看你的眼神里多了一丝说不清的东西。", "effects": { "daoxin": -1, "jiashi": 1 }, "deathChance": 0.05, "deathText": "魔修撤退前的最后一击，恰好落在了你的位置。" }
+    ]
+  },
+  {
+    "id": "mo101", "realmMin": 2, "realmMax": 4, "weight": 2, "cond": { "flag": "modao" },
+    "text": "魔道之路，弱肉强食。你围杀了一名落单的散修，此人储物袋丰厚，气血也可炼为己用。",
+    "options": [
+      { "text": "血祭炼化，人财两收", "resultText": "血雾入体，修为暴涨。你告诉自己：魔道本该如此。声音却越来越小。", "effects": { "cultivation": 25, "daoxin": -2 } },
+      { "text": "只取财物，留他性命", "resultText": "『滚。』你踢开储物袋里的骸骨袋，只拿了灵石。魔道中人笑你妇人之仁，你懒得理会。", "effects": { "jiashi": 2, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "mo102", "realmMin": 3, "realmMax": 5, "cond": { "flag": "modao" },
+    "text": "你的名字上了正道联军的诛魔榜，三位金丹修士循着气息围了上来。",
+    "options": [
+      { "text": "杀出重围", "resultText": "一场血战从山巅打到海底。你活了下来，诛魔榜上你的悬赏翻了三倍。", "effects": { "cultivation": 15, "tipo": -1 }, "deathChance": 0.18, "deathText": "双拳难敌六手，你陨落于正道联军的合击之下。" },
+      { "text": "金蝉脱壳，隐姓埋名", "resultText": "你诈死脱身，蛰伏于一座凡人小城。修为停滞的日子里，你时常想起入魔前的自己。", "effects": { "cultivation": -10, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "z103", "realmMin": 3, "realmMax": 4, "once": true, "cond": { "minAttrs": { "daoxin": 6 } },
+    "text": "掌门寿元将近，召你入殿，案上放着掌门印信：『宗门，托付给你了。』",
+    "options": [
+      { "text": "接过印信", "resultText": "从此你的名字与整个宗门绑在了一起。千斤重担，也是千钧信任。", "effects": { "jiashi": 3, "daoxin": 1 }, "achievement": "执掌一门" },
+      { "text": "举贤让位", "resultText": "你推举了更合适的师弟，自请镇守后山。掌门看了你很久，说了句：也好。", "effects": { "daoxin": 2, "cultivation": 8 } }
+    ]
+  },
+  {
+    "id": "q103", "realmMin": 2, "realmMax": 3, "once": true,
+    "text": "山下故人捎来书信：当年对你有一饭之恩的老妪病重，凡间药石无医，唯灵丹可救。",
+    "options": [
+      { "text": "亲自送药下山", "resultText": "老妪已认不出你，只是拉着你的手说这位仙长面善。你把丹药化在她的粥里。", "effects": { "jiashi": -1, "daoxin": 2 }, "achievement": "一饭之报" },
+      { "text": "凡人生死有命", "resultText": "修行人不沾因果。你把信折好压在丹炉底下，那炉丹最后炼废了。", "effects": { "cultivation": 5, "daoxin": -2 } }
     ]
   }
 ];

@@ -22,6 +22,6 @@ export default [
   { "id": "yaowang", "name": "药王后人", "desc": "祖传医术在身，体魄+1，与丹有缘", "rarity": 2, "effects": { "tipo": 1, "flag": "dandao" } },
   { "id": "guijia", "name": "没落世家", "desc": "祖上阔过，家世+2 道心-1", "rarity": 1, "effects": { "jiashi": 2, "daoxin": -1 } },
   { "id": "tianyan", "name": "慧眼识宝", "desc": "看什么都值钱，机缘不断", "rarity": 2, "effects": { "flag": "qiyun" } },
-  { "id": "mozhong", "name": "魔种潜藏", "desc": "体内藏魔，灵根+2 道心-2，慎选", "rarity": 2, "effects": { "linggen": 2, "daoxin": -2 } },
+  { "id": "mozhong", "name": "魔种潜藏", "desc": "体内藏魔，灵根+2 道心-2，将引来魔道纠缠，慎选", "rarity": 2, "effects": { "linggen": 2, "daoxin": -2, "flag": "mozhong" } },
   { "id": "pingfan", "name": "平平无奇", "desc": "普通就是福气，全属性+0，寿元+20", "rarity": 1, "effects": { "lifespan": 20 } }
 ];

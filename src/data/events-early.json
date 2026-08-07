@@ -183,5 +183,69 @@
       { "text": "当场服下", "resultText": "雷力在体内横冲直撞，你硬生生炼化了它，灵根竟被淬炼了一层！", "effects": { "linggen": 1, "cultivation": 20 }, "achievement": "雷灵造化", "deathChance": 0.12, "deathText": "狂暴的雷力撑碎了你的经脉，你死在了机缘手里。" },
       { "text": "拿去坊市高价卖掉", "resultText": "灵果拍出了天价。摸着鼓鼓的储物袋，你安慰自己：稳一点，没错。", "effects": { "jiashi": 3 } }
     ]
+  },
+  {
+    "id": "q001", "realmMax": 0, "ageMin": 8, "ageMax": 16, "once": true,
+    "text": "邻家那个总跟在你身后的小丫头，今天塞给你一颗烤红薯，耳根红红的。",
+    "options": [
+      { "text": "从此常伴左右", "resultText": "上山采药、下河摸鱼，都成了两个人的事。少年心事，甜里带涩。", "effects": { "daoxin": 1, "flag": "qingmei" } },
+      { "text": "心无旁骛，独来独往", "resultText": "你接过红薯道了谢，转身继续读你的书。她后来没再来过。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "q002", "realmMax": 1, "ageMin": 14, "ageMax": 24, "once": true, "cond": { "flag": "qingmei" },
+    "text": "仙师过境，一眼看中她的资质要收为徒。她在马车上回头望你，眼里有泪也有光。",
+    "options": [
+      { "text": "立誓追上她的脚步", "resultText": "你在她消失的官道尽头站到天黑，回家点灯苦修——总有一天，你要堂堂正正走到她面前。", "effects": { "cultivation": 15, "daoxin": -1 }, "achievement": "追光之誓" },
+      { "text": "祝她前程似锦", "resultText": "你笑着朝马车挥手。有的相逢是为了送别，你比谁都早懂这个道理。", "effects": { "daoxin": 2 } }
+    ]
+  },
+  {
+    "id": "z001", "realmMin": 1, "realmMax": 2,
+    "text": "执法堂缉拿一名盗取灵田的外门弟子，点你协查。人赃并获后，对方偷偷塞来一袋灵石。",
+    "options": [
+      { "text": "秉公上报", "resultText": "连人带灵石一并交了上去。执法长老多看了你一眼，那一眼价值千金。", "effects": { "daoxin": 1, "jiashi": 1 } },
+      { "text": "收下灵石，睁只眼闭只眼", "resultText": "灵石入袋，心里却像塞了团棉絮。此后每次路过执法堂，你都绕着走。", "effects": { "jiashi": 2, "daoxin": -2 } }
+    ]
+  },
+  {
+    "id": "z002", "realmMin": 1, "realmMax": 2, "weight": 2,
+    "text": "藏经阁值夜，青灯一盏，万卷道藏任你翻阅。",
+    "options": [
+      { "text": "苦读本门功法", "resultText": "逐字推敲，你把功法里以前含糊带过的关窍全捋通了。", "effects": { "cultivation": 10 } },
+      { "text": "遍览杂书野史", "resultText": "上古秘辛、域外见闻、失传的阵图丹方……看似无用的杂学，悄悄拓宽了你的眼界。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "z003", "realmMin": 1, "realmMax": 2, "once": true, "cond": { "minAttrs": { "wuxing": 6 } },
+    "text": "师尊夜里单独召你上峰，说观你悟性不俗，愿传你一门不外传的秘法。",
+    "options": [
+      { "text": "叩首尽学", "resultText": "三个月倾囊相授，你尽得真传。下山那日，师尊说：青出于蓝。", "effects": { "cultivation": 25 }, "achievement": "师门真传" },
+      { "text": "自谦资质浅薄，只学皮毛", "resultText": "你怕树大招风，只学了三成。师尊叹了口气，没再多说。", "effects": { "cultivation": 8, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "z004", "realmMin": 1, "realmMax": 2, "once": true,
+    "text": "有同门在长老面前构陷你偷练禁术，证据竟做得有模有样。",
+    "options": [
+      { "text": "当众对质，查个水落石出", "resultText": "你据理力争三日，终于揪出伪证的破绽。构陷者被逐出师门，你的道心经此一炼，愈发坚定。", "effects": { "daoxin": 2 }, "deathChance": 0.05, "deathText": "对方狗急跳墙，趁夜对你下了毒手。" },
+      { "text": "忍气吞声，任凭发落", "resultText": "你被罚面壁一年。冤屈像根刺扎在心里，拔不出来。", "effects": { "daoxin": -2, "cultivation": 5 } }
+    ]
+  },
+  {
+    "id": "mo001", "realmMin": 1, "realmMax": 3, "weight": 2, "cond": { "flag": "mozhong" },
+    "text": "夜深人静，体内的魔种又开始低语：『借我一分力，还你十分修为……』",
+    "options": [
+      { "text": "顺从那股力量", "resultText": "魔气过处，修为暴涨，你的眼底闪过一丝转瞬即逝的猩红。", "effects": { "cultivation": 18, "daoxin": -2 }, "deathChance": 0.06, "deathText": "魔种趁虚而入，一夜之间蚕食了你的神智，躯壳里再没有『你』。" },
+      { "text": "咬牙强行压制", "resultText": "你以道心为封、气血为锁，把低语压回丹田深处。额头的冷汗湿透了道袍。", "effects": { "daoxin": 1, "tipo": -1 } }
+    ]
+  },
+  {
+    "id": "mo002", "realmMin": 2, "realmMax": 4, "once": true, "cond": { "flag": "mozhong" },
+    "text": "魔种终于成熟，与你神魂纠缠一体。今日必须做个了断：入魔，或断魔。",
+    "options": [
+      { "text": "堕入魔道", "resultText": "你不再抗拒。魔气冲天而起，从此正道多了一个通缉令，魔道多了一个天才。", "effects": { "cultivation": 30, "daoxin": -2, "flag": "modao" }, "achievement": "堕入魔道" },
+      { "text": "自断魔种", "resultText": "你以本命真元为刃，生生剜去魔种。修为大损，灵台却前所未有地清明。", "effects": { "cultivation": -20, "daoxin": 2, "tipo": -1 }, "achievement": "断魔明志", "deathChance": 0.1, "deathText": "魔种反噬，你与它同归于尽，至死灵台清明。" }
+    ]
   }
 ]

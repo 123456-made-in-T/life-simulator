@@ -102,5 +102,53 @@
       { "text": "闭死关", "resultText": "石壁滴水成痕，你在定境中吐纳天地，修为悄然精进。", "effects": { "cultivation": 18 }, "deathChance": 0.04, "deathText": "这一定，再没有醒来。后人开启洞府时，只见蒲团上一具含笑的枯坐身影。" },
       { "text": "巡游疆界，斩妖除魔", "resultText": "你循着妖气清理了几处魔窟，顺手救下的凡人已记不清数目。", "effects": { "cultivation": 8, "daoxin": 1 }, "deathChance": 0.08, "deathText": "一处魔窟深处藏着远超预估的存在，你没能走出来。" }
     ]
+  },
+  {
+    "id": "mo201", "realmMin": 4, "realmMax": 6, "once": true, "cond": { "flag": "modao" },
+    "text": "老魔主陨落，魔道群龙无首。数股势力同时向你递来血书：请君登魔主之位。",
+    "options": [
+      { "text": "登魔主之位", "resultText": "血旗蔽日，万魔朝拜。你坐上那张白骨王座时，忽然想起小时候听的仙人故事。", "effects": { "jiashi": 3, "cultivation": 25 }, "achievement": "一代魔主", "deathChance": 0.15, "deathText": "登位大典上，三名觊觎王座的魔道大能同时出手，你死在了权力的顶点。" },
+      { "text": "焚了血书，归隐山林", "resultText": "『魔道自由，不当以主奴论。』你烧了血书远遁，魔道中从此流传着一个拒绝王座的传说。", "effects": { "daoxin": 2, "cultivation": 10 } }
+    ]
+  },
+  {
+    "id": "mo202", "realmMin": 5, "realmMax": 6, "once": true, "cond": { "flag": "modao" },
+    "text": "正魔大战一触即发，两边的军阵在天穹下对峙。你站在阵前，忽然不确定自己为何而战。",
+    "options": [
+      { "text": "率魔军决一死战", "resultText": "尸山血海，天地变色。战后论功，你的凶名足以止小儿夜啼。", "effects": { "cultivation": 20 }, "deathChance": 0.22, "deathText": "大战正酣，你被正道三位大能合力锁杀于万军阵前。" },
+      { "text": "临阵抽身，只求问心无愧", "resultText": "你转身离开战场，正魔两道都骂你。你抬头看了看天，觉得几百年来从没这么轻松过。", "effects": { "daoxin": 2 }, "achievement": "迷途知返" }
+    ]
+  },
+  {
+    "id": "q201", "realmMin": 5, "realmMax": 6, "once": true, "cond": { "flag": "daolv" },
+    "text": "道侣的天劫比你先到。雷云压顶，她回头对你笑：『别过来，等我。』",
+    "options": [
+      { "text": "闯入雷区为她护法", "resultText": "你以身挡下最烈的三道天雷。她渡劫成功回头找你时，你已烧得只剩道袍完好。她哭着把你从灰烬里挖出来——还有一口气。", "effects": { "daoxin": 2, "tipo": -2 }, "achievement": "生死与共", "deathChance": 0.15, "deathText": "第九道天雷落下时，你替她挡在了正中央。她飞升那日，带走了一捧灰。" },
+      { "text": "谨守界外，静候结果", "resultText": "你握紧的拳心掐出了血。她成功了——但从此你们之间隔着一道你没有跨过去的雷池。", "effects": { "cultivation": 10, "daoxin": -2 } }
+    ]
+  },
+  {
+    "id": "z201", "realmMin": 4, "realmMax": 6, "once": true,
+    "text": "昔日宗门遭遇灭门之危，掌门血书求援。你早已是化外之人，去或不去，全在一念。",
+    "options": [
+      { "text": "出山护宗", "resultText": "你降下云头的那一刻，围山的强敌齐齐后退了三步。山门上下泣声一片。", "effects": { "daoxin": 2, "cultivation": 10 }, "achievement": "护宗大恩", "deathChance": 0.12, "deathText": "强敌之中藏着一位隐世大能，你为护山门流尽了最后一滴血。" },
+      { "text": "尘缘已断，闭关不出", "resultText": "出关后你去了一趟故地。山门残碑上刻着战殁者名录，你从头到尾读了三遍。", "effects": { "cultivation": 15, "daoxin": -2 } }
+    ]
+  },
+  {
+    "id": "l101", "realmMin": 6, "realmMax": 6, "once": true, "cond": { "minAttrs": { "wuxing": 8 } },
+    "text": "渡劫前夜，冥冥中天道向你敞开了一道缝隙——窥，或不窥？",
+    "options": [
+      { "text": "窥探天机", "resultText": "刹那间你看见了天地的经纬。代价是心神剧震，但你对天劫的来路已了然于胸。", "effects": { "wuxing": 1, "cultivation": 20 }, "achievement": "窥见天机", "deathChance": 0.1, "deathText": "天机岂容凡窥。一缕天道反噬抹去了你的神魂。" },
+      { "text": "天机不可窥", "resultText": "你合上双目退出了那道缝隙。有些答案，该在雷劫里自己找。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "l102", "realmMin": 4, "realmMax": 6,
+    "text": "山中不知岁月，你于崖边静坐，一坐便入了坐忘之境。",
+    "options": [
+      { "text": "物我两忘", "resultText": "云过千帆，雪落无声。出定时衣上落满松针，道心一片澄明。", "effects": { "daoxin": 2 } },
+      { "text": "出定巡山", "resultText": "你沿着山脊走了一遍，给崖边的小松树培了培土。修行也在山水之间。", "effects": { "tipo": 1, "cultivation": 5 } }
+    ]
   }
 ]
