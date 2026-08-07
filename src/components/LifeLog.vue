@@ -34,6 +34,7 @@ const cultivationPercent = computed(() =>
     <div class="status">
       <span class="realm-badge">{{ realmName }}</span>
       <span v-if="state.origin" class="origin-badge">{{ state.origin.name }}</span>
+      <span v-if="state.artifact" class="artifact-badge">{{ state.artifact.name }}</span>
       <span class="age">{{ state.age }} 岁 <span class="lifespan">/ 寿元 {{ state.lifespan }}</span></span>
       <div class="cult-bar" :title="`修为 ${cultivationPercent}%`">
         <div class="cult-fill" :style="{ width: cultivationPercent + '%' }"></div>
@@ -98,6 +99,13 @@ const cultivationPercent = computed(() =>
 .origin-badge {
   border: 1px solid var(--line);
   color: var(--ink-soft);
+  padding: 0.1em 0.6em;
+  font-size: 0.78rem;
+}
+
+.artifact-badge {
+  border: 1px solid var(--gold);
+  color: var(--gold);
   padding: 0.1em 0.6em;
   font-size: 0.78rem;
 }

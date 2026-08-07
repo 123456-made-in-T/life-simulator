@@ -20,7 +20,7 @@ export default [
     "id": "m004", "realmMin": 2, "realmMax": 3, "once": true, "cond": { "flag": "jiandao" },
     "text": "荒岭剑冢，万剑朽烂。唯有一柄断剑在你走近时嗡鸣颤动，似在呼唤。",
     "options": [
-      { "text": "握住断剑", "resultText": "剑鸣如龙！断剑认主，你的剑从此快了三分。", "effects": { "cultivation": 20, "tipo": 1 }, "achievement": "断剑认主", "deathChance": 0.08, "deathText": "剑中残存的凶戾剑意逆冲而入，绞碎了你的神魂。" },
+      { "text": "握住断剑", "resultText": "剑鸣如龙！断剑洗尽锈色，莲纹流转——本命法宝「青莲剑」认主，你的剑从此快了三分。", "effects": { "cultivation": 20, "tipo": 1 }, "achievement": "断剑认主", "artifact": "qinglian", "deathChance": 0.08, "deathText": "剑中残存的凶戾剑意逆冲而入，绞碎了你的神魂。" },
       { "text": "敬而远之", "resultText": "剑有凶气，你拱手一礼绕道而行。身后的嗡鸣渐渐低落，像一声叹息。", "effects": { "daoxin": 1 } }
     ]
   },
@@ -174,6 +174,62 @@ export default [
     "options": [
       { "text": "亲自送药下山", "resultText": "老妪已认不出你，只是拉着你的手说这位仙长面善。你把丹药化在她的粥里。", "effects": { "jiashi": -1, "daoxin": 2 }, "achievement": "一饭之报" },
       { "text": "凡人生死有命", "resultText": "修行人不沾因果。你把信折好压在丹炉底下，那炉丹最后炼废了。", "effects": { "cultivation": 5, "daoxin": -2 } }
+    ]
+  },
+  {
+    "id": "n001", "realmMin": 2, "realmMax": 4, "once": true,
+    "text": "万宝楼百年大拍开幕，压轴之物是一颗吞吐灵雾的「聚灵珠」。竞价一路飞涨。",
+    "options": [
+      { "text": "豪掷千金拍下", "resultText": "落槌那一刻半座城都听见了你的报价。聚灵珠入手，从此洞府灵气如雾。", "effects": { "jiashi": -2 }, "artifact": "juling" },
+      { "text": "只看不买", "resultText": "你全程围观了神仙打架般的竞价，顺便认清了本城几大势力的家底。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "n002", "realmMin": 3, "realmMax": 5, "once": true,
+    "text": "夜空一道火光坠向百里外的荒原——域外陨星！各方修士闻讯蜂拥而去。",
+    "options": [
+      { "text": "抢先探查", "resultText": "你第一个赶到陨坑，在灼热的星核旁参悟了一夜域外星力。", "effects": { "cultivation": 20, "wuxing": 1 }, "deathChance": 0.12, "deathText": "星核余威未散，靠得最近的你被一波爆发吞没。" },
+      { "text": "让给他人，远观其变", "resultText": "果然有人在陨坑丧命。你在远处山头喝完一壶茶，心平气和地离开。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "n003", "realmMin": 3, "realmMax": 5, "once": true, "cond": { "minAttrs": { "daoxin": 5 } },
+    "text": "古修留下的「问心塔」现世，塔中皆是心魔幻境。传闻登顶者可得镇塔之宝。",
+    "options": [
+      { "text": "闯塔问心", "resultText": "九层幻境，你把自己的执念、悔恨与恐惧一一走了一遍。登顶时，掌心多了一枚「清心铃」。", "effects": { "daoxin": 1 }, "artifact": "qingxin", "deathChance": 0.1, "deathText": "第七层幻境里，你没能认出那是幻境。" },
+      { "text": "心有不稳，暂不涉险", "resultText": "你在塔外静坐三日，看着进塔的人一半疯着出来，转身离去。", "effects": { "cultivation": 8 } }
+    ]
+  },
+  {
+    "id": "n004", "realmMin": 3, "realmMax": 5, "once": true,
+    "text": "山道旁，一只通体雪白的灵狐幼崽奄奄一息，见到你，挣扎着叼住了你的衣角。",
+    "options": [
+      { "text": "带回洞府收养", "resultText": "灵狐通人性，你闭关时它守在洞外，一守就是几十年。修行路上，多了一声呼唤。", "effects": { "daoxin": 2, "jiashi": -1 } },
+      { "text": "喂下一颗丹药，放归山林", "resultText": "灵狐绕着你转了三圈，消失在林间。多年后你在险境中被一道白影救过一次，没看清是什么。", "effects": { "cultivation": 8, "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "n005", "realmMin": 3, "realmMax": 5,
+    "text": "十年一度的论道大会开幕，天下修士齐聚，高台之上唇枪舌剑。",
+    "options": [
+      { "text": "登台与群修论道", "resultText": "你舌战三日，胜负参半，名声却传开了——敢上台的人，本就赢了一半。", "effects": { "wuxing": 1, "jiashi": 1 } },
+      { "text": "台下静听百家之言", "resultText": "你记满了三卷玉简，回山闭关时逐条印证，收获远比台上的虚名扎实。", "effects": { "cultivation": 10 } }
+    ]
+  },
+  {
+    "id": "n006", "realmMin": 3, "realmMax": 4, "once": true,
+    "text": "山下大燕王朝的皇帝亲笔手书，以举国之礼请你出任国师，庇佑社稷百年。",
+    "options": [
+      { "text": "应下百年之约", "resultText": "你在庙堂之上观人道兴衰，见惯了权谋与悲欢——这也是修行。", "effects": { "jiashi": 2, "daoxin": 1 }, "achievement": "帝师之尊" },
+      { "text": "婉拒尘缘", "resultText": "你回了八个字：山野之人，不入庙堂。", "effects": { "cultivation": 10 } }
+    ]
+  },
+  {
+    "id": "n007", "realmMin": 3, "realmMax": 5,
+    "text": "洞府灵泉日渐枯竭，灵气一天薄过一天。是走，是留？",
+    "options": [
+      { "text": "深挖地脉，寻泉眼源头", "resultText": "掘地三百丈，你真找到了被岩层封住的泉眼！灵泉复涌，更胜从前。", "effects": { "cultivation": 12 }, "deathChance": 0.06, "deathText": "地脉深处涌出的不是灵泉，是积压万年的地火。" },
+      { "text": "另觅洞府，随遇而安", "resultText": "你云游半年选定新居，搬家的路上顺便见了许多山水。", "effects": { "tipo": 1, "daoxin": 1 } }
     ]
   }
 ];

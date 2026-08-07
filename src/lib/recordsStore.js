@@ -44,3 +44,24 @@ export function saveFruits(count) {
     console.warn('保存道果失败:', error);
   }
 }
+
+const ACHIEVEMENTS_KEY = 'wendao-unlocked-achievements';
+
+export function loadUnlockedAchievements() {
+  try {
+    const raw = window.localStorage.getItem(ACHIEVEMENTS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn('读取成就失败:', error);
+    return [];
+  }
+}
+
+export function saveUnlockedAchievements(names) {
+  try {
+    window.localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(names));
+  } catch (error) {
+    console.warn('保存成就失败:', error);
+  }
+}

@@ -1,13 +1,20 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { computeCareer } from '../engine/records.js';
+import { ACHIEVEMENT_INDEX } from '../data/index.js';
 
 const props = defineProps({
   records: { type: Array, required: true },
+  unlocked: { type: Array, default: () => [] },
 });
 defineEmits(['back', 'clear']);
 
 const career = computed(() => computeCareer(props.records));
+const isIndexOpen = ref(false);
+const unlockedSet = computed(() => new Set(props.unlocked));
+const unlockedCount = computed(
+  () => ACHIEVEMENT_INDEX.filter((a) => unlockedSet.value.has(a.name)).length,
+);
 </script>
 
 <template>
@@ -32,6 +39,23 @@ const career = computed(() => computeCareer(props.records));
         <span class="r-score">{{ record.score }}</span>
       </li>
     </ul>
+
+    <div class="ach-index">
+      <button class="ach-toggle" @click="isIndexOpen = !isIndexOpen">
+        成就图鉴（{{ unlockedCount }}/{{ ACHIEVEMENT_INDEX.length }}）{{ isIndexOpen ? '▲' : '▼' }}
+      </button>
+      <ul v-if="isIndexOpen" class="ach-list">
+        <li
+          v-for="a in ACHIEVEMENT_INDEX"
+          :key="a.name"
+          class="ach-row"
+          :class="{ done: unlockedSet.has(a.name) }"
+        >
+          <span class="ach-name">{{ unlockedSet.has(a.name) ? a.name : '？？？' }}</span>
+          <span class="ach-hint">{{ a.hint }}</span>
+        </li>
+      </ul>
+    </div>
 
     <div class="actions">
       <button :disabled="records.length === 0" @click="$emit('clear')">清空战绩</button>
@@ -119,6 +143,49 @@ h2 {
 .r-score {
   flex-shrink: 0;
   font-weight: 600;
+}
+
+.ach-index {
+  margin: 0 0 var(--space-2);
+}
+
+.ach-toggle {
+  font-size: 0.85rem;
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.ach-list {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--line);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.ach-row {
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.85rem;
+}
+
+.ach-name {
+  flex-shrink: 0;
+  min-width: 6.5em;
+  color: var(--ink-soft);
+}
+
+.ach-row.done .ach-name {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.ach-hint {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
 }
 
 .actions {

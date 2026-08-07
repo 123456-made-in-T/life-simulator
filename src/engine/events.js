@@ -3,6 +3,7 @@
 
 import { clampAttr } from './character.js';
 import { adjustedDeathChance } from './difficulty.js';
+import { equipArtifact } from './artifacts.js';
 
 const ATTR_KEYS = ['linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin'];
 
@@ -75,8 +76,13 @@ export function applyOption(state, option, rng) {
       : state.achievements,
   };
 
+  // 法宝在死亡判定前入手：护身法宝能保住获取它的那次冒险
+  if (option.artifact) {
+    next = equipArtifact(next, option.artifact);
+  }
+
   if (option.deathChance) {
-    if (rng() < adjustedDeathChance(option.deathChance, state.difficulty)) {
+    if (rng() < adjustedDeathChance(option.deathChance, state.difficulty, next.artifact)) {
       return { state: next, died: true, deathText: option.deathText || '不幸殒命。' };
     }
     // 从鬼门关前走过一遭也被记下（用于结算成就）

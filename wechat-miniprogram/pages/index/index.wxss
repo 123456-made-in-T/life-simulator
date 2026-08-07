@@ -238,6 +238,47 @@
   font-weight: 600;
 }
 
+.ach-toggle {
+  display: inline-block;
+  font-size: 24rpx;
+  color: var(--gold);
+  border: 1rpx solid var(--gold);
+  border-radius: 4rpx;
+  padding: 6rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.ach-list {
+  max-height: 45vh;
+  border: 1rpx solid var(--line);
+  padding: 8rpx 20rpx;
+  margin-bottom: 24rpx;
+}
+
+.ach-row {
+  display: flex;
+  gap: 20rpx;
+  padding: 10rpx 0;
+  border-bottom: 1rpx dashed var(--line);
+  font-size: 25rpx;
+}
+
+.ach-name {
+  flex-shrink: 0;
+  min-width: 6.5em;
+  color: var(--ink-soft);
+}
+
+.ach-row.done .ach-name {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.ach-hint {
+  color: var(--ink-soft);
+  font-size: 22rpx;
+}
+
 .actions.end {
   justify-content: flex-end;
 }
@@ -308,6 +349,13 @@
 .origin-badge {
   border: 1rpx solid var(--line);
   color: var(--ink-soft);
+  padding: 2rpx 16rpx;
+  font-size: 22rpx;
+}
+
+.artifact-badge {
+  border: 1rpx solid var(--gold);
+  color: var(--gold);
   padding: 2rpx 16rpx;
   font-size: 22rpx;
 }

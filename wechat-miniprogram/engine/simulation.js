@@ -67,13 +67,16 @@ export function advanceTick(state, pool, rng) {
     }
   }
 
-  // 随机事件：只呈现，不结算，等玩家抉择
+  // 随机事件：只呈现，不结算，等玩家抉择（texts 为多变体文案时随机取一）
   const event = pickEvent(pool, next, rng);
   if (event) {
     if (event.once) {
       next = { ...next, usedEventIds: [...next.usedEventIds, event.id] };
     }
-    logs.push(entry(next, event.text, 'choice'));
+    const text = Array.isArray(event.texts)
+      ? event.texts[Math.floor(rng() * event.texts.length)]
+      : event.text;
+    logs.push(entry(next, text, 'choice'));
     return { state: next, logs, pending: { kind: 'event', event } };
   }
 
@@ -152,7 +155,7 @@ function attemptBreakthrough(state, rng, logs) {
   }
   next = trackStats(next);
 
-  if (isFinal && rng() < adjustedDeathChance(TRIBULATION_FAIL_DEATH_CHANCE, state.difficulty)) {
+  if (isFinal && rng() < adjustedDeathChance(TRIBULATION_FAIL_DEATH_CHANCE, state.difficulty, state.artifact)) {
     return endLife(next, logs, '天劫之下金身寸寸碎裂——渡劫失败，身死道消，魂飞魄散于九天雷海。');
   }
 
@@ -160,6 +163,7 @@ function attemptBreakthrough(state, rng, logs) {
     const deathChance = adjustedDeathChance(
       BREAK_FAIL_DEATH_BASE + (next.realmIndex - BREAK_FAIL_DEATH_REALM) * BREAK_FAIL_DEATH_PER_REALM,
       state.difficulty,
+      state.artifact,
     );
     if (rng() < deathChance) {
       return endLife(next, logs, '冲关失败真元逆冲——强行冲关走火入魔，经脉尽断而亡。');
@@ -200,7 +204,7 @@ function resolveInnerDemon(state, rng, logs) {
     logs.push(entry(next, '心魔滋生，幸得道心通明护佑，灵台重归清净。（道心回稳）', 'normal'));
     return { state: next, logs };
   }
-  if (rng() < adjustedDeathChance(INNER_DEMON_DEATH_CHANCE, state.difficulty)) {
+  if (rng() < adjustedDeathChance(INNER_DEMON_DEATH_CHANCE, state.difficulty, state.artifact)) {
     return endLife(state, logs, '心魔吞噬灵台，你在疯癫中耗尽了最后一丝神智——道心崩溃，入魔而亡。');
   }
   const next = {

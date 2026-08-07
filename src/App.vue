@@ -25,6 +25,8 @@ import {
   clearRecords,
   loadFruits,
   saveFruits,
+  loadUnlockedAchievements,
+  saveUnlockedAchievements,
 } from './lib/recordsStore.js';
 import bgmUrl from './assets/bgm.mp3';
 import sfxChoiceUrl from './assets/sfx-choice.mp3';
@@ -48,6 +50,7 @@ const pending = ref(null);
 const records = ref(loadRecords());
 const fruits = ref(loadFruits());
 const earnedFruits = ref(0);
+const unlockedAchievements = ref(loadUnlockedAchievements());
 
 function handleClearRecords() {
   if (window.confirm('确定清空全部战绩？此操作不可恢复。')) {
@@ -211,6 +214,11 @@ function finishLife() {
   earnedFruits.value = fruitsEarned(summary.value.score);
   fruits.value += earnedFruits.value;
   saveFruits(fruits.value);
+  const merged = [...new Set([...unlockedAchievements.value, ...summary.value.achievements])];
+  if (merged.length > unlockedAchievements.value.length) {
+    unlockedAchievements.value = merged;
+    saveUnlockedAchievements(merged);
+  }
   summaryTimer = setTimeout(() => {
     summaryTimer = null;
     phase.value = 'summary';
@@ -269,6 +277,7 @@ onBeforeUnmount(() => {
     <RecordsPanel
       v-else-if="phase === 'records'"
       :records="records"
+      :unlocked="unlockedAchievements"
       @back="phase = 'setup'"
       @clear="handleClearRecords"
     />

@@ -97,7 +97,12 @@
   },
   {
     "id": "l018", "realmMin": 4, "realmMax": 6, "weight": 2,
-    "text": "又一甲子弹指而过。山下王朝换了国姓，你洞府门前的松树粗了一圈。这段岁月，你选择——",
+    "texts": [
+      "又一甲子弹指而过。山下王朝换了国姓，你洞府门前的松树粗了一圈。这段岁月，你选择——",
+      "当年的婴孩已成冢中枯骨，你的容颜却未曾变过。漫长的岁月里，你决定——",
+      "云聚了又散，雪落了又化。修行日久，岁月只剩刻度。接下来的年月——",
+      "有小辈修士远远朝你的山头行礼——你已是传说里的人物了。这段光阴——"
+    ],
     "options": [
       { "text": "闭死关", "resultText": "石壁滴水成痕，你在定境中吐纳天地，修为悄然精进。", "effects": { "cultivation": 18 }, "deathChance": 0.04, "deathText": "这一定，再没有醒来。后人开启洞府时，只见蒲团上一具含笑的枯坐身影。" },
       { "text": "巡游疆界，斩妖除魔", "resultText": "你循着妖气清理了几处魔窟，顺手救下的凡人已记不清数目。", "effects": { "cultivation": 8, "daoxin": 1 }, "deathChance": 0.08, "deathText": "一处魔窟深处藏着远超预估的存在，你没能走出来。" }
@@ -145,10 +150,86 @@
   },
   {
     "id": "l102", "realmMin": 4, "realmMax": 6,
-    "text": "山中不知岁月，你于崖边静坐，一坐便入了坐忘之境。",
+    "texts": [
+      "山中不知岁月，你于崖边静坐，一坐便入了坐忘之境。",
+      "月上中天，万籁俱寂。你在洞府顶上盘膝而坐，心随云动。",
+      "春雷惊蛰，你在瀑布边听了一整日水声，物我渐忘。"
+    ],
     "options": [
       { "text": "物我两忘", "resultText": "云过千帆，雪落无声。出定时衣上落满松针，道心一片澄明。", "effects": { "daoxin": 2 } },
       { "text": "出定巡山", "resultText": "你沿着山脊走了一遍，给崖边的小松树培了培土。修行也在山水之间。", "effects": { "tipo": 1, "cultivation": 5 } }
+    ]
+  },
+  {
+    "id": "n008", "realmMin": 4, "realmMax": 6, "once": true,
+    "text": "噩耗：你的亲传弟子盗走功法投奔敌对势力，宗门上下群情激愤。",
+    "options": [
+      { "text": "亲手清理门户", "resultText": "你在千里之外截住了他。收回功法那一刻，他喊的那声『师父』你此后很多年都会梦到。", "effects": { "cultivation": 10, "daoxin": -1 } },
+      { "text": "由他去吧", "resultText": "『功法是死的，道是自己的。』你没有追。多年后他战死在魔道前线——至死没用过你的功法伤害同门。", "effects": { "daoxin": 2 } }
+    ]
+  },
+  {
+    "id": "n009", "realmMin": 4, "realmMax": 6, "once": true,
+    "text": "北境妖王遣使送来一份请柬：邀你入万妖山论道百日，以妖族至宝为礼。",
+    "options": [
+      { "text": "只身赴约", "resultText": "百日论道，人妖两族的大道相互印证。临别时，妖王赠你一只吞吐灵机的「造化葫芦」。", "effects": { "wuxing": 1 }, "artifact": "zaohua", "deathChance": 0.1, "deathText": "万妖山中不止有论道的妖，还有等着吃人的妖。" },
+      { "text": "非我族类，谢绝", "resultText": "你退回请柬。后来听说赴约的另一位大能收获颇丰，也听说有人再没回来。", "effects": { "cultivation": 10 } }
+    ]
+  },
+  {
+    "id": "n010", "realmMin": 4, "realmMax": 6,
+    "text": "一条魔气侵蚀的灵脉正在腐坏方圆千里的生机，草木成灰，走兽相食。",
+    "options": [
+      { "text": "以身入脉，涤荡魔气", "resultText": "你在灵脉中枯坐三月，以自身真元为引涤尽魔气。出来时千里山河重新泛绿。", "effects": { "daoxin": 1, "cultivation": 10 }, "deathChance": 0.08, "deathText": "魔气比预想的深重，你的真元先一步耗尽了。" },
+      { "text": "封山立碑，绕道而行", "resultText": "你立碑警示后人，转身离去。那片灰色的土地成了地图上的禁区。", "effects": { "jiashi": -1 } }
+    ]
+  },
+  {
+    "id": "n011", "realmMin": 4, "realmMax": 5, "once": true,
+    "text": "东海海眼百年一开，传闻底部沉着上古玄龟蜕下的甲壳，坚不可摧。",
+    "options": [
+      { "text": "潜入海眼取宝", "resultText": "顶着足以碾碎金丹的水压，你从海眼底部捞起了那面「玄龟盾」——从此刀兵水火，皆可挡一挡。", "artifact": "xuangui", "deathChance": 0.12, "deathText": "海眼的水压没有给你第二次机会。" },
+      { "text": "海眼凶险，不去", "resultText": "你在岸边看着几道身影潜入海中，最终只有一人浮了上来。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "n012", "realmMin": 5, "realmMax": 6, "once": true,
+    "text": "一缕上古残魂寻至你的洞府，自称困于人间万载，求你以大法力助他入轮回。",
+    "options": [
+      { "text": "耗百年修为渡他转世", "resultText": "残魂消散前留下一块温润的「长生玉」：『万载谢礼，助你长生。』", "effects": { "cultivation": -20, "daoxin": 2 }, "achievement": "渡魂之德", "artifact": "changsheng" },
+      { "text": "炼化残魂，夺其万载感悟", "resultText": "残魂的哀嚎持续了七日。你的修为暴涨，梦里却总有个声音在念佛。", "effects": { "cultivation": 25, "daoxin": -2 } }
+    ]
+  },
+  {
+    "id": "n013", "realmMin": 5, "realmMax": 6,
+    "text": "今夜星河倒转，天象大变——化神之后，你已能从星轨中窥见大道的影子。",
+    "options": [
+      { "text": "逆推天机", "resultText": "你彻夜推演，抓住了一缕稍纵即逝的道则轨迹。", "effects": { "wuxing": 1, "cultivation": 15 }, "deathChance": 0.06, "deathText": "天机反噬，你的神魂随星轨一同流散。" },
+      { "text": "顺势观想，不强求", "resultText": "你只是静静看完了这场星河之舞，心境圆融了一分。", "effects": { "daoxin": 1, "cultivation": 8 } }
+    ]
+  },
+  {
+    "id": "n014", "realmMin": 4, "realmMax": 6, "once": true,
+    "text": "当年同门中唯一还在世的老友大限将至，托人捎信：想把一脉传承与门下弟子托付给你。",
+    "options": [
+      { "text": "亲往应下", "resultText": "你陪他走完最后一程，接过了那一脉香火。老友含笑而逝。", "effects": { "daoxin": 2 } },
+      { "text": "修书婉拒", "resultText": "『各人有各人的路。』信送出后，你在洞府门口站了一夜。", "effects": { "cultivation": 10, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "n015", "realmMin": 6, "realmMax": 6, "once": true,
+    "text": "渡劫在即，一位数百年未见的故人千里来访，带了一坛你们年轻时最爱喝的浊酒。",
+    "options": [
+      { "text": "把酒言欢，忆尽平生", "resultText": "一夜长谈，从村口的老槐树聊到九天的雷云。天亮送别时，你的道心澄澈如洗。", "effects": { "daoxin": 2 } },
+      { "text": "大事在前，闭门谢客", "resultText": "故人把酒放在门口走了。渡劫那日你才打开，酒香里全是回不去的年月。", "effects": { "cultivation": 10, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "n016", "realmMin": 5, "realmMax": 6, "once": true, "cond": { "minAttrs": { "wuxing": 7 } },
+    "text": "古籍有载「一气化三清」之法：以神魂炼出化身，可分身修行。此术玄奥，稍有差池神魂俱裂。",
+    "options": [
+      { "text": "依法炼制化身", "resultText": "百年苦功，化身终成！从此一人两地修行，大道之路快人一步。", "effects": { "cultivation": 20 }, "achievement": "一气化身", "deathChance": 0.1, "deathText": "化身炼至一半神魂失控，你被自己的化身撕碎了。" },
+      { "text": "旁门之术，不修", "resultText": "你合上古籍。大道向前，何必分心。", "effects": { "daoxin": 1 } }
     ]
   }
 ]

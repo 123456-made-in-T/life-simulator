@@ -103,6 +103,8 @@ export function createCharacter(alloc, talents, difficulty = DEFAULT_DIFFICULTY)
     // 境界沉淀：记录进入当前境界时的年龄
     realmEnteredAge: 0,
     capNotedRealm: -1,
+    // 本命法宝（一世限持一件，由事件授予）
+    artifact: null,
     // 结算成就用的统计
     stats: { breakFails: 0, riskSurvived: 0, minDaoxin: attrs.daoxin },
   };

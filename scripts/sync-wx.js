@@ -28,7 +28,7 @@ for (const file of readdirSync(engineSrc)) {
 const dataSrc = join(root, 'src/data');
 const dataDst = join(wxRoot, 'data');
 mkdirSync(dataDst, { recursive: true });
-const jsonFiles = ['talents.json', 'origins.json', 'events-early.json', 'events-mid.json', 'events-late.json'];
+const jsonFiles = ['talents.json', 'origins.json', 'achievements.json', 'events-early.json', 'events-mid.json', 'events-late.json'];
 for (const file of jsonFiles) {
   const json = readFileSync(join(dataSrc, file), 'utf8').trim();
   const banner = `// 由 scripts/sync-wx.js 从 src/data/${file} 自动生成，勿手改\n`;
@@ -40,12 +40,14 @@ writeFileSync(
   `// 由 scripts/sync-wx.js 自动生成，勿手改
 import talents from './talents.js';
 import origins from './origins.js';
+import achievements from './achievements.js';
 import earlyEvents from './events-early.js';
 import midEvents from './events-mid.js';
 import lateEvents from './events-late.js';
 
 export const TALENT_POOL = talents;
 export const ORIGIN_POOL = origins;
+export const ACHIEVEMENT_INDEX = achievements;
 export const EVENT_POOL = [...earlyEvents, ...midEvents, ...lateEvents];
 `,
 );

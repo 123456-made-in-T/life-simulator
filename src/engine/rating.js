@@ -36,6 +36,11 @@ export function summarize(state) {
   };
 }
 
+/** 结算特殊成就全名录（成就图鉴与测试用） */
+export const SPECIAL_ACHIEVEMENTS = [
+  '一鼓作气', '百折不挠', '金身无损', '道心如铁', '刀口舔血', '布衣终老', '地狱归来',
+];
+
 /** 由整局统计计算的特殊成就（事件成就之外的一层） */
 function computedAchievements(state) {
   const stats = state.stats || { breakFails: 0, riskSurvived: 0, minDaoxin: 5 };

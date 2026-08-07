@@ -24,19 +24,20 @@ export function realmOf(state) {
   return REALMS[state.realmIndex];
 }
 
-/** 每回合的修为增速：灵根为主，悟性为辅，境界越高越难精进 */
+/** 每回合的修为增速：灵根为主，悟性为辅，境界越高越难精进；本命法宝可加速 */
 export function cultivationGain(state, tickYears) {
   const { linggen, wuxing } = state.attrs;
   const realmDrag = 1 / (1 + state.realmIndex * 0.8);
   const perYear = (linggen * 0.7 + wuxing * 0.35) * realmDrag;
-  return perYear * tickYears;
+  return perYear * tickYears * (state.artifact?.cultMul ?? 1);
 }
 
-/** 突破成功率：基础值 + 灵根/悟性加成 + 道心影响，夹在 [0.05, 0.9] */
+/** 突破成功率：基础值 + 灵根/悟性加成 + 道心影响 + 法宝加成，夹在 [0.05, 0.9] */
 export function breakthroughChance(state) {
   const { linggen, wuxing, daoxin } = state.attrs;
   const base = REALMS[state.realmIndex].baseBreakChance;
-  const chance = base + linggen * 0.025 + wuxing * 0.015 + (daoxin - 5) * 0.02;
+  const chance =
+    base + linggen * 0.025 + wuxing * 0.015 + (daoxin - 5) * 0.02 + (state.artifact?.breakBonus ?? 0);
   return Math.min(0.9, Math.max(0.05, chance));
 }
 

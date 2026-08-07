@@ -30,11 +30,13 @@ import {
   clearRecords,
   loadFruits,
   saveFruits,
+  loadUnlockedAchievements,
+  saveUnlockedAchievements,
 } from '../../lib/recordsStore.js';
 import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
-import { TALENT_POOL, EVENT_POOL, ORIGIN_POOL } from '../../data/index.js';
+import { TALENT_POOL, EVENT_POOL, ORIGIN_POOL, ACHIEVEMENT_INDEX } from '../../data/index.js';
 
 const TALENT_OPTIONS_COUNT = 10;
 const PICK_COUNT = 3;
@@ -85,11 +87,16 @@ Page({
     remainingFruits: 0,
     boons: BOONS,
     boonSelected: {},
+    achRows: [],
+    achUnlocked: 0,
+    achTotal: ACHIEVEMENT_INDEX.length,
+    showAchIndex: false,
   },
 
   onLoad() {
     this.difficulty = DEFAULT_DIFFICULTY;
     this.records = loadRecords();
+    this.unlocked = loadUnlockedAchievements();
     this.boonIds = [];
     const fruits = loadFruits();
     this.setData({ fruits, remainingFruits: fruits });
@@ -287,6 +294,7 @@ Page({
     return {
       realmName: REALMS[s.realmIndex].name,
       originName: s.origin ? s.origin.name : '',
+      artifactName: s.artifact ? s.artifact.name : '',
       age: s.age,
       lifespan: s.lifespan,
       cultPercent: Math.min(100, Math.round((s.cultivation / CULTIVATION_CAP) * 100)),
@@ -394,6 +402,11 @@ Page({
     };
     this.records = addRecord(this.records, buildRecord(summary, this.data.seed, Date.now()));
     saveRecords(this.records);
+    const merged = [...new Set([...this.unlocked, ...summary.achievements])];
+    if (merged.length > this.unlocked.length) {
+      this.unlocked = merged;
+      saveUnlockedAchievements(merged);
+    }
     this.summaryTimer = setTimeout(() => {
       this.summaryTimer = null;
       this.setData({ phase: 'summary', summary: this.pendingSummary });
@@ -458,11 +471,24 @@ Page({
   },
 
   onShowRecords() {
+    const unlockedSet = new Set(this.unlocked);
+    const achRows = ACHIEVEMENT_INDEX.map((a) => ({
+      name: unlockedSet.has(a.name) ? a.name : '？？？',
+      hint: a.hint,
+      done: unlockedSet.has(a.name),
+    }));
     this.setData({
       phase: 'records',
       records: this.records,
       career: computeCareer(this.records),
+      achRows,
+      achUnlocked: achRows.filter((r) => r.done).length,
+      showAchIndex: false,
     });
+  },
+
+  onToggleAchIndex() {
+    this.setData({ showAchIndex: !this.data.showAchIndex });
   },
 
   onBackFromRecords() {

@@ -1,17 +1,19 @@
 // 内容库完整性校验：写错一个字段名，游戏不会报错但事件永远不触发——用测试兜住
 
 import { describe, test, expect } from 'vitest';
-import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
+import { TALENT_POOL, EVENT_POOL, ACHIEVEMENT_INDEX } from '../src/data/index.js';
 import { isEligible } from '../src/engine/events.js';
+import { ARTIFACTS } from '../src/engine/artifacts.js';
+import { SPECIAL_ACHIEVEMENTS } from '../src/engine/rating.js';
 
 const VALID_EFFECT_KEYS = new Set([
   'linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin', 'cultivation', 'lifespan', 'flag',
 ]);
 const VALID_EVENT_KEYS = new Set([
-  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'cond', 'text', 'options',
+  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'cond', 'text', 'texts', 'options',
 ]);
 const VALID_OPTION_KEYS = new Set([
-  'text', 'resultText', 'effects', 'deathChance', 'deathText', 'achievement', 'tone',
+  'text', 'resultText', 'effects', 'deathChance', 'deathText', 'achievement', 'tone', 'artifact',
 ]);
 const MIN_OPTIONS = 2;
 
@@ -41,7 +43,8 @@ describe('事件数据（抉择制）', () => {
 
   test('每个事件至少有两个选项，且字段全部合法', () => {
     for (const event of EVENT_POOL) {
-      expect(event.text, event.id).toBeTruthy();
+      const hasText = Boolean(event.text) || (Array.isArray(event.texts) && event.texts.every(Boolean) && event.texts.length > 0);
+      expect(hasText, `${event.id} 缺少 text/texts`).toBe(true);
       for (const key of Object.keys(event)) {
         expect(VALID_EVENT_KEYS.has(key), `${event.id} 含非法字段 ${key}`).toBe(true);
       }
@@ -69,6 +72,9 @@ describe('事件数据（抉择制）', () => {
         for (const key of Object.keys(option.effects || {})) {
           expect(VALID_EFFECT_KEYS.has(key), `${event.id}「${option.text}」含非法效果键 ${key}`).toBe(true);
         }
+        if (option.artifact != null) {
+          expect(ARTIFACTS[option.artifact], `${event.id}「${option.text}」引用了不存在的法宝 ${option.artifact}`).toBeTruthy();
+        }
         if (option.deathChance != null) {
           expect(option.deathChance, `${event.id}「${option.text}」deathChance 越界`).toBeGreaterThan(0);
           expect(option.deathChance, `${event.id}「${option.text}」deathChance 越界`).toBeLessThanOrEqual(1);
@@ -84,6 +90,26 @@ describe('事件数据（抉择制）', () => {
         (e) => (e.realmMin ?? 0) <= realm && realm <= (e.realmMax ?? 6),
       );
       expect(available.length, `境界 ${realm} 没有任何事件`).toBeGreaterThan(0);
+    }
+  });
+
+  test('成就登记册与游戏内成就一一对应（不缺不漏）', () => {
+    const inGame = new Set(SPECIAL_ACHIEVEMENTS);
+    for (const event of EVENT_POOL) {
+      for (const option of event.options) {
+        if (option.achievement) inGame.add(option.achievement);
+      }
+    }
+    const registered = new Set(ACHIEVEMENT_INDEX.map((a) => a.name));
+
+    for (const name of inGame) {
+      expect(registered.has(name), `成就「${name}」未登记进图鉴`).toBe(true);
+    }
+    for (const name of registered) {
+      expect(inGame.has(name), `图鉴里的「${name}」在游戏中不存在`).toBe(true);
+    }
+    for (const a of ACHIEVEMENT_INDEX) {
+      expect(a.hint, a.name).toBeTruthy();
     }
   });
 

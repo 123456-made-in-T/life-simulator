@@ -79,6 +79,14 @@
     </view>
   </scroll-view>
 
+  <view class="ach-toggle" bindtap="onToggleAchIndex">成就图鉴（{{achUnlocked}}/{{achTotal}}）{{showAchIndex ? '▲' : '▼'}}</view>
+  <scroll-view wx:if="{{showAchIndex}}" scroll-y class="ach-list">
+    <view wx:for="{{achRows}}" wx:key="hint" class="ach-row {{item.done ? 'done' : ''}}">
+      <text class="ach-name">{{item.name}}</text>
+      <text class="ach-hint">{{item.hint}}</text>
+    </view>
+  </scroll-view>
+
   <view class="actions">
     <view class="btn {{records.length === 0 ? 'disabled' : ''}}" hover-class="btn-hover" bindtap="onClearRecords">清空战绩</view>
     <view class="btn primary" hover-class="btn-hover" bindtap="onBackFromRecords">返回</view>
@@ -112,6 +120,7 @@
   <view class="status">
     <text class="realm-badge">{{view.realmName}}</text>
     <text class="origin-badge" wx:if="{{view.originName}}">{{view.originName}}</text>
+    <text class="artifact-badge" wx:if="{{view.artifactName}}">{{view.artifactName}}</text>
     <text class="age">{{view.age}} 岁 <text class="lifespan">/ 寿元 {{view.lifespan}}</text></text>
     <view class="cult-bar"><view class="cult-fill" style="width: {{view.cultPercent}}%"></view></view>
     <view class="attrs">

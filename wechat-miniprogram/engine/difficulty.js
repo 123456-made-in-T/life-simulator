@@ -11,7 +11,10 @@ export const DIFFICULTIES = [
 
 export const DEFAULT_DIFFICULTY = DIFFICULTIES[1];
 
-/** 按全局加压与难度放大死亡概率，封顶 95% */
-export function adjustedDeathChance(chance, difficulty) {
-  return Math.min(0.95, chance * BASE_DEATH_SCALE * (difficulty?.deathMul ?? 1));
+/** 按全局加压、难度与本命法宝放大/减免死亡概率，封顶 95% */
+export function adjustedDeathChance(chance, difficulty, artifact) {
+  return Math.min(
+    0.95,
+    chance * BASE_DEATH_SCALE * (difficulty?.deathMul ?? 1) * (artifact?.deathMul ?? 1),
+  );
 }
