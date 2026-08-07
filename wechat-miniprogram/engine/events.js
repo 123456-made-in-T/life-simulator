@@ -7,12 +7,19 @@ import { equipArtifact } from './artifacts.js';
 
 const ATTR_KEYS = ['linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin'];
 
+// 非 once 事件默认一世最多出现次数（数据可用 repeat: true 解除、maxTimes 覆盖）
+const DEFAULT_MAX_TIMES = 2;
+
 export function isEligible(event, state) {
   if (event.realmMin != null && state.realmIndex < event.realmMin) return false;
   if (event.realmMax != null && state.realmIndex > event.realmMax) return false;
   if (event.ageMin != null && state.age < event.ageMin) return false;
   if (event.ageMax != null && state.age > event.ageMax) return false;
   if (event.once && state.usedEventIds.includes(event.id)) return false;
+  if (!event.once && !event.repeat) {
+    const played = state.eventCounts?.[event.id] ?? 0;
+    if (played >= (event.maxTimes ?? DEFAULT_MAX_TIMES)) return false;
+  }
 
   const cond = event.cond;
   if (cond) {
@@ -32,9 +39,14 @@ export function isEligible(event, state) {
   return true;
 }
 
-/** 按权重随机抽一个可用事件，无可用事件返回 null */
+/** 按权重随机抽一个可用事件，无可用事件返回 null；避免同一事件紧接着重复出现 */
 export function pickEvent(pool, state, rng) {
-  const eligible = pool.filter((event) => isEligible(event, state));
+  let eligible = pool.filter((event) => isEligible(event, state));
+  const recent = state.recentEventIds ?? [];
+  const fresh = eligible.filter((event) => !recent.includes(event.id));
+  if (fresh.length > 0) {
+    eligible = fresh;
+  }
   if (eligible.length === 0) {
     return null;
   }

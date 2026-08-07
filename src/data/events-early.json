@@ -1,13 +1,5 @@
 [
   {
-    "id": "e001", "realmMax": 0, "ageMax": 2, "once": true, "weight": 2,
-    "text": "你呱呱坠地，睁眼看到的是产婆布满皱纹的脸。",
-    "options": [
-      { "text": "放声大哭", "resultText": "哭声洪亮，中气十足，全家都说这孩子身子骨结实。", "effects": { "tipo": 1 } },
-      { "text": "安静打量世界", "resultText": "你不哭不闹，黑亮的眼珠滴溜溜转，老人说这孩子心里有数。", "effects": { "wuxing": 1 } }
-    ]
-  },
-  {
     "id": "e002", "realmMax": 0, "ageMin": 1, "ageMax": 5, "once": true,
     "text": "你在河边玩水，脚下一滑跌进深潭！",
     "options": [
@@ -72,7 +64,7 @@
     ]
   },
   {
-    "id": "e014", "realmMax": 0, "ageMin": 13, "weight": 3,
+    "id": "e014", "realmMax": 0, "ageMin": 13, "weight": 3, "repeat": true,
     "texts": [
       "又是一年春耕秋收。这一年，你打算怎么过？",
       "村口的老槐树又粗了一圈，田里的活计永远做不完。今年呢？",
@@ -110,7 +102,7 @@
     ]
   },
   {
-    "id": "e033", "realmMax": 0, "ageMin": 55, "weight": 2,
+    "id": "e033", "realmMax": 0, "ageMin": 55, "weight": 2, "repeat": true,
     "text": "你坐在村口晒太阳，孙辈缠着你讲年轻时的故事。",
     "options": [
       { "text": "添油加醋讲一段", "resultText": "『那年爷爷差一点就遇到仙人了……』孩子们听得眼睛发亮，你也讲得眉飞色舞。", "effects": { "daoxin": 1 } },
@@ -118,7 +110,7 @@
     ]
   },
   {
-    "id": "e034", "realmMax": 0, "ageMin": 50, "weight": 2,
+    "id": "e034", "realmMax": 0, "ageMin": 50, "weight": 2, "repeat": true,
     "text": "岁月催人老，你的背驼了，眼也花了，儿孙劝你别再下地。",
     "options": [
       { "text": "硬撑着继续干活", "resultText": "闲不住的命。只是收工后腰疼得整宿睡不着。", "effects": { "tipo": -1 } },
@@ -174,7 +166,7 @@
     ]
   },
   {
-    "id": "e029", "realmMin": 1, "realmMax": 6, "weight": 3,
+    "id": "e029", "realmMin": 1, "realmMax": 6, "weight": 3, "repeat": true,
     "texts": [
       "洞中无岁月，又到一次闭关的关口。这一关，你打算怎么修？",
       "蒲团已换过三次，石壁上的刻痕又添几道。新一轮闭关将启——",
@@ -259,7 +251,7 @@
     ]
   },
   {
-    "id": "b_shancun", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shancun" },
+    "id": "b_shancun", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_shancun" },
     "text": "你降生在青山环抱的小村。屋后溪水潺潺，门前稻浪翻滚，爹娘煮了一碗红糖水庆祝你的到来。",
     "options": [
       { "text": "哭声惊飞了檐上的麻雀", "resultText": "接生婆连声说好：嗓门这么亮，将来是把干活的好手！", "effects": { "tipo": 1 } },
@@ -283,7 +275,7 @@
     ]
   },
   {
-    "id": "b_shiji", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shiji" },
+    "id": "b_shiji", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_shiji" },
     "text": "你降生在长街最热闹的绸缎铺二楼。楼下算盘噼啪、伙计吆喝，爹说这是天底下最好听的曲子。",
     "options": [
       { "text": "抓周时一把抓住算盘", "resultText": "满堂宾客喝彩：好！天生的掌柜命！", "effects": { "jiashi": 1 } },
@@ -307,7 +299,7 @@
     ]
   },
   {
-    "id": "b_lieren", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_lieren" },
+    "id": "b_lieren", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_lieren" },
     "text": "你降生在老林深处的猎户木屋。门外雪深三尺，火塘上炖着肉，爹用裹着硝烟味的大手接住了你。",
     "options": [
       { "text": "在满屋兽皮味里睡得香甜", "resultText": "爹说：不怕腥膻的孩子，山神爷会照看。", "effects": { "tipo": 1 } },
@@ -331,7 +323,7 @@
     ]
   },
   {
-    "id": "b_shuxiang", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shuxiang" },
+    "id": "b_shuxiang", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_shuxiang" },
     "text": "你降生在满架藏书的宅院。祖父提笔为你写下名字，满室墨香里，你打了人生第一个喷嚏。",
     "options": [
       { "text": "抓周时抓住一支狼毫笔", "resultText": "祖父大喜过望，当场吟诗一首。你听不懂，但觉得音律很好听。", "effects": { "wuxing": 1 } },
@@ -355,7 +347,7 @@
     ]
   },
   {
-    "id": "b_bianguan", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_bianguan" },
+    "id": "b_bianguan", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_bianguan" },
     "text": "你降生在边关军镇，第一声啼哭混在换防的号角里。爹是城头一名老卒，用头盔当盆给你洗了澡。",
     "options": [
       { "text": "号角声里睡得踏实", "resultText": "满营的兵都说这娃有出息——号角当摇篮曲的，天生是块铁。", "effects": { "tipo": 1 } },
@@ -379,7 +371,7 @@
     ]
   },
   {
-    "id": "b_daoguan", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_daoguan" },
+    "id": "b_daoguan", "realmMax": 0, "ageMax": 0, "once": true, "weight": 10, "cond": { "flag": "origin_daoguan" },
     "text": "你是山门外拾来的孩子。老道士抱起襁褓时，你正抓着他的拂尘不撒手。从此青灯古观，便是家。",
     "options": [
       { "text": "在钟声里咯咯直笑", "resultText": "老道说：晨钟暮鼓听得进去，是个有慧根的。", "effects": { "daoxin": 1 } },

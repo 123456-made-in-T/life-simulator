@@ -12,7 +12,8 @@ import { advanceTick, resolveChoice } from '../src/engine/simulation.js';
 import { breakthroughChance, REALMS } from '../src/engine/realms.js';
 import { summarize } from '../src/engine/rating.js';
 import { DIFFICULTIES, adjustedDeathChance } from '../src/engine/difficulty.js';
-import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
+import { TALENT_POOL, EVENT_POOL, ORIGIN_POOL } from '../src/data/index.js';
+import { assignOrigin } from '../src/engine/origins.js';
 
 const VALID_ALLOC = { linggen: 8, wuxing: 5, tipo: 4, jiashi: 3 };
 
@@ -224,6 +225,44 @@ describe('难度模式与结算成就', () => {
     };
 
     expect(summarize(state).achievements).toContain('刀口舔血');
+  });
+});
+
+describe('出生与情节重复抑制', () => {
+  test('人生第一回合为出生：年龄保持 0 并呈现降生事件', () => {
+    const rng = createRng(1);
+    const state = assignOrigin(freshState(), ORIGIN_POOL, rng);
+
+    const first = advanceTick(state, EVENT_POOL, rng);
+
+    expect(first.state.age).toBe(0);
+    expect(first.pending?.kind).toBe('event');
+    expect(first.pending.event.ageMax).toBe(0);
+
+    const resolved = resolveChoice(first.state, first.pending, 0, rng).state;
+    const second = advanceTick(resolved, EVENT_POOL, rng);
+    expect(second.state.age).toBe(1);
+  });
+
+  test('非 once 事件一世最多出现两次，repeat 事件不受限', () => {
+    const event = { id: 'r1', options: [] };
+    const state = { ...freshState(), eventCounts: { r1: 2 } };
+
+    expect(isEligible(event, state)).toBe(false);
+    expect(isEligible({ ...event, repeat: true }, state)).toBe(true);
+    expect(isEligible(event, { ...state, eventCounts: { r1: 1 } })).toBe(true);
+  });
+
+  test('pickEvent 避开最近出现过的事件', () => {
+    const pool = [
+      { id: 'a', options: [] },
+      { id: 'b', options: [] },
+    ];
+    const state = { ...freshState(), recentEventIds: ['a'] };
+
+    for (let seed = 0; seed < 10; seed += 1) {
+      expect(pickEvent(pool, state, createRng(seed)).id).toBe('b');
+    }
   });
 });
 

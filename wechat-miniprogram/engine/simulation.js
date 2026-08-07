@@ -32,8 +32,13 @@ export const BREAKTHROUGH_OPTIONS = { ATTEMPT: 0, CONSOLIDATE: 1 };
 /** 推进一回合：岁月流逝与修为增长；遇到事件或突破点则返回 pending 等玩家抉择 */
 export function advanceTick(state, pool, rng) {
   const logs = [];
-  const tickYears = REALMS[state.realmIndex].tickYears;
+  // 出生回合：人生的第一回合不增岁，先呈现降生事件（0 岁）
+  const isBirthTick = state.age === 0 && !state.flags.born;
+  const tickYears = isBirthTick ? 0 : REALMS[state.realmIndex].tickYears;
   let next = { ...state, age: state.age + tickYears };
+  if (isBirthTick) {
+    next = { ...next, flags: { ...next.flags, born: true } };
+  }
 
   // 寿元耗尽（回合跨度大时年龄可能越过寿元，按寿元数收口；寿终不可被金刚护体挡下）
   if (next.age >= next.lifespan) {
@@ -73,6 +78,15 @@ export function advanceTick(state, pool, rng) {
     if (event.once) {
       next = { ...next, usedEventIds: [...next.usedEventIds, event.id] };
     }
+    // 记录出现次数与最近事件，抑制情节重复
+    next = {
+      ...next,
+      eventCounts: {
+        ...(next.eventCounts ?? {}),
+        [event.id]: (next.eventCounts?.[event.id] ?? 0) + 1,
+      },
+      recentEventIds: [event.id, ...(next.recentEventIds ?? [])].slice(0, 2),
+    };
     const text = Array.isArray(event.texts)
       ? event.texts[Math.floor(rng() * event.texts.length)]
       : event.text;
@@ -241,5 +255,11 @@ function ageDeathText(state) {
 }
 
 function entry(state, text, tone) {
-  return { age: state.age, realm: REALMS[Math.min(state.realmIndex, MAX_REALM_INDEX)].name, text, tone };
+  return {
+    age: state.age,
+    ageText: state.age === 0 ? '出生' : `${state.age}岁`,
+    realm: REALMS[Math.min(state.realmIndex, MAX_REALM_INDEX)].name,
+    text,
+    tone,
+  };
 }

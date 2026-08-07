@@ -62,7 +62,7 @@ function saveShareImage() {
       </button>
       <div v-if="isRecordOpen" class="record-list">
         <p v-for="(log, i) in logs" :key="i" class="record-line" :class="`tone-${log.tone}`">
-          <span class="record-age">{{ log.age }}岁</span>{{ log.text }}
+          <span class="record-age">{{ log.ageText }}</span>{{ log.text }}
         </p>
       </div>
     </div>

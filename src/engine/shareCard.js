@@ -74,7 +74,7 @@ export function drawShareCard(ctx, payload) {
   ctx.font = `24px ${SERIF}`;
   for (const log of highlights.slice(0, 6)) {
     ctx.fillStyle = SOFT;
-    ctx.fillText(`${log.age}岁`, 96, y);
+    ctx.fillText(log.ageText ?? `${log.age}岁`, 96, y);
     ctx.fillStyle = TONE_COLORS[log.tone] || INK;
     ctx.fillText(truncate(log.text, 22), 186, y);
     y += 42;

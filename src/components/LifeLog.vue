@@ -48,7 +48,7 @@ const cultivationPercent = computed(() =>
 
     <div ref="scroller" class="log-scroll">
       <p v-for="(log, i) in logs" :key="i" class="log" :class="`tone-${log.tone}`">
-        <span class="log-age">{{ log.age }}岁</span>
+        <span class="log-age">{{ log.ageText }}</span>
         <span class="log-text">{{ log.text }}</span>
       </p>
     </div>

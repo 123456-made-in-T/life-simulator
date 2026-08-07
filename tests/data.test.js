@@ -10,7 +10,7 @@ const VALID_EFFECT_KEYS = new Set([
   'linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin', 'cultivation', 'lifespan', 'flag',
 ]);
 const VALID_EVENT_KEYS = new Set([
-  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'cond', 'text', 'texts', 'options',
+  'id', 'realmMin', 'realmMax', 'ageMin', 'ageMax', 'weight', 'once', 'repeat', 'maxTimes', 'cond', 'text', 'texts', 'options',
 ]);
 const VALID_OPTION_KEYS = new Set([
   'text', 'resultText', 'effects', 'deathChance', 'deathText', 'achievement', 'tone', 'artifact',
@@ -113,12 +113,13 @@ describe('事件数据（抉择制）', () => {
     }
   });
 
-  test('凡人从幼年到寿终每个年龄都有事件可触发（不出现空窗）', () => {
+  test('凡人从出生到寿终每个年龄都有事件可触发（不出现空窗）', () => {
+    // 真实游戏中出身必定被赋予，这里以山村出身为代表
     const base = {
       realmIndex: 0,
       usedEventIds: [],
       talents: [],
-      flags: {},
+      flags: { origin_shancun: true },
       attrs: { linggen: 5, wuxing: 5, tipo: 5, jiashi: 5, daoxin: 5 },
     };
     for (let age = 0; age < 80; age += 1) {

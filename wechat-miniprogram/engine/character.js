@@ -89,6 +89,8 @@ export function createCharacter(alloc, talents, difficulty = DEFAULT_DIFFICULTY)
     talents: talents.map((t) => t.id),
     flags,
     usedEventIds: [],
+    eventCounts: {},
+    recentEventIds: [],
     achievements: [],
     alive: true,
     ascended: false,

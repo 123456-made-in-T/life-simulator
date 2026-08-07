@@ -130,7 +130,7 @@
 
   <scroll-view class="log-scroll" scroll-y scroll-into-view="{{lastLogId}}" scroll-with-animation>
     <view class="log tone-{{item.tone}}" wx:for="{{logs}}" wx:key="index" id="log-{{index}}">
-      <text class="log-age">{{item.age}}岁</text>
+      <text class="log-age">{{item.ageText}}</text>
       <text class="log-text">{{item.text}}</text>
     </view>
     <view id="log-bottom"></view>
@@ -180,7 +180,7 @@
   <view class="record-toggle" bindtap="onToggleRecord">{{showRecord ? '收起此生年表 ▲' : '回顾此生年表 ▼'}}</view>
   <scroll-view wx:if="{{showRecord}}" scroll-y class="record-list">
     <view wx:for="{{logs}}" wx:key="index" class="record-line tone-{{item.tone}}">
-      <text class="record-age">{{item.age}}岁</text>{{item.text}}
+      <text class="record-age">{{item.ageText}}</text>{{item.text}}
     </view>
   </scroll-view>
 

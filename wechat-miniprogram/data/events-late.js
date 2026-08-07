@@ -97,7 +97,7 @@ export default [
     ]
   },
   {
-    "id": "l018", "realmMin": 4, "realmMax": 6, "weight": 2,
+    "id": "l018", "realmMin": 4, "realmMax": 6, "weight": 2, "repeat": true,
     "texts": [
       "又一甲子弹指而过。山下王朝换了国姓，你洞府门前的松树粗了一圈。这段岁月，你选择——",
       "当年的婴孩已成冢中枯骨，你的容颜却未曾变过。漫长的岁月里，你决定——",
@@ -150,7 +150,7 @@ export default [
     ]
   },
   {
-    "id": "l102", "realmMin": 4, "realmMax": 6,
+    "id": "l102", "realmMin": 4, "realmMax": 6, "repeat": true,
     "texts": [
       "山中不知岁月，你于崖边静坐，一坐便入了坐忘之境。",
       "月上中天，万籁俱寂。你在洞府顶上盘膝而坐，心随云动。",
