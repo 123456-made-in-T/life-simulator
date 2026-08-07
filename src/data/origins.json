@@ -1,0 +1,8 @@
+[
+  { "id": "shancun", "name": "山村农家", "flag": "origin_shancun", "desc": "青山环抱的小村，屋后有溪，门前有田", "minJiashi": 0, "maxJiashi": 6, "weight": 3 },
+  { "id": "shiji", "name": "市井商户", "flag": "origin_shiji", "desc": "街市喧嚣的绸缎铺子，算盘声里长大", "minJiashi": 3, "maxJiashi": 8, "weight": 3 },
+  { "id": "lieren", "name": "深山猎户", "flag": "origin_lieren", "desc": "老林深处的木屋，火塘常年不熄", "minJiashi": 0, "maxJiashi": 4, "weight": 2 },
+  { "id": "shuxiang", "name": "书香门第", "flag": "origin_shuxiang", "desc": "满架藏书的宅院，墨香浸润童年", "minJiashi": 5, "maxJiashi": 10, "weight": 3 },
+  { "id": "bianguan", "name": "边关军镇", "flag": "origin_bianguan", "desc": "号角与烽火中的边城，民风彪悍", "minJiashi": 2, "maxJiashi": 7, "weight": 2 },
+  { "id": "daoguan", "name": "道观遗孤", "flag": "origin_daoguan", "desc": "山门外拾来的孩子，青灯为伴", "minJiashi": 0, "maxJiashi": 3, "weight": 2 }
+]

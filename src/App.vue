@@ -4,7 +4,8 @@ import { createRng, randomSeed } from './engine/rng.js';
 import { createCharacter, drawTalents } from './engine/character.js';
 import { advanceTick, resolveChoice } from './engine/simulation.js';
 import { summarize } from './engine/rating.js';
-import { TALENT_POOL, EVENT_POOL } from './data/index.js';
+import { TALENT_POOL, EVENT_POOL, ORIGIN_POOL } from './data/index.js';
+import { assignOrigin } from './engine/origins.js';
 import SetupPanel from './components/SetupPanel.vue';
 import TalentPick from './components/TalentPick.vue';
 import LifeLog from './components/LifeLog.vue';
@@ -121,7 +122,7 @@ function handleAllocation(payload) {
 }
 
 function handleTalents(chosen) {
-  state.value = createCharacter(allocation, chosen, difficulty);
+  state.value = assignOrigin(createCharacter(allocation, chosen, difficulty), ORIGIN_POOL, rng);
   logs.value = [];
   tickCount = 0;
   phase.value = 'living';

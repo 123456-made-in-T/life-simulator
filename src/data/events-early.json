@@ -72,7 +72,7 @@
     ]
   },
   {
-    "id": "e014", "realmMax": 0, "ageMin": 6, "weight": 3,
+    "id": "e014", "realmMax": 0, "ageMin": 13, "weight": 3,
     "text": "又是一年春耕秋收。这一年，你打算怎么过？",
     "options": [
       { "text": "勤恳劳作", "resultText": "日出而作日落而息，筋骨在劳作中愈发结实。", "effects": { "tipo": 1 } },
@@ -246,6 +246,150 @@
     "options": [
       { "text": "堕入魔道", "resultText": "你不再抗拒。魔气冲天而起，从此正道多了一个通缉令，魔道多了一个天才。", "effects": { "cultivation": 30, "daoxin": -2, "flag": "modao" }, "achievement": "堕入魔道" },
       { "text": "自断魔种", "resultText": "你以本命真元为刃，生生剜去魔种。修为大损，灵台却前所未有地清明。", "effects": { "cultivation": -20, "daoxin": 2, "tipo": -1 }, "achievement": "断魔明志", "deathChance": 0.1, "deathText": "魔种反噬，你与它同归于尽，至死灵台清明。" }
+    ]
+  },
+  {
+    "id": "b_shancun", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shancun" },
+    "text": "你降生在青山环抱的小村。屋后溪水潺潺，门前稻浪翻滚，爹娘煮了一碗红糖水庆祝你的到来。",
+    "options": [
+      { "text": "哭声惊飞了檐上的麻雀", "resultText": "接生婆连声说好：嗓门这么亮，将来是把干活的好手！", "effects": { "tipo": 1 } },
+      { "text": "盯着房梁咯咯直笑", "resultText": "你笑得没心没肺，娘说你像是知道什么大伙不知道的事。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "c_shancun1", "realmMax": 0, "ageMin": 3, "ageMax": 10, "once": true, "cond": { "flag": "origin_shancun" },
+    "text": "盛夏，村里孩子都泡在溪里。深潭底下听说有条断线的大青鱼。",
+    "options": [
+      { "text": "憋一口气潜下去摸", "resultText": "你真把那条大青鱼抱了上来！全村孩子看你的眼神从此不一样了。", "effects": { "tipo": 1, "jiashi": 1 }, "deathChance": 0.04, "deathText": "深潭水草缠住了你的脚踝，大人们赶到时已经晚了。" },
+      { "text": "蹲在浅滩看鱼群", "resultText": "你看了一下午，摸清了鱼儿逆流藏石的规律——观察，也是一种本事。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "c_shancun2", "realmMax": 0, "ageMin": 5, "ageMax": 12, "once": true, "cond": { "flag": "origin_shancun" },
+    "text": "放牛时你在牛背上睡着了。梦里有个白衣人踏着一柄飞剑，从月亮上一掠而过。",
+    "options": [
+      { "text": "醒来后立志要找到那个人", "resultText": "全村人都笑你说梦话，只有你自己知道，那道剑光亮得不像梦。", "effects": { "daoxin": 1, "cultivation": 3 } },
+      { "text": "只当是个梦", "resultText": "你揉揉眼继续放牛。但很多年后你仍会想起那道剑光——梦这种东西，说不清的。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "b_shiji", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shiji" },
+    "text": "你降生在长街最热闹的绸缎铺二楼。楼下算盘噼啪、伙计吆喝，爹说这是天底下最好听的曲子。",
+    "options": [
+      { "text": "抓周时一把抓住算盘", "resultText": "满堂宾客喝彩：好！天生的掌柜命！", "effects": { "jiashi": 1 } },
+      { "text": "抓周时抓住一枚旧铜镜", "resultText": "宾客们面面相觑。只有角落一位借宿的游方道人多看了那面镜子一眼。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "c_shiji1", "realmMax": 0, "ageMin": 4, "ageMax": 10, "once": true, "cond": { "flag": "origin_shiji" },
+    "text": "爹让你在柜台帮忙。长街上今日来了耍猴戏的班子，锣声一阵阵往铺子里钻。",
+    "options": [
+      { "text": "守着柜台打算盘", "resultText": "一下午没错一笔账。爹捋着胡子说：这孩子心定，是块材料。", "effects": { "wuxing": 1, "jiashi": 1 } },
+      { "text": "溜出去看耍猴", "resultText": "猴戏没什么，倒是班主变戏法时袖中一闪的青光让你记了很多年。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "c_shiji2", "realmMax": 0, "ageMin": 6, "ageMax": 12, "once": true, "cond": { "flag": "origin_shiji" },
+    "text": "西域客商带来一颗琉璃珠，珠子里似有雾气缓缓流转。客商开价不菲，说这是『有缘人才看得见雾』。",
+    "options": [
+      { "text": "缠着爹把它买下来", "resultText": "爹肉痛地付了钱。夜里你抱着珠子睡，梦里雾气钻进了眉心。", "effects": { "jiashi": -1, "cultivation": 8 } },
+      { "text": "把雾气的样子默默记下", "resultText": "买不起，但你把那雾气的流转路线记在了心里——多年后你才明白那是一幅吐纳图。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "b_lieren", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_lieren" },
+    "text": "你降生在老林深处的猎户木屋。门外雪深三尺，火塘上炖着肉，爹用裹着硝烟味的大手接住了你。",
+    "options": [
+      { "text": "在满屋兽皮味里睡得香甜", "resultText": "爹说：不怕腥膻的孩子，山神爷会照看。", "effects": { "tipo": 1 } },
+      { "text": "睁眼就盯着跳动的火塘", "resultText": "娘说你看火的眼神不像个婴儿，倒像在读一本书。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "c_lieren1", "realmMax": 0, "ageMin": 5, "ageMax": 12, "once": true, "cond": { "flag": "origin_lieren" },
+    "text": "爹第一次让你摸弓。雪地尽头，一只灰兔正竖着耳朵张望。",
+    "options": [
+      { "text": "屏息，放箭", "resultText": "箭正中目标！爹拍着你的头，把兔子挂上了你的腰。", "effects": { "tipo": 1 } },
+      { "text": "手一抖，箭飞了", "resultText": "兔子跑了。但你记住了风掠过箭羽的角度——下一箭，不会偏。", "effects": { "wuxing": 1, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "c_lieren2", "realmMax": 0, "ageMin": 7, "ageMax": 12, "once": true, "cond": { "flag": "origin_lieren" },
+    "text": "深冬雪夜，狼群围了木屋，嚎声一声近过一声。爹抄起猎叉守在门后。",
+    "options": [
+      { "text": "抓起柴刀站到爹身边", "resultText": "那一夜狼群终究没敢破门。爹后来常说：那晚你站过来的时候，就不再是孩子了。", "effects": { "tipo": 1, "daoxin": 1 }, "deathChance": 0.05, "deathText": "一头老狼撞破了窗，你没能躲开那一口。" },
+      { "text": "缩在被窝里数狼嚎", "resultText": "你数到一百零七声，天亮了。恐惧这东西，你算是从小认识了它。", "effects": { "wuxing": 1, "daoxin": -1 } }
+    ]
+  },
+  {
+    "id": "b_shuxiang", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_shuxiang" },
+    "text": "你降生在满架藏书的宅院。祖父提笔为你写下名字，满室墨香里，你打了人生第一个喷嚏。",
+    "options": [
+      { "text": "抓周时抓住一支狼毫笔", "resultText": "祖父大喜过望，当场吟诗一首。你听不懂，但觉得音律很好听。", "effects": { "wuxing": 1 } },
+      { "text": "抓周时把《山海经》拖到怀里", "resultText": "满座哗然——那么多正经典籍，这孩子偏挑了本讲妖怪的。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "c_shuxiang1", "realmMax": 0, "ageMin": 4, "ageMax": 10, "once": true, "cond": { "flag": "origin_shuxiang" },
+    "text": "每日描红一百字，是祖父定下的规矩。今日窗外风筝正高。",
+    "options": [
+      { "text": "一笔一画描完再说", "resultText": "字写完，风筝也飞走了。但笔下的横平竖直，日后成了你道心的底子。", "effects": { "wuxing": 1, "daoxin": 1 } },
+      { "text": "在纸角偷偷画了个御剑小人", "resultText": "祖父检查时盯着那小人看了很久，最后什么也没说，只是把那页纸收进了抽屉。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "c_shuxiang2", "realmMax": 0, "ageMin": 6, "ageMax": 12, "once": true, "cond": { "flag": "origin_shuxiang" },
+    "text": "你在祖父书房最高一格翻到半页残卷，上面画着人形与游走周身的细线，题着『导引』二字。",
+    "options": [
+      { "text": "藏起来，夜里偷偷照着练", "resultText": "细线游走的路径竟真能引动一丝暖流。只是每次练完，你都心虚得不敢看祖父。", "effects": { "cultivation": 8, "daoxin": -1 } },
+      { "text": "捧去问祖父", "resultText": "祖父沉默半晌，说：这是你曾祖求仙未成留下的。既然被你翻到……也许是天意。", "effects": { "daoxin": 1, "jiashi": 1, "cultivation": 3 } }
+    ]
+  },
+  {
+    "id": "b_bianguan", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_bianguan" },
+    "text": "你降生在边关军镇，第一声啼哭混在换防的号角里。爹是城头一名老卒，用头盔当盆给你洗了澡。",
+    "options": [
+      { "text": "号角声里睡得踏实", "resultText": "满营的兵都说这娃有出息——号角当摇篮曲的，天生是块铁。", "effects": { "tipo": 1 } },
+      { "text": "一听号角就手舞足蹈", "resultText": "爹笑骂：小兔崽子，急什么，城墙又跑不了。", "effects": { "daoxin": 1 } }
+    ]
+  },
+  {
+    "id": "c_bianguan1", "realmMax": 0, "ageMin": 5, "ageMax": 12, "once": true, "cond": { "flag": "origin_bianguan" },
+    "text": "每天清晨，你趴在城头看大兵操练。长枪如林，喊杀震天。",
+    "options": [
+      { "text": "捡根木棍跟着比划", "resultText": "一套枪法比划得有模有样，教头看见了，笑着纠正了你三个动作。", "effects": { "tipo": 1 } },
+      { "text": "数旗子，琢磨阵型变化", "resultText": "你看出了操练里三处前后矛盾。多年后你才知道，那叫阵法的生门与死门。", "effects": { "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "c_bianguan2", "realmMax": 0, "ageMin": 8, "ageMax": 12, "once": true, "cond": { "flag": "origin_bianguan" },
+    "text": "烽火骤起！敌骑夜袭扣关，全城男丁都上了城墙，石块和箭矢在头顶乱飞。",
+    "options": [
+      { "text": "帮着往城头搬石头", "resultText": "你搬了一夜石头，手掌磨出了血。天亮时敌骑退了，老卒们都记住了这个不哭的孩子。", "effects": { "tipo": 1, "daoxin": 1 }, "deathChance": 0.05, "deathText": "一支流矢越过垛口，你倒在了搬石的半路上。" },
+      { "text": "随妇孺躲进地窖", "resultText": "地窖里一夜，你听着头顶的喊杀声，把恐惧和愤怒都刻进了骨头。", "effects": { "daoxin": -1, "wuxing": 1 } }
+    ]
+  },
+  {
+    "id": "b_daoguan", "realmMax": 0, "ageMax": 2, "once": true, "weight": 10, "cond": { "flag": "origin_daoguan" },
+    "text": "你是山门外拾来的孩子。老道士抱起襁褓时，你正抓着他的拂尘不撒手。从此青灯古观，便是家。",
+    "options": [
+      { "text": "在钟声里咯咯直笑", "resultText": "老道说：晨钟暮鼓听得进去，是个有慧根的。", "effects": { "daoxin": 1 } },
+      { "text": "抓着拂尘死不撒手", "resultText": "老道费了半天劲才掰开你的小手，叹道：小小年纪，执念不轻啊。", "effects": { "tipo": 1 } }
+    ]
+  },
+  {
+    "id": "c_daoguan1", "realmMax": 0, "ageMin": 4, "ageMax": 10, "once": true, "cond": { "flag": "origin_daoguan" },
+    "text": "你的活计是洒扫大殿。三清神像高踞莲台，目光似乎总跟着你走。",
+    "options": [
+      { "text": "把神像上下擦得一尘不染", "resultText": "师父说：扫地亦是修行。你不懂，但擦完神像心里确实很静。", "effects": { "daoxin": 1 } },
+      { "text": "偷偷模仿神像的手印", "resultText": "指诀掐到第三个，你的指尖竟麻了一下。你吓得赶紧收手，心口却怦怦跳了一晚上。", "effects": { "cultivation": 5 } }
+    ]
+  },
+  {
+    "id": "c_daoguan2", "realmMax": 0, "ageMin": 6, "ageMax": 12, "once": true, "cond": { "flag": "origin_daoguan" },
+    "text": "后半夜你起来解手，撞见师父在殿后打坐——他周身竟萦绕着一层淡淡的紫气，缓缓流入眉心。",
+    "options": [
+      { "text": "跪下求师父传法", "resultText": "师父睁眼看了你很久：既然看得见紫气，便是有缘。明日起，随我晨课。", "effects": { "cultivation": 8, "daoxin": 1 } },
+      { "text": "躲在柱后偷偷记下", "resultText": "你把紫气游走的路线记了个大概，回房自己瞎练——居然真练出了一丝气感。", "effects": { "wuxing": 1, "cultivation": 4 } }
     ]
   }
 ]

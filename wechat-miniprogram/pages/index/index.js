@@ -12,11 +12,12 @@ import {
 } from '../../engine/character.js';
 import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../../engine/difficulty.js';
 import { buildRecord, addRecord, computeCareer } from '../../engine/records.js';
+import { assignOrigin } from '../../engine/origins.js';
 import { loadRecords, saveRecords, clearRecords } from '../../lib/recordsStore.js';
 import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
-import { TALENT_POOL, EVENT_POOL } from '../../data/index.js';
+import { TALENT_POOL, EVENT_POOL, ORIGIN_POOL } from '../../data/index.js';
 
 const TALENT_OPTIONS_COUNT = 10;
 const PICK_COUNT = 3;
@@ -206,7 +207,11 @@ Page({
   onConfirmTalents() {
     if (this.data.selectedCount !== PICK_COUNT) return;
     const chosen = this.data.talentOptions.filter((t) => this.data.selectedMap[t.id]);
-    this.state = createCharacter(this.allocation, chosen, this.difficulty);
+    this.state = assignOrigin(
+      createCharacter(this.allocation, chosen, this.difficulty),
+      ORIGIN_POOL,
+      this.rng,
+    );
     this.tickCount = 0;
     this.setData({ phase: 'living', logs: [], lastLogId: '', view: this.buildView() });
     this.startTimer();
@@ -218,6 +223,7 @@ Page({
     const s = this.state;
     return {
       realmName: REALMS[s.realmIndex].name,
+      originName: s.origin ? s.origin.name : '',
       age: s.age,
       lifespan: s.lifespan,
       cultPercent: Math.min(100, Math.round((s.cultivation / CULTIVATION_CAP) * 100)),
