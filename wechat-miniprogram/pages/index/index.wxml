@@ -19,6 +19,19 @@
   </view>
   <view class="mode-desc">{{difficultyDesc}}</view>
 
+  <view class="boons" wx:if="{{fruits > 0}}">
+    <view class="boons-title">道果 ×{{remainingFruits}}<text class="boons-hint">（历世参悟所得，可购临世机缘）</text></view>
+    <view class="boon-list">
+      <view
+        wx:for="{{boons}}"
+        wx:key="id"
+        class="boon {{boonSelected[item.id] ? 'active' : ''}} {{!boonSelected[item.id] && item.cost > remainingFruits ? 'dim' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onToggleBoon"
+      >{{item.name}} ×{{item.cost}}</view>
+    </view>
+  </view>
+
   <view class="hint">剩余点数：<text class="{{remaining !== 0 ? 'warn' : ''}}">{{remaining}}</text> / {{pointTotal}}</view>
 
   <view class="attr-row" wx:for="{{allocKeys}}" wx:for-item="key" wx:key="*this">
@@ -149,7 +162,11 @@
     </view>
   </view>
 
+  <view class="fruits">参悟道果 ×{{summary.earnedFruits}}<text class="fruits-total">（现有 ×{{summary.fruitsTotal}}，投胎时可购临世机缘）</text></view>
   <view class="seed">命盘编号 #{{seed}}</view>
+
+  <view class="share-btn" bindtap="onSaveShareCard">保存战绩图</view>
+  <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
 
   <view class="record-toggle" bindtap="onToggleRecord">{{showRecord ? '收起此生年表 ▲' : '回顾此生年表 ▼'}}</view>
   <scroll-view wx:if="{{showRecord}}" scroll-y class="record-list">

@@ -8,7 +8,11 @@ import {
   randomAllocation,
 } from '../engine/character.js';
 import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../engine/difficulty.js';
+import { BOONS, boonsCost, EXTRA_POINTS_BOON, EXTRA_POINTS_AMOUNT } from '../engine/daofruit.js';
 
+const props = defineProps({
+  fruits: { type: Number, default: 0 },
+});
 const emit = defineEmits(['confirm', 'records']);
 
 const ATTR_HINTS = {
@@ -20,14 +24,32 @@ const ATTR_HINTS = {
 
 const difficulty = ref(DEFAULT_DIFFICULTY);
 const alloc = reactive({ linggen: 5, wuxing: 5, tipo: 5, jiashi: 5 });
+const selectedBoons = ref([]);
 
-const pointTotal = computed(() => difficulty.value.points);
+const spentFruits = computed(() => boonsCost(selectedBoons.value));
+const remainingFruits = computed(() => props.fruits - spentFruits.value);
+
+const pointTotal = computed(
+  () =>
+    difficulty.value.points +
+    (selectedBoons.value.includes(EXTRA_POINTS_BOON) ? EXTRA_POINTS_AMOUNT : 0),
+);
 const remaining = computed(
   () => pointTotal.value - ALLOC_KEYS.reduce((sum, key) => sum + alloc[key], 0),
 );
 
 function selectDifficulty(mode) {
   difficulty.value = mode;
+}
+
+function toggleBoon(boon) {
+  if (selectedBoons.value.includes(boon.id)) {
+    selectedBoons.value = selectedBoons.value.filter((id) => id !== boon.id);
+    return;
+  }
+  if (boon.cost <= remainingFruits.value) {
+    selectedBoons.value = [...selectedBoons.value, boon.id];
+  }
 }
 
 function adjust(key, delta) {
@@ -43,7 +65,11 @@ function randomize() {
 
 function confirm() {
   if (remaining.value === 0) {
-    emit('confirm', { alloc: { ...alloc }, difficulty: difficulty.value });
+    emit('confirm', {
+      alloc: { ...alloc },
+      difficulty: difficulty.value,
+      boonIds: [...selectedBoons.value],
+    });
   }
 }
 </script>
@@ -65,6 +91,25 @@ function confirm() {
       </button>
     </div>
     <p class="mode-desc">{{ difficulty.desc }}</p>
+
+    <div v-if="fruits > 0" class="boons">
+      <p class="boons-title">
+        道果 ×{{ remainingFruits }}<span class="boons-hint">（历世参悟所得，可购临世机缘）</span>
+      </p>
+      <div class="boon-list">
+        <button
+          v-for="boon in BOONS"
+          :key="boon.id"
+          class="boon"
+          :class="{ active: selectedBoons.includes(boon.id) }"
+          :disabled="!selectedBoons.includes(boon.id) && boon.cost > remainingFruits"
+          :title="boon.desc"
+          @click="toggleBoon(boon)"
+        >
+          {{ boon.name }} <span class="boon-cost">×{{ boon.cost }}</span>
+        </button>
+      </div>
+    </div>
 
     <p class="hint">
       剩余点数：<strong :class="{ warn: remaining !== 0 }">{{ remaining }}</strong> / {{ pointTotal }}
@@ -130,6 +175,48 @@ h2 {
   margin: 0 0 var(--space-1);
   font-size: 0.78rem;
   color: var(--ink-soft);
+}
+
+.boons {
+  border: 1px dashed var(--gold);
+  padding: 0.6rem 0.8rem;
+  margin-bottom: var(--space-1);
+}
+
+.boons-title {
+  margin: 0 0 0.5rem;
+  color: var(--gold);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.boons-hint {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+}
+
+.boon-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.boon {
+  font-size: 0.78rem;
+  padding: 0.25em 0.7em;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+.boon.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--paper);
+}
+
+.boon-cost {
+  opacity: 0.75;
 }
 
 .warn {

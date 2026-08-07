@@ -35,10 +35,10 @@ export function advanceTick(state, pool, rng) {
   const tickYears = REALMS[state.realmIndex].tickYears;
   let next = { ...state, age: state.age + tickYears };
 
-  // 寿元耗尽（回合跨度大时年龄可能越过寿元，按寿元数收口）
+  // 寿元耗尽（回合跨度大时年龄可能越过寿元，按寿元数收口；寿终不可被金刚护体挡下）
   if (next.age >= next.lifespan) {
     next = { ...next, age: next.lifespan };
-    return { ...endLife(next, logs, ageDeathText(next)), pending: null };
+    return { ...endLife(next, logs, ageDeathText(next), false), pending: null };
   }
 
   // 修为增长（开蒙之后）
@@ -153,8 +153,7 @@ function attemptBreakthrough(state, rng, logs) {
   next = trackStats(next);
 
   if (isFinal && rng() < adjustedDeathChance(TRIBULATION_FAIL_DEATH_CHANCE, state.difficulty)) {
-    logs.push(entry(next, '天劫之下，金身寸寸碎裂……', 'death'));
-    return { state: { ...next, alive: false, endingText: '渡劫失败，身死道消，魂飞魄散于九天雷海。' }, logs };
+    return endLife(next, logs, '天劫之下金身寸寸碎裂——渡劫失败，身死道消，魂飞魄散于九天雷海。');
   }
 
   if (next.realmIndex >= BREAK_FAIL_DEATH_REALM) {
@@ -163,8 +162,7 @@ function attemptBreakthrough(state, rng, logs) {
       state.difficulty,
     );
     if (rng() < deathChance) {
-      logs.push(entry(next, '冲关失败，真元逆冲，经脉寸断……', 'death'));
-      return { state: { ...next, alive: false, endingText: '强行冲关走火入魔，经脉尽断而亡。' }, logs };
+      return endLife(next, logs, '冲关失败真元逆冲——强行冲关走火入魔，经脉尽断而亡。');
     }
     next = { ...next, attrs: { ...next.attrs, tipo: clampAttr(next.attrs.tipo - 2) } };
     logs.push(entry(next, '冲关失败，走火入魔，你重伤吐血堪堪保住性命。（体魄-2 道心-1）', 'bad'));
@@ -203,8 +201,7 @@ function resolveInnerDemon(state, rng, logs) {
     return { state: next, logs };
   }
   if (rng() < adjustedDeathChance(INNER_DEMON_DEATH_CHANCE, state.difficulty)) {
-    logs.push(entry(state, '心魔吞噬灵台，你在疯癫中耗尽了最后一丝神智……', 'death'));
-    return { state: { ...state, alive: false, endingText: '道心崩溃，入魔而亡。' }, logs };
+    return endLife(state, logs, '心魔吞噬灵台，你在疯癫中耗尽了最后一丝神智——道心崩溃，入魔而亡。');
   }
   const next = {
     ...state,
@@ -215,7 +212,19 @@ function resolveInnerDemon(state, rng, logs) {
   return { state: next, logs };
 }
 
-function endLife(state, logs, endingText) {
+function endLife(state, logs, endingText, preventable = true) {
+  // 金刚护体（转世道果机缘）：横死可免一次，寿终无效
+  if (preventable && state.flags.jingang) {
+    const next = {
+      ...state,
+      flags: { ...state.flags, jingang: false },
+      attrs: { ...state.attrs, tipo: Math.max(1, clampAttr(state.attrs.tipo - 2)) },
+    };
+    logs.push(
+      entry(next, `${endingText}——千钧一发之际，金刚护体金光炸裂，硬生生将你从鬼门关拽了回来！（护体已碎 体魄受损）`, 'bad'),
+    );
+    return { state: next, logs };
+  }
   logs.push(entry(state, endingText, 'death'));
   return { state: { ...state, alive: false, endingText }, logs };
 }

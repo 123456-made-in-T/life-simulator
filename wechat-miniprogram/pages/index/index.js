@@ -13,7 +13,24 @@ import {
 import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../../engine/difficulty.js';
 import { buildRecord, addRecord, computeCareer } from '../../engine/records.js';
 import { assignOrigin } from '../../engine/origins.js';
-import { loadRecords, saveRecords, clearRecords } from '../../lib/recordsStore.js';
+import {
+  BOONS,
+  boonsCost,
+  fruitsEarned,
+  applyBoons,
+  EXTRA_POINTS_BOON,
+  EXTRA_POINTS_AMOUNT,
+  EXTRA_TALENT_BOON,
+  EXTRA_TALENT_COUNT,
+} from '../../engine/daofruit.js';
+import { drawShareCard, pickHighlights, CARD_WIDTH, CARD_HEIGHT } from '../../engine/shareCard.js';
+import {
+  loadRecords,
+  saveRecords,
+  clearRecords,
+  loadFruits,
+  saveFruits,
+} from '../../lib/recordsStore.js';
 import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
@@ -64,11 +81,18 @@ Page({
     showRecord: false,
     records: [],
     career: { total: 0, bestScore: 0, ascensions: 0, maxAge: 0 },
+    fruits: 0,
+    remainingFruits: 0,
+    boons: BOONS,
+    boonSelected: {},
   },
 
   onLoad() {
     this.difficulty = DEFAULT_DIFFICULTY;
     this.records = loadRecords();
+    this.boonIds = [];
+    const fruits = loadFruits();
+    this.setData({ fruits, remainingFruits: fruits });
     this.updateRemaining();
     this.bgm = wx.createInnerAudioContext();
     this.bgm.src = '/assets/bgm.mp3';
@@ -101,12 +125,44 @@ Page({
     else if (tones.includes('breakthrough')) this.playSfx('break');
   },
 
+  currentBonusPoints() {
+    return this.data.boonSelected[EXTRA_POINTS_BOON] ? EXTRA_POINTS_AMOUNT : 0;
+  },
+
   onSelectDifficulty(e) {
     const mode = DIFFICULTIES.find((d) => d.id === e.currentTarget.dataset.id);
     if (!mode) return;
     this.difficulty = mode;
     this.setData(
-      { difficultyId: mode.id, difficultyDesc: mode.desc, pointTotal: mode.points },
+      {
+        difficultyId: mode.id,
+        difficultyDesc: mode.desc,
+        pointTotal: mode.points + this.currentBonusPoints(),
+      },
+      () => this.updateRemaining(),
+    );
+  },
+
+  onToggleBoon(e) {
+    const { id } = e.currentTarget.dataset;
+    const boon = BOONS.find((b) => b.id === id);
+    if (!boon) return;
+    const selected = { ...this.data.boonSelected };
+    if (selected[id]) {
+      delete selected[id];
+    } else if (boon.cost <= this.data.remainingFruits) {
+      selected[id] = true;
+    } else {
+      return;
+    }
+    const cost = boonsCost(Object.keys(selected));
+    this.setData(
+      {
+        boonSelected: selected,
+        remainingFruits: this.data.fruits - cost,
+        pointTotal:
+          this.difficulty.points + (selected[EXTRA_POINTS_BOON] ? EXTRA_POINTS_AMOUNT : 0),
+      },
       () => this.updateRemaining(),
     );
   },
@@ -178,12 +234,20 @@ Page({
     if (this.data.remaining !== 0) return;
     this.playBgm();
     this.allocation = { ...this.data.alloc };
+    // 道果在投胎时消费，落子无悔
+    this.boonIds = Object.keys(this.data.boonSelected);
+    const fruits = this.data.fruits - boonsCost(this.boonIds);
+    saveFruits(fruits);
     const seed = randomSeed();
     this.rng = createRng(seed);
+    const talentCount = this.boonIds.includes(EXTRA_TALENT_BOON)
+      ? EXTRA_TALENT_COUNT
+      : TALENT_OPTIONS_COUNT;
     this.setData({
       seed,
+      fruits,
       phase: 'talent',
-      talentOptions: drawTalents(TALENT_POOL, TALENT_OPTIONS_COUNT, this.rng),
+      talentOptions: drawTalents(TALENT_POOL, talentCount, this.rng),
       selectedMap: {},
       selectedCount: 0,
     });
@@ -207,10 +271,9 @@ Page({
   onConfirmTalents() {
     if (this.data.selectedCount !== PICK_COUNT) return;
     const chosen = this.data.talentOptions.filter((t) => this.data.selectedMap[t.id]);
-    this.state = assignOrigin(
-      createCharacter(this.allocation, chosen, this.difficulty),
-      ORIGIN_POOL,
-      this.rng,
+    this.state = applyBoons(
+      assignOrigin(createCharacter(this.allocation, chosen, this.difficulty), ORIGIN_POOL, this.rng),
+      this.boonIds,
     );
     this.tickCount = 0;
     this.setData({ phase: 'living', logs: [], lastLogId: '', view: this.buildView() });
@@ -319,7 +382,16 @@ Page({
     if (this.summaryTimer || this.data.phase === 'summary') return;
     this.stopTimer();
     const summary = summarize(this.state);
-    this.pendingSummary = { ...summary, gradeClass: GRADE_CLASS[summary.grade] || 'd' };
+    const earned = fruitsEarned(summary.score);
+    const fruitsTotal = this.data.fruits + earned;
+    saveFruits(fruitsTotal);
+    this.setData({ fruits: fruitsTotal, remainingFruits: fruitsTotal });
+    this.pendingSummary = {
+      ...summary,
+      gradeClass: GRADE_CLASS[summary.grade] || 'd',
+      earnedFruits: earned,
+      fruitsTotal,
+    };
     this.records = addRecord(this.records, buildRecord(summary, this.data.seed, Date.now()));
     saveRecords(this.records);
     this.summaryTimer = setTimeout(() => {
@@ -338,6 +410,51 @@ Page({
 
   onToggleRecord() {
     this.setData({ showRecord: !this.data.showRecord });
+  },
+
+  onSaveShareCard() {
+    wx.createSelectorQuery()
+      .select('#shareCanvas')
+      .fields({ node: true })
+      .exec((res) => {
+        const canvas = res?.[0]?.node;
+        if (!canvas) {
+          wx.showToast({ title: '生成失败，请重试', icon: 'none' });
+          return;
+        }
+        canvas.width = CARD_WIDTH;
+        canvas.height = CARD_HEIGHT;
+        drawShareCard(canvas.getContext('2d'), {
+          summary: this.pendingSummary,
+          seed: this.data.seed,
+          highlights: pickHighlights(this.data.logs),
+        });
+        wx.canvasToTempFilePath({
+          canvas,
+          success: ({ tempFilePath }) => this.saveImageToAlbum(tempFilePath),
+          fail: () => wx.showToast({ title: '生成图片失败', icon: 'none' }),
+        });
+      });
+  },
+
+  saveImageToAlbum(filePath) {
+    wx.saveImageToPhotosAlbum({
+      filePath,
+      success: () => wx.showToast({ title: '已保存到相册' }),
+      fail: (err) => {
+        if (err.errMsg && err.errMsg.includes('auth')) {
+          wx.showModal({
+            title: '需要相册权限',
+            content: '请在设置中允许保存到相册后重试',
+            success: (res) => {
+              if (res.confirm) wx.openSetting();
+            },
+          });
+        } else {
+          wx.showToast({ title: '保存失败', icon: 'none' });
+        }
+      },
+    });
   },
 
   onShowRecords() {

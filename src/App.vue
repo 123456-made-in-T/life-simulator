@@ -12,7 +12,20 @@ import LifeLog from './components/LifeLog.vue';
 import SummaryCard from './components/SummaryCard.vue';
 import RecordsPanel from './components/RecordsPanel.vue';
 import { buildRecord, addRecord } from './engine/records.js';
-import { loadRecords, saveRecords, clearRecords } from './lib/recordsStore.js';
+import {
+  applyBoons,
+  boonsCost,
+  fruitsEarned,
+  EXTRA_TALENT_BOON,
+  EXTRA_TALENT_COUNT,
+} from './engine/daofruit.js';
+import {
+  loadRecords,
+  saveRecords,
+  clearRecords,
+  loadFruits,
+  saveFruits,
+} from './lib/recordsStore.js';
 import bgmUrl from './assets/bgm.mp3';
 import sfxChoiceUrl from './assets/sfx-choice.mp3';
 import sfxBreakUrl from './assets/sfx-break.mp3';
@@ -33,6 +46,8 @@ const speed = ref('slow');
 const summary = ref(null);
 const pending = ref(null);
 const records = ref(loadRecords());
+const fruits = ref(loadFruits());
+const earnedFruits = ref(0);
 
 function handleClearRecords() {
   if (window.confirm('确定清空全部战绩？此操作不可恢复。')) {
@@ -110,19 +125,28 @@ function toggleMusic() {
 }
 
 let difficulty = null;
+let boonIds = [];
 
 function handleAllocation(payload) {
   ensureBgm();
   allocation = payload.alloc;
   difficulty = payload.difficulty;
+  boonIds = payload.boonIds;
+  // 道果在投胎时消费，落子无悔
+  fruits.value -= boonsCost(boonIds);
+  saveFruits(fruits.value);
   seed.value = randomSeed();
   rng = createRng(seed.value);
-  talentOptions.value = drawTalents(TALENT_POOL, TALENT_OPTIONS_COUNT, rng);
+  const talentCount = boonIds.includes(EXTRA_TALENT_BOON) ? EXTRA_TALENT_COUNT : TALENT_OPTIONS_COUNT;
+  talentOptions.value = drawTalents(TALENT_POOL, talentCount, rng);
   phase.value = 'talent';
 }
 
 function handleTalents(chosen) {
-  state.value = assignOrigin(createCharacter(allocation, chosen, difficulty), ORIGIN_POOL, rng);
+  state.value = applyBoons(
+    assignOrigin(createCharacter(allocation, chosen, difficulty), ORIGIN_POOL, rng),
+    boonIds,
+  );
   logs.value = [];
   tickCount = 0;
   phase.value = 'living';
@@ -184,6 +208,9 @@ function finishLife() {
   summary.value = summarize(state.value);
   records.value = addRecord(records.value, buildRecord(summary.value, seed.value, Date.now()));
   saveRecords(records.value);
+  earnedFruits.value = fruitsEarned(summary.value.score);
+  fruits.value += earnedFruits.value;
+  saveFruits(fruits.value);
   summaryTimer = setTimeout(() => {
     summaryTimer = null;
     phase.value = 'summary';
@@ -233,7 +260,12 @@ onBeforeUnmount(() => {
   </header>
 
   <main class="stage">
-    <SetupPanel v-if="phase === 'setup'" @confirm="handleAllocation" @records="phase = 'records'" />
+    <SetupPanel
+      v-if="phase === 'setup'"
+      :fruits="fruits"
+      @confirm="handleAllocation"
+      @records="phase = 'records'"
+    />
     <RecordsPanel
       v-else-if="phase === 'records'"
       :records="records"
@@ -250,7 +282,15 @@ onBeforeUnmount(() => {
       @toggle-speed="toggleSpeed"
       @choose="choose"
     />
-    <SummaryCard v-else :summary="summary" :seed="seed" :logs="logs" @restart="restart" />
+    <SummaryCard
+      v-else
+      :summary="summary"
+      :seed="seed"
+      :logs="logs"
+      :earned-fruits="earnedFruits"
+      :fruits-total="fruits"
+      @restart="restart"
+    />
   </main>
 </template>
 

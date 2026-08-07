@@ -1,14 +1,32 @@
 <script setup>
 import { ref } from 'vue';
+import { drawShareCard, pickHighlights, CARD_WIDTH, CARD_HEIGHT } from '../engine/shareCard.js';
 
-defineProps({
+const props = defineProps({
   summary: { type: Object, required: true },
   seed: { type: Number, required: true },
   logs: { type: Array, default: () => [] },
+  earnedFruits: { type: Number, default: 0 },
+  fruitsTotal: { type: Number, default: 0 },
 });
 defineEmits(['restart']);
 
 const isRecordOpen = ref(false);
+
+function saveShareImage() {
+  const canvas = document.createElement('canvas');
+  canvas.width = CARD_WIDTH;
+  canvas.height = CARD_HEIGHT;
+  drawShareCard(canvas.getContext('2d'), {
+    summary: props.summary,
+    seed: props.seed,
+    highlights: pickHighlights(props.logs),
+  });
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL('image/png');
+  link.download = `问道战绩-${props.seed}.png`;
+  link.click();
+}
 </script>
 
 <template>
@@ -31,7 +49,12 @@ const isRecordOpen = ref(false);
       </ul>
     </div>
 
+    <p class="fruits">参悟道果 ×{{ earnedFruits }}<span class="fruits-total">（现有 ×{{ fruitsTotal }}，投胎时可购临世机缘）</span></p>
     <p class="seed">命盘编号 #{{ seed }}</p>
+
+    <div class="share">
+      <button @click="saveShareImage">保存战绩图</button>
+    </div>
 
     <div class="record">
       <button class="record-toggle" @click="isRecordOpen = !isRecordOpen">
@@ -129,6 +152,28 @@ h2 {
   font-size: 0.8rem;
   color: var(--ink-soft);
   letter-spacing: 0.15em;
+}
+
+.fruits {
+  color: var(--gold);
+  font-weight: 600;
+  margin: 0 0 0.4em;
+}
+
+.fruits-total {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.share {
+  margin: 0 0 var(--space-1);
+}
+
+.share button {
+  font-size: 0.85rem;
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .record {

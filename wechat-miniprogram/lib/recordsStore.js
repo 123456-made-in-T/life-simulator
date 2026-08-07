@@ -23,3 +23,24 @@ export function saveRecords(records) {
 export function clearRecords() {
   saveRecords([]);
 }
+
+const FRUITS_KEY = 'wendao-dao-fruits';
+
+export function loadFruits() {
+  try {
+    const value = wx.getStorageSync(FRUITS_KEY);
+    const parsed = Number.parseInt(value || '0', 10);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0;
+  } catch (error) {
+    console.warn('读取道果失败:', error);
+    return 0;
+  }
+}
+
+export function saveFruits(count) {
+  try {
+    wx.setStorageSync(FRUITS_KEY, String(count));
+  } catch (error) {
+    console.warn('保存道果失败:', error);
+  }
+}
