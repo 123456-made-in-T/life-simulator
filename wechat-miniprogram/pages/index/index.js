@@ -2,7 +2,6 @@
 
 import { createRng, randomSeed } from '../../engine/rng.js';
 import {
-  POINT_TOTAL,
   ATTR_MAX,
   ATTR_MIN,
   ALLOC_KEYS,
@@ -11,6 +10,7 @@ import {
   createCharacter,
   drawTalents,
 } from '../../engine/character.js';
+import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../../engine/difficulty.js';
 import { advanceTick, resolveChoice } from '../../engine/simulation.js';
 import { summarize } from '../../engine/rating.js';
 import { REALMS, CULTIVATION_CAP } from '../../engine/realms.js';
@@ -40,7 +40,10 @@ Page({
     attrLabels: ATTR_LABELS,
     attrHints: ATTR_HINTS,
     rarityLabels: RARITY_LABELS,
-    pointTotal: POINT_TOTAL,
+    difficulties: DIFFICULTIES,
+    difficultyId: DEFAULT_DIFFICULTY.id,
+    difficultyDesc: DEFAULT_DIFFICULTY.desc,
+    pointTotal: DEFAULT_DIFFICULTY.points,
     pickCount: PICK_COUNT,
     alloc: { linggen: 5, wuxing: 5, tipo: 5, jiashi: 5 },
     remaining: 0,
@@ -55,9 +58,11 @@ Page({
     seed: 0,
     pendingOptions: [],
     musicOn: true,
+    showRecord: false,
   },
 
   onLoad() {
+    this.difficulty = DEFAULT_DIFFICULTY;
     this.updateRemaining();
     this.bgm = wx.createInnerAudioContext();
     this.bgm.src = '/assets/bgm.mp3';
@@ -65,6 +70,39 @@ Page({
     this.bgm.volume = 0.45;
     // 不受 iOS 静音键影响（游戏 BGM 的惯例）
     this.bgm.obeyMuteSwitch = false;
+
+    this.sfx = {};
+    for (const name of ['choice', 'break', 'death', 'ascend']) {
+      const ctx = wx.createInnerAudioContext();
+      ctx.src = `/assets/sfx-${name}.mp3`;
+      ctx.volume = 0.7;
+      ctx.obeyMuteSwitch = false;
+      this.sfx[name] = ctx;
+    }
+  },
+
+  playSfx(name) {
+    if (!this.data.musicOn || !this.sfx[name]) return;
+    this.sfx[name].stop();
+    this.sfx[name].play();
+  },
+
+  /** 根据结算日志的音调触发对应音效 */
+  playSfxForLogs(logs) {
+    const tones = logs.map((log) => log.tone);
+    if (tones.includes('ascend')) this.playSfx('ascend');
+    else if (tones.includes('death')) this.playSfx('death');
+    else if (tones.includes('breakthrough')) this.playSfx('break');
+  },
+
+  onSelectDifficulty(e) {
+    const mode = DIFFICULTIES.find((d) => d.id === e.currentTarget.dataset.id);
+    if (!mode) return;
+    this.difficulty = mode;
+    this.setData(
+      { difficultyId: mode.id, difficultyDesc: mode.desc, pointTotal: mode.points },
+      () => this.updateRemaining(),
+    );
   },
 
   onShow() {
@@ -84,6 +122,9 @@ Page({
     this.clearSummaryTimer();
     if (this.bgm) {
       this.bgm.destroy();
+    }
+    if (this.sfx) {
+      Object.values(this.sfx).forEach((ctx) => ctx.destroy());
     }
   },
 
@@ -108,7 +149,7 @@ Page({
 
   updateRemaining() {
     const used = ALLOC_KEYS.reduce((sum, key) => sum + this.data.alloc[key], 0);
-    this.setData({ remaining: POINT_TOTAL - used });
+    this.setData({ remaining: this.data.pointTotal - used });
   },
 
   onAdjust(e) {
@@ -121,7 +162,10 @@ Page({
   },
 
   onRandomize() {
-    this.setData({ alloc: randomAllocation(Math.random) }, () => this.updateRemaining());
+    this.setData(
+      { alloc: randomAllocation(Math.random, this.data.pointTotal) },
+      () => this.updateRemaining(),
+    );
   },
 
   onConfirmAlloc() {
@@ -157,7 +201,7 @@ Page({
   onConfirmTalents() {
     if (this.data.selectedCount !== PICK_COUNT) return;
     const chosen = this.data.talentOptions.filter((t) => this.data.selectedMap[t.id]);
-    this.state = createCharacter(this.allocation, chosen);
+    this.state = createCharacter(this.allocation, chosen, this.difficulty);
     this.tickCount = 0;
     this.setData({ phase: 'living', logs: [], lastLogId: '', view: this.buildView() });
     this.startTimer();
@@ -201,6 +245,7 @@ Page({
     const result = advanceTick(this.state, EVENT_POOL, this.rng);
     this.state = result.state;
     this.renderLogs(result.logs);
+    this.playSfxForLogs(result.logs);
     if (result.pending) {
       // 遇到抉择点：停下光阴，等玩家做决定
       this.stopTimer();
@@ -224,12 +269,14 @@ Page({
 
   onChoose(e) {
     if (!this.pending) return;
+    this.playSfx('choice');
     const index = Number(e.currentTarget.dataset.index);
     const result = resolveChoice(this.state, this.pending, index, this.rng);
     this.pending = null;
     this.state = result.state;
     this.setData({ pendingOptions: [] });
     this.renderLogs(result.logs);
+    this.playSfxForLogs(result.logs);
     if (!result.state.alive || result.state.ascended) {
       this.finishLife();
       return;
@@ -276,6 +323,10 @@ Page({
     }
   },
 
+  onToggleRecord() {
+    this.setData({ showRecord: !this.data.showRecord });
+  },
+
   onRestart() {
     this.stopTimer();
     this.clearSummaryTimer();
@@ -292,6 +343,7 @@ Page({
       summary: null,
       view: null,
       pendingOptions: [],
+      showRecord: false,
     });
     this.updateRemaining();
   },

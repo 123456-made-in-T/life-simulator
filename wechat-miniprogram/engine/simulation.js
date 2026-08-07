@@ -12,7 +12,8 @@ import {
   cultivationGain,
   breakthroughChance,
 } from './realms.js';
-import { clampAttr } from './character.js';
+import { clampAttr, trackStats } from './character.js';
+import { adjustedDeathChance } from './difficulty.js';
 import { pickEvent, applyOption, formatEffects } from './events.js';
 
 const INNER_DEMON_DEATH_CHANCE = 0.5;
@@ -80,7 +81,7 @@ function resolveEventOption(state, event, optionIndex, rng) {
     throw new Error(`事件 ${event.id} 不存在选项 ${optionIndex}`);
   }
   const applied = applyOption(state, option, rng);
-  const next = applied.state;
+  const next = trackStats(applied.state);
   logs.push(
     entry(next, `你选择「${option.text}」。${option.resultText}${formatEffects(option.effects)}`, option.tone || 'normal'),
   );
@@ -131,15 +132,21 @@ function attemptBreakthrough(state, rng, logs) {
     cultivation: CONSOLIDATE_CULTIVATION - 20,
     attrs: { ...state.attrs, daoxin: clampAttr(state.attrs.daoxin - 1) },
   };
+  if (next.stats) {
+    next = { ...next, stats: { ...next.stats, breakFails: next.stats.breakFails + 1 } };
+  }
+  next = trackStats(next);
 
-  if (isFinal && rng() < TRIBULATION_FAIL_DEATH_CHANCE) {
+  if (isFinal && rng() < adjustedDeathChance(TRIBULATION_FAIL_DEATH_CHANCE, state.difficulty)) {
     logs.push(entry(next, '天劫之下，金身寸寸碎裂……', 'death'));
     return { state: { ...next, alive: false, endingText: '渡劫失败，身死道消，魂飞魄散于九天雷海。' }, logs };
   }
 
   if (next.realmIndex >= BREAK_FAIL_DEATH_REALM) {
-    const deathChance =
-      BREAK_FAIL_DEATH_BASE + (next.realmIndex - BREAK_FAIL_DEATH_REALM) * BREAK_FAIL_DEATH_PER_REALM;
+    const deathChance = adjustedDeathChance(
+      BREAK_FAIL_DEATH_BASE + (next.realmIndex - BREAK_FAIL_DEATH_REALM) * BREAK_FAIL_DEATH_PER_REALM,
+      state.difficulty,
+    );
     if (rng() < deathChance) {
       logs.push(entry(next, '冲关失败，真元逆冲，经脉寸断……', 'death'));
       return { state: { ...next, alive: false, endingText: '强行冲关走火入魔，经脉尽断而亡。' }, logs };
@@ -180,7 +187,7 @@ function resolveInnerDemon(state, rng, logs) {
     logs.push(entry(next, '心魔滋生，幸得道心通明护佑，灵台重归清净。（道心回稳）', 'normal'));
     return { state: next, logs };
   }
-  if (rng() < INNER_DEMON_DEATH_CHANCE) {
+  if (rng() < adjustedDeathChance(INNER_DEMON_DEATH_CHANCE, state.difficulty)) {
     logs.push(entry(state, '心魔吞噬灵台，你在疯癫中耗尽了最后一丝神智……', 'death'));
     return { state: { ...state, alive: false, endingText: '道心崩溃，入魔而亡。' }, logs };
   }

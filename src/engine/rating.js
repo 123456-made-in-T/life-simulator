@@ -12,14 +12,15 @@ const GRADES = [
 ];
 
 export function summarize(state) {
+  const achievements = [...state.achievements, ...computedAchievements(state)];
   const attrSum = Object.values(state.attrs).reduce((sum, v) => sum + v, 0);
-  const score = Math.round(
+  const rawScore =
     (state.ascended ? 1000 : 0) +
-      state.realmIndex * 100 +
-      state.age / 10 +
-      attrSum * 2 +
-      state.achievements.length * 20,
-  );
+    state.realmIndex * 100 +
+    state.age / 10 +
+    attrSum * 2 +
+    achievements.length * 20;
+  const score = Math.round(rawScore * (state.difficulty?.scoreMul ?? 1));
 
   return {
     score,
@@ -27,11 +28,26 @@ export function summarize(state) {
     title: titleFor(state),
     realmName: state.ascended ? '飞升仙界' : REALMS[state.realmIndex].name,
     age: state.age,
-    achievements: state.achievements,
+    achievements,
+    difficultyName: state.difficulty?.name ?? '凡人',
     endingText: state.ascended
       ? '一朝功成登临仙界，从此天高海阔，大道可期。'
       : state.endingText || '一世浮沉，就此落幕。',
   };
+}
+
+/** 由整局统计计算的特殊成就（事件成就之外的一层） */
+function computedAchievements(state) {
+  const stats = state.stats || { breakFails: 0, riskSurvived: 0, minDaoxin: 5 };
+  const earned = [];
+  if (state.ascended && stats.breakFails === 0) earned.push('一鼓作气');
+  if (state.realmIndex >= 4 && stats.breakFails >= 3) earned.push('百折不挠');
+  if (state.ascended && state.attrs.tipo >= 8) earned.push('金身无损');
+  if (state.age >= 60 && stats.minDaoxin >= 3) earned.push('道心如铁');
+  if (stats.riskSurvived >= 6) earned.push('刀口舔血');
+  if (!state.ascended && state.realmIndex === 0 && state.age >= 70) earned.push('布衣终老');
+  if (state.difficulty?.id === 'diyu' && state.ascended) earned.push('地狱归来');
+  return earned;
 }
 
 function titleFor(state) {

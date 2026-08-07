@@ -35,6 +35,34 @@
   font-weight: 600;
 }
 
+.modes {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.mode {
+  flex: 1;
+  text-align: center;
+  padding: 8rpx 0;
+  border: 1rpx solid var(--line);
+  border-radius: 4rpx;
+  color: var(--ink-soft);
+  font-size: 28rpx;
+}
+
+.mode.active {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: var(--paper);
+}
+
+.mode-desc {
+  font-size: 22rpx;
+  color: var(--ink-soft);
+  margin-bottom: 12rpx;
+}
+
 /* ---------- 资质分配 ---------- */
 
 .attr-row {
@@ -327,6 +355,46 @@
   color: var(--ink-soft);
   margin-bottom: 32rpx;
 }
+
+.mode-tag {
+  font-size: 24rpx;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+  margin: -8rpx 0 16rpx;
+}
+
+.record-toggle {
+  display: inline-block;
+  font-size: 24rpx;
+  color: var(--ink-soft);
+  border: 1rpx solid var(--line);
+  border-radius: 4rpx;
+  padding: 6rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.record-list {
+  max-height: 50vh;
+  text-align: left;
+  border: 1rpx solid var(--line);
+  padding: 16rpx 20rpx;
+  margin-bottom: 24rpx;
+  font-size: 25rpx;
+}
+
+.record-line {
+  margin-bottom: 12rpx;
+}
+
+.record-age {
+  color: var(--ink-soft);
+  font-size: 22rpx;
+  margin-right: 12rpx;
+}
+
+.record-line.tone-breakthrough { color: var(--indigo); }
+.record-line.tone-death { color: var(--cinnabar); }
+.record-line.tone-ascend { color: var(--gold); }
 
 .restart {
   font-size: 32rpx;

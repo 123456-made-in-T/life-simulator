@@ -1,15 +1,21 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   summary: { type: Object, required: true },
   seed: { type: Number, required: true },
+  logs: { type: Array, default: () => [] },
 });
 defineEmits(['restart']);
+
+const isRecordOpen = ref(false);
 </script>
 
 <template>
   <section class="panel summary">
     <p class="grade" :class="`grade-${summary.grade}`">{{ summary.grade }}</p>
     <h2>{{ summary.title }}</h2>
+    <p class="mode-tag">{{ summary.difficultyName }}模式</p>
     <p class="ending">{{ summary.endingText }}</p>
 
     <dl class="facts">
@@ -26,6 +32,17 @@ defineEmits(['restart']);
     </div>
 
     <p class="seed">命盘编号 #{{ seed }}</p>
+
+    <div class="record">
+      <button class="record-toggle" @click="isRecordOpen = !isRecordOpen">
+        {{ isRecordOpen ? '收起此生年表 ▲' : '回顾此生年表 ▼' }}
+      </button>
+      <div v-if="isRecordOpen" class="record-list">
+        <p v-for="(log, i) in logs" :key="i" class="record-line" :class="`tone-${log.tone}`">
+          <span class="record-age">{{ log.age }}岁</span>{{ log.text }}
+        </p>
+      </div>
+    </div>
 
     <button class="primary restart" @click="$emit('restart')">再入轮回</button>
   </section>
@@ -106,6 +123,47 @@ h2 {
   color: var(--ink-soft);
   margin: 0 0 var(--space-2);
 }
+
+.mode-tag {
+  margin: -0.4em 0 0.6em;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+}
+
+.record {
+  margin: 0 0 var(--space-2);
+}
+
+.record-toggle {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+.record-list {
+  margin-top: var(--space-1);
+  max-height: 40vh;
+  overflow-y: auto;
+  text-align: left;
+  border: 1px solid var(--line);
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.85rem;
+}
+
+.record-line {
+  margin: 0 0 0.45em;
+}
+
+.record-age {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  margin-right: 0.6em;
+}
+
+.record-line.tone-breakthrough { color: var(--indigo); }
+.record-line.tone-death { color: var(--cinnabar); }
+.record-line.tone-ascend { color: var(--gold); }
 
 .restart {
   font-size: 1.05rem;

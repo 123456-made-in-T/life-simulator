@@ -7,6 +7,18 @@
 <!-- 资质分配 -->
 <view class="panel" wx:if="{{phase === 'setup'}}">
   <view class="section-title">投胎 · 分配资质</view>
+
+  <view class="modes">
+    <view
+      wx:for="{{difficulties}}"
+      wx:key="id"
+      class="mode {{difficultyId === item.id ? 'active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="onSelectDifficulty"
+    >{{item.name}}</view>
+  </view>
+  <view class="mode-desc">{{difficultyDesc}}</view>
+
   <view class="hint">剩余点数：<text class="{{remaining !== 0 ? 'warn' : ''}}">{{remaining}}</text> / {{pointTotal}}</view>
 
   <view class="attr-row" wx:for="{{allocKeys}}" wx:for-item="key" wx:key="*this">
@@ -88,6 +100,7 @@
 <view class="panel summary" wx:elif="{{phase === 'summary'}}">
   <view class="grade grade-{{summary.gradeClass}}">{{summary.grade}}</view>
   <view class="summary-title">{{summary.title}}</view>
+  <view class="mode-tag">{{summary.difficultyName}}模式</view>
   <view class="ending">{{summary.endingText}}</view>
 
   <view class="facts">
@@ -104,5 +117,13 @@
   </view>
 
   <view class="seed">命盘编号 #{{seed}}</view>
+
+  <view class="record-toggle" bindtap="onToggleRecord">{{showRecord ? '收起此生年表 ▲' : '回顾此生年表 ▼'}}</view>
+  <scroll-view wx:if="{{showRecord}}" scroll-y class="record-list">
+    <view wx:for="{{logs}}" wx:key="index" class="record-line tone-{{item.tone}}">
+      <text class="record-age">{{item.age}}岁</text>{{item.text}}
+    </view>
+  </scroll-view>
+
   <view class="btn primary restart" hover-class="btn-hover" bindtap="onRestart">再入轮回</view>
 </view>

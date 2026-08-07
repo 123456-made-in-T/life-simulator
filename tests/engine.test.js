@@ -11,6 +11,7 @@ import { isEligible, pickEvent, applyOption } from '../src/engine/events.js';
 import { advanceTick, resolveChoice } from '../src/engine/simulation.js';
 import { breakthroughChance } from '../src/engine/realms.js';
 import { summarize } from '../src/engine/rating.js';
+import { DIFFICULTIES, adjustedDeathChance } from '../src/engine/difficulty.js';
 import { TALENT_POOL, EVENT_POOL } from '../src/data/index.js';
 
 const VALID_ALLOC = { linggen: 8, wuxing: 5, tipo: 4, jiashi: 3 };
@@ -148,6 +149,46 @@ describe('events', () => {
 
   test('pickEvent 空事件池返回 null', () => {
     expect(pickEvent([], freshState(), createRng(1))).toBeNull();
+  });
+});
+
+describe('难度模式与结算成就', () => {
+  test('死亡概率按难度放大且封顶 95%', () => {
+    const diyu = DIFFICULTIES.find((d) => d.id === 'diyu');
+
+    expect(adjustedDeathChance(0.1, diyu)).toBeCloseTo(0.15);
+    expect(adjustedDeathChance(0.9, diyu)).toBe(0.95);
+    expect(adjustedDeathChance(0.1, undefined)).toBe(0.1);
+  });
+
+  test('地狱模式 16 点开局并记录难度，20 点分配报错', () => {
+    const diyu = DIFFICULTIES.find((d) => d.id === 'diyu');
+
+    const state = createCharacter({ linggen: 6, wuxing: 4, tipo: 3, jiashi: 3 }, [], diyu);
+
+    expect(state.difficulty.id).toBe('diyu');
+    expect(state.stats).toEqual({ breakFails: 0, riskSurvived: 0, minDaoxin: 5 });
+    expect(() => createCharacter(VALID_ALLOC, [], diyu)).toThrow();
+  });
+
+  test('凡人终老计入特殊成就，结算带难度名', () => {
+    const state = { ...freshState(), alive: false, age: 75, realmIndex: 0 };
+
+    const summary = summarize(state);
+
+    expect(summary.achievements).toContain('布衣终老');
+    expect(summary.difficultyName).toBe('凡人');
+  });
+
+  test('历险生还次数达标触发「刀口舔血」', () => {
+    const base = freshState();
+    const state = {
+      ...base,
+      alive: false,
+      stats: { ...base.stats, riskSurvived: 6 },
+    };
+
+    expect(summarize(state).achievements).toContain('刀口舔血');
   });
 });
 

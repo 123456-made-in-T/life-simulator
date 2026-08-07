@@ -10,6 +10,10 @@ import TalentPick from './components/TalentPick.vue';
 import LifeLog from './components/LifeLog.vue';
 import SummaryCard from './components/SummaryCard.vue';
 import bgmUrl from './assets/bgm.mp3';
+import sfxChoiceUrl from './assets/sfx-choice.mp3';
+import sfxBreakUrl from './assets/sfx-break.mp3';
+import sfxDeathUrl from './assets/sfx-death.mp3';
+import sfxAscendUrl from './assets/sfx-ascend.mp3';
 
 const TALENT_OPTIONS_COUNT = 10;
 const TICK_INTERVAL_MS = { slow: 700, fast: 220 };
@@ -46,6 +50,32 @@ let tickCount = 0;
 const isMusicOn = ref(true);
 let bgm = null;
 
+const SFX_URLS = {
+  choice: sfxChoiceUrl,
+  breakthrough: sfxBreakUrl,
+  death: sfxDeathUrl,
+  ascend: sfxAscendUrl,
+};
+const sfxPlayers = {};
+
+function playSfx(name) {
+  if (!isMusicOn.value || !SFX_URLS[name]) return;
+  if (!sfxPlayers[name]) {
+    sfxPlayers[name] = new Audio(SFX_URLS[name]);
+    sfxPlayers[name].volume = 0.7;
+  }
+  sfxPlayers[name].currentTime = 0;
+  sfxPlayers[name].play().catch(() => {});
+}
+
+/** 根据结算出的日志音调触发对应音效 */
+function playSfxForLogs(entries) {
+  const tones = new Set(entries.map((e) => e.tone));
+  if (tones.has('ascend')) playSfx('ascend');
+  else if (tones.has('death')) playSfx('death');
+  else if (tones.has('breakthrough')) playSfx('breakthrough');
+}
+
 function ensureBgm() {
   if (!bgm) {
     bgm = new Audio(bgmUrl);
@@ -67,9 +97,12 @@ function toggleMusic() {
   }
 }
 
-function handleAllocation(alloc) {
+let difficulty = null;
+
+function handleAllocation(payload) {
   ensureBgm();
-  allocation = alloc;
+  allocation = payload.alloc;
+  difficulty = payload.difficulty;
   seed.value = randomSeed();
   rng = createRng(seed.value);
   talentOptions.value = drawTalents(TALENT_POOL, TALENT_OPTIONS_COUNT, rng);
@@ -77,7 +110,7 @@ function handleAllocation(alloc) {
 }
 
 function handleTalents(chosen) {
-  state.value = createCharacter(allocation, chosen);
+  state.value = createCharacter(allocation, chosen, difficulty);
   logs.value = [];
   tickCount = 0;
   phase.value = 'living';
@@ -105,6 +138,7 @@ function step() {
   const result = advanceTick(state.value, EVENT_POOL, rng);
   state.value = result.state;
   logs.value = [...logs.value, ...result.logs];
+  playSfxForLogs(result.logs);
   if (result.pending) {
     // 遇到抉择点：停下光阴，等玩家做决定
     stopTimer();
@@ -116,10 +150,12 @@ function step() {
 
 function choose(index) {
   if (!pending.value) return;
+  playSfx('choice');
   const result = resolveChoice(state.value, pending.value, index, rng);
   pending.value = null;
   state.value = result.state;
   logs.value = [...logs.value, ...result.logs];
+  playSfxForLogs(result.logs);
   if (!result.state.alive || result.state.ascended) {
     finishLife();
     return;
@@ -194,7 +230,7 @@ onBeforeUnmount(() => {
       @toggle-speed="toggleSpeed"
       @choose="choose"
     />
-    <SummaryCard v-else :summary="summary" :seed="seed" @restart="restart" />
+    <SummaryCard v-else :summary="summary" :seed="seed" :logs="logs" @restart="restart" />
   </main>
 </template>
 

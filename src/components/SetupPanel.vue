@@ -1,13 +1,13 @@
 <script setup>
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref } from 'vue';
 import {
-  POINT_TOTAL,
   ATTR_MAX,
   ATTR_MIN,
   ALLOC_KEYS,
   ATTR_LABELS,
   randomAllocation,
 } from '../engine/character.js';
+import { DIFFICULTIES, DEFAULT_DIFFICULTY } from '../engine/difficulty.js';
 
 const emit = defineEmits(['confirm']);
 
@@ -18,11 +18,17 @@ const ATTR_HINTS = {
   jiashi: '出身背景与财力',
 };
 
+const difficulty = ref(DEFAULT_DIFFICULTY);
 const alloc = reactive({ linggen: 5, wuxing: 5, tipo: 5, jiashi: 5 });
 
+const pointTotal = computed(() => difficulty.value.points);
 const remaining = computed(
-  () => POINT_TOTAL - ALLOC_KEYS.reduce((sum, key) => sum + alloc[key], 0),
+  () => pointTotal.value - ALLOC_KEYS.reduce((sum, key) => sum + alloc[key], 0),
 );
+
+function selectDifficulty(mode) {
+  difficulty.value = mode;
+}
 
 function adjust(key, delta) {
   const next = alloc[key] + delta;
@@ -32,12 +38,12 @@ function adjust(key, delta) {
 }
 
 function randomize() {
-  Object.assign(alloc, randomAllocation(Math.random));
+  Object.assign(alloc, randomAllocation(Math.random, pointTotal.value));
 }
 
 function confirm() {
   if (remaining.value === 0) {
-    emit('confirm', { ...alloc });
+    emit('confirm', { alloc: { ...alloc }, difficulty: difficulty.value });
   }
 }
 </script>
@@ -45,8 +51,23 @@ function confirm() {
 <template>
   <section class="panel">
     <h2>投胎 · 分配资质</h2>
+
+    <div class="modes">
+      <button
+        v-for="mode in DIFFICULTIES"
+        :key="mode.id"
+        class="mode"
+        :class="{ active: difficulty.id === mode.id }"
+        :title="mode.desc"
+        @click="selectDifficulty(mode)"
+      >
+        {{ mode.name }}
+      </button>
+    </div>
+    <p class="mode-desc">{{ difficulty.desc }}</p>
+
     <p class="hint">
-      剩余点数：<strong :class="{ warn: remaining !== 0 }">{{ remaining }}</strong> / {{ POINT_TOTAL }}
+      剩余点数：<strong :class="{ warn: remaining !== 0 }">{{ remaining }}</strong> / {{ pointTotal }}
     </p>
 
     <div v-for="key in ALLOC_KEYS" :key="key" class="attr-row">
@@ -81,6 +102,31 @@ h2 {
 .hint {
   color: var(--ink-soft);
   margin: 0 0 var(--space-2);
+}
+
+.modes {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: 0.4rem;
+}
+
+.mode {
+  flex: 1;
+  padding: 0.35em 0;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+.mode.active {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: var(--paper);
+}
+
+.mode-desc {
+  margin: 0 0 var(--space-1);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
 }
 
 .warn {

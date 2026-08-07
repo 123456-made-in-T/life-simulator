@@ -2,6 +2,7 @@
 // 事件不再自动结算——每个事件带 options，由玩家抉择后经 applyOption 应用
 
 import { clampAttr } from './character.js';
+import { adjustedDeathChance } from './difficulty.js';
 
 const ATTR_KEYS = ['linggen', 'wuxing', 'tipo', 'jiashi', 'daoxin'];
 
@@ -62,7 +63,7 @@ export function applyOption(state, option, rng) {
 
   // 寿元同时计入 lifespanBonus：突破换算新境界寿元时才不会丢掉事件加成
   const lifespanDelta = effects.lifespan ?? 0;
-  const next = {
+  let next = {
     ...state,
     attrs,
     cultivation: Math.max(0, state.cultivation + (effects.cultivation ?? 0)),
@@ -74,8 +75,14 @@ export function applyOption(state, option, rng) {
       : state.achievements,
   };
 
-  if (option.deathChance && rng() < option.deathChance) {
-    return { state: next, died: true, deathText: option.deathText || '不幸殒命。' };
+  if (option.deathChance) {
+    if (rng() < adjustedDeathChance(option.deathChance, state.difficulty)) {
+      return { state: next, died: true, deathText: option.deathText || '不幸殒命。' };
+    }
+    // 从鬼门关前走过一遭也被记下（用于结算成就）
+    if (next.stats) {
+      next = { ...next, stats: { ...next.stats, riskSurvived: next.stats.riskSurvived + 1 } };
+    }
   }
   return { state: next, died: false, deathText: null };
 }

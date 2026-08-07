@@ -1,6 +1,7 @@
 // 角色创建：分配资质点数 + 应用命格效果，返回初始状态（纯函数）
 
 import { REALMS } from './realms.js';
+import { DEFAULT_DIFFICULTY } from './difficulty.js';
 
 export const POINT_TOTAL = 20;
 export const ATTR_MIN = 0;
@@ -18,7 +19,7 @@ export const ATTR_LABELS = {
 };
 
 /** 校验分配是否合法，返回错误消息，合法则返回 null */
-export function validateAllocation(alloc) {
+export function validateAllocation(alloc, pointTotal = POINT_TOTAL) {
   for (const key of ALLOC_KEYS) {
     const value = alloc[key];
     if (!Number.isInteger(value)) {
@@ -29,16 +30,16 @@ export function validateAllocation(alloc) {
     }
   }
   const total = ALLOC_KEYS.reduce((sum, key) => sum + alloc[key], 0);
-  if (total !== POINT_TOTAL) {
-    return `资质点数必须刚好用完 ${POINT_TOTAL} 点（当前 ${total} 点）`;
+  if (total !== pointTotal) {
+    return `资质点数必须刚好用完 ${pointTotal} 点（当前 ${total} 点）`;
   }
   return null;
 }
 
 /** 用随机数生成一组合法的随机分配 */
-export function randomAllocation(rng) {
+export function randomAllocation(rng, pointTotal = POINT_TOTAL) {
   const alloc = { linggen: 0, wuxing: 0, tipo: 0, jiashi: 0 };
-  for (let i = 0; i < POINT_TOTAL; i += 1) {
+  for (let i = 0; i < pointTotal; i += 1) {
     const candidates = ALLOC_KEYS.filter((key) => alloc[key] < ATTR_MAX);
     const key = candidates[Math.floor(rng() * candidates.length)];
     alloc[key] += 1;
@@ -47,8 +48,8 @@ export function randomAllocation(rng) {
 }
 
 /** 创建初始状态。talents 为命格对象数组（含 effects）。 */
-export function createCharacter(alloc, talents) {
-  const error = validateAllocation(alloc);
+export function createCharacter(alloc, talents, difficulty = DEFAULT_DIFFICULTY) {
+  const error = validateAllocation(alloc, difficulty.points);
   if (error) {
     throw new Error(error);
   }
@@ -92,7 +93,23 @@ export function createCharacter(alloc, talents) {
     alive: true,
     ascended: false,
     endingText: null,
+    difficulty: {
+      id: difficulty.id,
+      name: difficulty.name,
+      deathMul: difficulty.deathMul,
+      scoreMul: difficulty.scoreMul,
+    },
+    // 结算成就用的统计
+    stats: { breakFails: 0, riskSurvived: 0, minDaoxin: attrs.daoxin },
   };
+}
+
+/** 刷新统计里的道心最低值（在道心可能变化后调用） */
+export function trackStats(state) {
+  if (!state.stats || state.attrs.daoxin >= state.stats.minDaoxin) {
+    return state;
+  }
+  return { ...state, stats: { ...state.stats, minDaoxin: state.attrs.daoxin } };
 }
 
 export function clampAttr(value) {
